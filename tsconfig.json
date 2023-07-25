@@ -55,6 +55,12 @@
       ],
       "@lib/group/domain/*": [
         "libs/group/domain/src/*"
+      ],
+      "@lib/group/infrastructure": [
+        "libs/group/infrastructure/src"
+      ],
+      "@lib/group/infrastructure/*": [
+        "libs/group/infrastructure/src/*"
       ]
     }
   }

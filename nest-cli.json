@@ -81,6 +81,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/group/domain/tsconfig.lib.json"
       }
+    },
+    "group/infrastructure": {
+      "type": "library",
+      "root": "libs/group/infrastructure",
+      "entryFile": "index",
+      "sourceRoot": "libs/group/infrastructure/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/group/infrastructure/tsconfig.lib.json"
+      }
     }
   }
 }

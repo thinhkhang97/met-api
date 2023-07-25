@@ -93,7 +93,8 @@
       "^@lib/user/domain(|/.*)$": "<rootDir>/libs/user/domain/src/$1",
       "^@lib/user/infrastructure(|/.*)$": "<rootDir>/libs/user/infrastructure/src/$1",
       "^@lib/user/graphql-ui(|/.*)$": "<rootDir>/libs/user/graphql-ui/src/$1",
-      "^@lib/group/domain(|/.*)$": "<rootDir>/libs/group/domain/src/$1"
+      "^@lib/group/domain(|/.*)$": "<rootDir>/libs/group/domain/src/$1",
+      "^@lib/group/infrastructure(|/.*)$": "<rootDir>/libs/group/infrastructure/src/$1"
     }
   }
 }
