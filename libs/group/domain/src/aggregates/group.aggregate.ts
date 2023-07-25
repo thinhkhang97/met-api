@@ -8,7 +8,7 @@ type CreateGroupProps = {
   name: string;
 };
 
-type GroupProps = {
+export type GroupProps = {
   name: string;
   roles: Role[];
   members: Member[];
@@ -21,19 +21,21 @@ export class Group extends AggregateRoot<GroupProps> {
     const owner = new Member({
       name: props.ownerName,
       userId: props.userId,
+      avatar: null,
       groupId,
-      role: Role.getOwner(roles),
+      roles: [Role.getOwner(roles)],
     });
     return new Group({ name: props.name, roles, members: [owner] }, groupId);
   }
 
-  public addMember(name: string, userId: CUID) {
+  public addNewMember(name: string, userId: CUID) {
     this._props.members.push(
       new Member({
         name,
         userId,
+        avatar: null,
         groupId: this._props.id as CUID,
-        role: Role.getMember(this._props.roles),
+        roles: [Role.getMember(this._props.roles)],
       }),
     );
     this.update();

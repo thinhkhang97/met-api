@@ -3,7 +3,7 @@ import { BaseEntity, CUID } from '@lib/shared';
 
 type CreateRoleProps = { name: string; groupId: CUID };
 
-type RoleProps = CreateRoleProps;
+export type RoleProps = CreateRoleProps;
 
 export class Role extends BaseEntity<RoleProps> {
   public get name() {
