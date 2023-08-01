@@ -10,15 +10,6 @@
   "monorepo": true,
   "root": "apps/lunch-together-api",
   "projects": {
-    "core": {
-    "type": "application",
-    "root": "apps/core",
-    "entryFile": "main",
-    "sourceRoot": "apps/core/src",
-    "compilerOptions": {
-      "tsConfigPath": "apps/core/tsconfig.app.json"
-    }
-  },
     "shared": {
       "type": "library",
       "root": "libs/shared",
@@ -91,13 +82,13 @@
         "tsConfigPath": "libs/group/infrastructure/tsconfig.lib.json"
       }
     },
-    "indentity": {
+    "identity": {
       "type": "application",
-      "root": "apps/indentity",
+      "root": "apps/identity",
       "entryFile": "main",
-      "sourceRoot": "apps/indentity/src",
+      "sourceRoot": "apps/identity/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/indentity/tsconfig.app.json"
+        "tsConfigPath": "apps/identity/tsconfig.app.json"
       }
     }
   }

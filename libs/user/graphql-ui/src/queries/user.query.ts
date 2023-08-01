@@ -1,4 +1,4 @@
-import { Either } from '@lib/shared';
+import { Either, Public } from '@lib/shared';
 import { GetUserQuery } from '@lib/user/application/queries';
 import { User } from '@lib/user/domain';
 import { UserObject } from '@lib/user/graphql-ui/objects/user.object';
@@ -11,6 +11,7 @@ import { UserResult } from '../unions/user-result.union';
 export class UserQuery {
   constructor(public readonly _queryBus: QueryBus) {}
 
+  @Public()
   @Query(() => String, { name: 'helloworld' })
   public getHelloWorld() {
     return 'hello world';
