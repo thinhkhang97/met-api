@@ -1,8 +1,9 @@
 {
-    "conventionalCommits.scopes": [
-        "app",
-        "identity",
-        "graphql-gateway",
-        "group"
-    ]
+  "conventionalCommits.scopes": [
+    "app",
+    "identity",
+    "graphql-gateway",
+    "group",
+    "shared"
+  ]
 }

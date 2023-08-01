@@ -1,5 +1,5 @@
 import { WrappedGraphqlModule } from '@lib/shared/modules/wapped-graphql/wrapped-graphql.module';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -11,4 +11,6 @@ import { ConfigModule } from '@nestjs/config';
     WrappedGraphqlModule.forGateway(),
   ],
 })
-export class GraphqlGatewayModule {}
+export class GraphqlGatewayModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): any {}
+}
