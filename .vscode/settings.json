@@ -1,6 +1,7 @@
 {
     "conventionalCommits.scopes": [
         "app",
-        "identity"
+        "identity",
+        "graphql-gateway"
     ]
 }

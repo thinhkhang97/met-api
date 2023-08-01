@@ -90,6 +90,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/identity/tsconfig.app.json"
       }
+    },
+    "graphql-gateway": {
+      "type": "application",
+      "root": "apps/graphql-gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/graphql-gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/graphql-gateway/tsconfig.app.json"
+      }
     }
   }
 }
