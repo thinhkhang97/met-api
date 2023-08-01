@@ -9,8 +9,8 @@
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "nest start identity --watch",
-    "start:debug": "nest start identity --debug --watch",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/lunch-together-api/main",
     "prisma:migrate-dev": "npx prisma migrate dev --schema",
     "prisma:generate": "npx prisma generate --schema",
@@ -93,7 +93,8 @@
       "^@lib/user/infrastructure(|/.*)$": "<rootDir>/libs/user/infrastructure/src/$1",
       "^@lib/user/graphql-ui(|/.*)$": "<rootDir>/libs/user/graphql-ui/src/$1",
       "^@lib/group/domain(|/.*)$": "<rootDir>/libs/group/domain/src/$1",
-      "^@lib/group/infrastructure(|/.*)$": "<rootDir>/libs/group/infrastructure/src/$1"
+      "^@lib/group/infrastructure(|/.*)$": "<rootDir>/libs/group/infrastructure/src/$1",
+      "^@lib/group/graphql-ui(|/.*)$": "<rootDir>/libs/group/graphql-ui/src/$1"
     }
   }
 }
