@@ -67,7 +67,7 @@ export abstract class PrismaRepository<
   }
 
   public async save(entity: Entity): Promise<Entity> {
-    entity.valiate();
+    entity.validate();
     const ormEntity = (await this._delegate.upsert(
       this.preSave(entity),
     )) as OrmEntity;

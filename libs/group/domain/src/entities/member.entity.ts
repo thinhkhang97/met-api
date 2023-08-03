@@ -13,7 +13,7 @@ type CreateMemberProps = {
 export type MemberProps = CreateMemberProps;
 
 export class Member extends BaseEntity<MemberProps> {
-  valiate() {
+  validate() {
     return;
   }
 }

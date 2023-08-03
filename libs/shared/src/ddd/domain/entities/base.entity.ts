@@ -50,7 +50,7 @@ export abstract class BaseEntity<T> {
     return object instanceof BaseEntity;
   }
 
-  public abstract valiate();
+  public abstract validate();
 
   public getProps(): T & BaseEntityProps {
     const propsCopy = {

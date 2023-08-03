@@ -40,7 +40,7 @@ export class User extends AggregateRoot<UserProps> {
     });
   }
 
-  valiate() {
+  validate() {
     return;
   }
 }

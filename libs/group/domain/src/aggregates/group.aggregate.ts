@@ -41,7 +41,7 @@ export class Group extends AggregateRoot<GroupProps> {
     this.update();
   }
 
-  valiate() {
+  validate() {
     return;
   }
 }

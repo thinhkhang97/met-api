@@ -27,7 +27,7 @@ export class Role extends BaseEntity<RoleProps> {
     return roles.find((role) => role.name === RoleName.MEMBER)!;
   }
 
-  valiate() {
+  validate() {
     return;
   }
 }
