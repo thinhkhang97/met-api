@@ -36,7 +36,6 @@ export class LoginCommandHandler extends BaseCommandHandler<
     const payload = {
       id: userProps.id.unpack(),
       email: userProps.email.unpack(),
-      name: userProps.name?.unpack(),
     };
     return {
       accessToken: await this._jwtService.signAsync(payload, {

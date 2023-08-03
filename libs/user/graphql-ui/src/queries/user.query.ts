@@ -1,9 +1,9 @@
-import { Either, Public } from '@lib/shared';
+import { Either, GraphQLUser, LoggedUser, Public } from '@lib/shared';
 import { GetUserQuery } from '@lib/user/application/queries';
 import { User } from '@lib/user/domain';
 import { UserObject } from '@lib/user/graphql-ui/objects/user.object';
 import { QueryBus } from '@nestjs/cqrs';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Query, Resolver } from '@nestjs/graphql';
 
 import { UserResult } from '../unions/user-result.union';
 
@@ -18,11 +18,9 @@ export class UserQuery {
   }
 
   @Query(() => UserResult, { name: 'user' })
-  public async getUserByIdQuery(
-    @Args('userId', { type: () => String }) userId: string,
-  ) {
+  public async getUserByIdQuery(@GraphQLUser() loggedUser: LoggedUser) {
     const result = await this._queryBus.execute<GetUserQuery, Either<User>>(
-      new GetUserQuery({ userId }),
+      new GetUserQuery({ userId: loggedUser.id }),
     );
     if (result.isErr()) {
       return {

@@ -34,7 +34,10 @@ export class WrappedGraphqlModule {
             return new RemoteGraphQLDataSource({
               url,
               willSendRequest({ request, context }) {
-                request.http?.headers.set('user', context?.req?.user);
+                request.http?.headers.set(
+                  'user',
+                  JSON.stringify(context?.req?.user || ''),
+                );
               },
             });
           },
@@ -48,6 +51,10 @@ export class WrappedGraphqlModule {
       ...options,
       driver: ApolloFederationDriver,
       autoSchemaFile: true,
+      context: ({ req }) => {
+        const user = req.headers.user ? JSON.parse(req.headers.user) : null;
+        return { user };
+      },
     });
   }
 }

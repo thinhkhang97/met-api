@@ -7,10 +7,9 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { NextFunction, Request, Response } from 'express';
 
-export interface LogginedUserData {
+export interface LoggedUser {
   id: string;
   email: string;
-  name?: string;
 }
 
 @Injectable()
@@ -55,8 +54,7 @@ export class JwtAuthorizationMiddleware implements NestMiddleware {
   private async authenticate(req: Request) {
     const [_, token] = req.headers.authorization?.split(' ') || [];
     try {
-      const user: LogginedUserData = await this._jwtService.verifyAsync(token);
-      req['user'] = user;
+      req['user'] = await this._jwtService.verifyAsync(token);
     } catch {
       throw new UnauthorizedException();
     }
