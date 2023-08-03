@@ -1,4 +1,4 @@
-import { IntrospectAndCompose } from '@apollo/gateway';
+import { IntrospectAndCompose, RemoteGraphQLDataSource } from '@apollo/gateway';
 import {
   ApolloFederationDriver,
   ApolloFederationDriverConfig,
@@ -29,6 +29,15 @@ export class WrappedGraphqlModule {
               },
             ],
           }),
+          subscription: false,
+          buildService({ url }) {
+            return new RemoteGraphQLDataSource({
+              url,
+              willSendRequest({ request, context }) {
+                request.http?.headers.set('user', context?.req?.user);
+              },
+            });
+          },
         },
       }),
     });

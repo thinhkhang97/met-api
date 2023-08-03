@@ -32,7 +32,12 @@ export class LoginCommandHandler extends BaseCommandHandler<
       throw new UserNotFoundException();
     }
     await user.password.compareWith(new Password(command.password));
-    const payload = user.getProps();
+    const userProps = user.getProps();
+    const payload = {
+      id: userProps.id.unpack(),
+      email: userProps.email.unpack(),
+      name: userProps.name?.unpack(),
+    };
     return {
       accessToken: await this._jwtService.signAsync(payload, {
         expiresIn: '7d',

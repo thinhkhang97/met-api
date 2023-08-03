@@ -1,4 +1,5 @@
 export * from './ddd';
+export * from './decorators';
 export * from './exceptions';
 export * from './services';
 export * from './types';
