@@ -23,7 +23,6 @@ export class Role extends BaseEntity<RoleProps> {
   }
 
   public static getMember(roles: Role[]) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return roles.find((role) => role.name === RoleName.MEMBER)!;
   }
 

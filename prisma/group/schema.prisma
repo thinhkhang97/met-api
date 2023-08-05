@@ -17,9 +17,9 @@ model Group {
   updatedAt DateTime @default(now())
   version   Int      @default(0)
 
-  name         String
-  groupMembers Member[]
-  roles        Role[]
+  name    String
+  members Member[]
+  roles   Role[]
 
   @@map("group")
 }
@@ -33,8 +33,8 @@ model Role {
   name    String // Group owner, admin, member
   groupId String
 
-  group       Group        @relation(fields: [groupId], references: [id])
-  memberRoles MemberRole[]
+  group   Group    @relation(fields: [groupId], references: [id])
+  members Member[]
 
   @@index([groupId])
   @@map("role")
@@ -50,26 +50,11 @@ model Member {
   avatar  String?
   userId  String
   groupId String
+  roleId  String
 
-  group       Group        @relation(fields: [groupId], references: [id])
-  memberRoles MemberRole[]
+  group Group @relation(fields: [groupId], references: [id])
+  role  Role  @relation(fields: [roleId], references: [id])
 
-  @@index([groupId])
+  @@index([groupId, roleId])
   @@map("member")
-}
-
-model MemberRole {
-  id        String   @id @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  version   Int      @default(0)
-
-  groupMemberId String
-  roleId        String
-
-  groupMember Member @relation(fields: [groupMemberId], references: [id])
-  groupRole   Role   @relation(fields: [roleId], references: [id])
-
-  @@index([groupMemberId, roleId])
-  @@map("member_role")
 }

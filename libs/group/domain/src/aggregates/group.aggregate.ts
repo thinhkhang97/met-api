@@ -21,9 +21,9 @@ export class Group extends AggregateRoot<GroupProps> {
     const owner = new Member({
       name: props.ownerName,
       userId: props.userId,
+      roleId: Role.getOwner(roles).id as CUID,
       avatar: null,
       groupId,
-      roles: [Role.getOwner(roles)],
     });
     return new Group({ name: props.name, roles, members: [owner] }, groupId);
   }
@@ -35,10 +35,15 @@ export class Group extends AggregateRoot<GroupProps> {
         userId,
         avatar: null,
         groupId: this._props.id as CUID,
-        roles: [Role.getMember(this._props.roles)],
+        roleId: Role.getMember(this._props.roles).id as CUID,
       }),
     );
     this.update();
+  }
+
+  // TODO: Implement later, should using watched list
+  public removeMember(memberId: CUID) {
+    return;
   }
 
   validate() {

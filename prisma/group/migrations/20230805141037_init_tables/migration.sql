@@ -31,20 +31,9 @@ CREATE TABLE "member" (
     "avatar" TEXT,
     "userId" TEXT NOT NULL,
     "groupId" TEXT NOT NULL,
-
-    CONSTRAINT "member_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "member_role" (
-    "id" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "version" INTEGER NOT NULL DEFAULT 0,
-    "groupMemberId" TEXT NOT NULL,
     "roleId" TEXT NOT NULL,
 
-    CONSTRAINT "member_role_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "member_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -60,13 +49,7 @@ CREATE INDEX "role_groupId_idx" ON "role"("groupId");
 CREATE UNIQUE INDEX "member_id_key" ON "member"("id");
 
 -- CreateIndex
-CREATE INDEX "member_groupId_idx" ON "member"("groupId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "member_role_id_key" ON "member_role"("id");
-
--- CreateIndex
-CREATE INDEX "member_role_groupMemberId_roleId_idx" ON "member_role"("groupMemberId", "roleId");
+CREATE INDEX "member_groupId_roleId_idx" ON "member"("groupId", "roleId");
 
 -- AddForeignKey
 ALTER TABLE "role" ADD CONSTRAINT "role_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -75,7 +58,4 @@ ALTER TABLE "role" ADD CONSTRAINT "role_groupId_fkey" FOREIGN KEY ("groupId") RE
 ALTER TABLE "member" ADD CONSTRAINT "member_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "member_role" ADD CONSTRAINT "member_role_groupMemberId_fkey" FOREIGN KEY ("groupMemberId") REFERENCES "member"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "member_role" ADD CONSTRAINT "member_role_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "member" ADD CONSTRAINT "member_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

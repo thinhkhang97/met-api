@@ -21,10 +21,6 @@ export abstract class PrismaRepository<
     private readonly _ormMapper: BaseOrmMapper<Entity, EntityProps, OrmEntity>,
   ) {}
 
-  public abstract getWhereCondition(
-    props: QueryParams<EntityProps>,
-  ): WhereCondition;
-
   public async findMany(
     props: QueryParams<EntityProps>,
   ): Promise<Array<Entity>> {
@@ -57,20 +53,24 @@ export abstract class PrismaRepository<
     return this._ormMapper.toEntity(result);
   }
 
-  public preSave(entity: Entity) {
-    const ormProps = this._ormMapper.toOrm(entity);
-    return {
-      where: { id: ormProps.id },
-      create: { ...ormProps },
-      update: { ...ormProps, version: ormProps.version + 1 },
-    };
-  }
-
   public async save(entity: Entity): Promise<Entity> {
     entity.validate();
     const ormEntity = (await this._delegate.upsert(
       this.preSave(entity),
     )) as OrmEntity;
     return this._ormMapper.toEntity(ormEntity);
+  }
+
+  protected abstract getWhereCondition(
+    props: QueryParams<EntityProps>,
+  ): WhereCondition;
+
+  protected preSave(entity: Entity): any {
+    const ormProps = this._ormMapper.toOrm(entity);
+    return {
+      where: { id: ormProps.id },
+      create: { ...ormProps },
+      update: { ...ormProps },
+    };
   }
 }

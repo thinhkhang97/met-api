@@ -20,10 +20,8 @@ export class MemberOrmMapper extends BaseOrmMapper<
       name: ormEntity.name,
       groupId: new CUID(ormEntity.groupId),
       userId: new CUID(ormEntity.userId),
+      roleId: new CUID(ormEntity.roleId),
       avatar: ormEntity.avatar,
-      roles: ormEntity.roles
-        ? ormEntity.roles.map((role) => this._roleMapper.toEntity(role))
-        : [],
     };
   }
 
@@ -34,7 +32,7 @@ export class MemberOrmMapper extends BaseOrmMapper<
       avatar: props.avatar,
       groupId: props.groupId.unpack(),
       userId: props.userId.unpack(),
-      roles: props.roles.map((role) => this._roleMapper.toOrm(role)),
+      roleId: props.roleId.unpack(),
     };
   }
 }
