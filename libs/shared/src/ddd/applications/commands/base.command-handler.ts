@@ -26,5 +26,5 @@ export abstract class BaseCommandHandler<C extends BaseCommand, R>
     }
   }
 
-  abstract handle(command: C): Promise<R>;
+  abstract handle(command: C): Promise<R> | R;
 }

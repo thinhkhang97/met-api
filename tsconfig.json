@@ -67,6 +67,12 @@
       ],
       "@lib/group/graphql-ui/*": [
         "libs/group/graphql-ui/src/*"
+      ],
+      "@lib/group/application": [
+        "libs/group/application/src"
+      ],
+      "@lib/group/application/*": [
+        "libs/group/application/src/*"
       ]
     }
   }
