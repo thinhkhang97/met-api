@@ -1,0 +1,56 @@
+@startuml
+!theme plain
+!include  https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include DEVICONS/react.puml
+!include DEVICONS/nodejs.puml
+!include DEVICONS/postgresql.puml
+
+Person(ltUser, "User", "A member of a group or an organization")
+
+
+System_Boundary(c1, "Lunch Together System") {
+
+Boundary(notificationContext, "Notification") {
+Container(ltNotification, "Notification", "NodeJS", "Provide notification functionalities such as email, web notification", $sprite="nodejs")
+}
+
+Container(ltSPA, "SPA", "React", "Provide all of the Lunch Together functionality to customers via their web browser", $sprite="react")
+
+Container(ltGateway, "API Gateway", "NodeJS", "Receive, authenticate and route the request to the corresponding service", $sprite="nodejs")
+
+Boundary(identityContext, "Identity") {
+Container(ltIdentity, "Identity", "NodeJS", "Provide user identity functionalities", $sprite="nodejs")
+ContainerDb(dbIdentity, "Identity Database", "Postgresql", "Holds user information", $sprite="postgresql")
+}
+
+Boundary(groupContext, "Group") {
+Container(ltGroup, "Group", "NodeJS", "Provide group functionalities", $sprite="nodejs")
+ContainerDb(dbGroup, "Group Database", "Postgresql", "Holds group information", $sprite="postgresql")
+}
+
+Boundary(mealContext, "Meal") {
+Container(ltMeal, "Meal", "NodeJS", "Provide meal functionalities", $sprite="nodejs")
+ContainerDb(dbMeal, "Meal Database", "Postgresql", "Holds meal, restaurant information", $sprite="postgresql")
+}
+}
+
+Rel(ltUser, ltSPA, "", "View and get information, host a meal with friends using")
+Rel(ltSPA, ltGateway, "Make API calls to", "Graphql queries, mutation")
+
+Rel(ltGateway, ltIdentity, "Route user functionality requests to", "HTTPS")
+Rel(ltIdentity, ltNotification, "Send verification email, notify open account success,etc using", "message")
+Rel(ltIdentity, dbIdentity, "Read from and write to", "SQL/TCP")
+
+Rel(ltGateway, ltGroup, "Route group functionality requests to", "HTTPS")
+Rel(ltGroup, dbGroup, "Read from and write to", "SQL/TCP")
+Rel(ltGroup, ltIdentity, "Get user information from", "gRPC")
+Rel(ltGroup, ltNotification, "Notify information relatives to group, members using", "message")
+
+Rel(ltMeal, dbMeal, "Read from and write to", "SQL/TCP")
+Rel(ltGateway, ltMeal, "Host a meal", "HTTPS")
+Rel(ltMeal, ltGroup, "Get group information", "rRPC")
+Rel(ltMeal, ltNotification, "Notify information relatives to meal, orders using", "message")
+
+@enduml

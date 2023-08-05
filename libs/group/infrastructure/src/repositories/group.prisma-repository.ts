@@ -14,10 +14,10 @@ export class GroupPrismaRepository extends PrismaRepository<
   Prisma.GroupDelegate<undefined>
 > {
   constructor(
-    private readonly _groupPrismaService: GroupPrismaService,
-    private readonly _groupOrmMapper: GroupOrmMapper,
+    private readonly _prismaService: GroupPrismaService,
+    private readonly _ormMapper: GroupOrmMapper,
   ) {
-    super(_groupPrismaService.group, _groupOrmMapper);
+    super(_prismaService.group, _ormMapper);
   }
 
   getWhereCondition(props: QueryParams<GroupProps>): Prisma.GroupWhereInput {
@@ -28,5 +28,19 @@ export class GroupPrismaRepository extends PrismaRepository<
     }
 
     return whereInput;
+  }
+
+  public preSave(entity: Group): {
+    create: GroupOrmEntity;
+    update: GroupOrmEntity & { version: number };
+    where: { id: string };
+  } {
+    const ormProps = this._ormMapper.toOrm(entity);
+
+    return {
+      where: { id: ormProps.id },
+      create: { ...ormProps },
+      update: { ...ormProps, version: ormProps.version + 1 },
+    };
   }
 }
