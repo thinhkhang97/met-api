@@ -21,10 +21,17 @@ export abstract class PrismaRepository<
     private readonly _ormMapper: BaseOrmMapper<Entity, EntityProps, OrmEntity>,
   ) {}
 
+  public abstract getIncludeRelation():
+    | {
+        include: { [key in keyof EntityProps]?: boolean };
+      }
+    | undefined;
+
   public async findMany(
     props: QueryParams<EntityProps>,
   ): Promise<Array<Entity>> {
     const result = (await this._delegate.findMany({
+      ...this.getIncludeRelation(),
       where: this.getWhereCondition(props),
     })) as Array<OrmEntity>;
     return result.map((r) => this._ormMapper.toEntity(r));
@@ -34,6 +41,7 @@ export abstract class PrismaRepository<
     props: QueryParams<EntityProps>,
   ): Promise<Nullable<Entity>> {
     const result = (await this._delegate.findUnique({
+      ...this.getIncludeRelation(),
       where: this.getWhereCondition(props),
     })) as OrmEntity;
     return result ? this._ormMapper.toEntity(result) : null;

@@ -32,4 +32,10 @@ export class UserPrismaRepository extends PrismaRepository<
 
     return whereCondition;
   }
+
+  getIncludeRelation():
+    | { include: { [key in keyof UserProps]?: boolean } }
+    | undefined {
+    return undefined;
+  }
 }
