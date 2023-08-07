@@ -25,7 +25,10 @@ export class Group extends AggregateRoot<GroupProps> {
       avatar: null,
       groupId,
     });
-    return new Group({ name: props.name, roles, members: [owner] }, groupId);
+    return new Group(
+      { name: props.name.toLowerCase(), roles, members: [owner] },
+      groupId,
+    );
   }
 
   public addNewMember(name: string, userId: CUID) {

@@ -40,7 +40,7 @@ export abstract class PrismaRepository<
   public async findOne(
     props: QueryParams<EntityProps>,
   ): Promise<Nullable<Entity>> {
-    const result = (await this._delegate.findUnique({
+    const result = (await this._delegate.findFirst({
       ...this.getIncludeRelation(),
       where: this.getWhereCondition(props),
     })) as OrmEntity;

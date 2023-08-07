@@ -42,6 +42,10 @@ export class GroupPrismaRepository extends PrismaRepository<
       whereInput.id = props.id.value;
     }
 
+    if (props.name) {
+      whereInput.name = props.name;
+    }
+
     return whereInput;
   }
 
