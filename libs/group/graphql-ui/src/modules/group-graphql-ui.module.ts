@@ -1,14 +1,17 @@
+import { GroupApplicationModule } from '@lib/group/application';
 import { WrappedGraphqlModule } from '@lib/shared/modules/wapped-graphql/wrapped-graphql.module';
-import { WrappedJwtModule } from '@lib/shared/modules/wrapped-jwt/wrapped-jwt.module';
 import { Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
 
+import { mutations } from '../mutations';
 import { queries } from '../queries';
 
 @Module({
   imports: [
-    WrappedJwtModule.registerAsync(),
+    CqrsModule,
     WrappedGraphqlModule.forSubgraph(),
+    GroupApplicationModule,
   ],
-  providers: [...queries],
+  providers: [...queries, ...mutations],
 })
 export class GroupGraphqlUIModule {}

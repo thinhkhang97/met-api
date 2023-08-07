@@ -1,12 +1,11 @@
-import { SharedModule } from '@lib/shared/modules/shared.module';
+import { GroupPrismaService } from '@lib/shared';
 import { Module } from '@nestjs/common';
 
 import { ormMappers } from '../orm-mappers';
 import { repositories } from '../repositories';
 
 @Module({
-  imports: [SharedModule],
-  providers: [...ormMappers, ...repositories],
+  providers: [GroupPrismaService, ...ormMappers, ...repositories],
   exports: [...repositories],
 })
 export class GroupInfrastructureModule {}

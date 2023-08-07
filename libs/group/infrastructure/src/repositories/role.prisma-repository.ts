@@ -29,4 +29,10 @@ export class RolePrismaRepository extends PrismaRepository<
 
     return whereInput;
   }
+
+  getIncludeRelation():
+    | { include: { [key in keyof RoleProps]?: boolean } }
+    | undefined {
+    return undefined;
+  }
 }

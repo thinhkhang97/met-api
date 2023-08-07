@@ -20,6 +20,7 @@ export class GroupOrmMapper extends BaseOrmMapper<
   }
 
   protected toEntityProps(ormEntity: GroupOrmEntity): GroupProps {
+    console.log(ormEntity);
     return {
       name: ormEntity.name,
       roles: ormEntity.roles.map((role) => this._roleMapper.toEntity(role)),

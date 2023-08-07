@@ -1,1 +1,2 @@
-export * from '@lib/group/application/modules/application.module';
+export * from './commands';
+export * from './modules/application.module';

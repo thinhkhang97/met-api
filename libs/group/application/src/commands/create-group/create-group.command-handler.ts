@@ -1,4 +1,4 @@
-import { Group } from '@lib/group/domain';
+import { Group, GroupRepository } from '@lib/group/domain';
 import { BaseCommandHandler, CUID } from '@lib/shared';
 import { CommandHandler } from '@nestjs/cqrs';
 
@@ -9,12 +9,18 @@ export class CreateGroupCommandHandler extends BaseCommandHandler<
   CreateGroupCommand,
   Group
 > {
-  handle(command: CreateGroupCommand): Group {
+  constructor(private readonly _groupRepository: GroupRepository) {
+    super();
+  }
+
+  async handle(command: CreateGroupCommand): Promise<Group> {
     const userId = new CUID(command.userId);
-    return Group.create({
+    const group = Group.create({
       userId,
       name: command.groupName,
       ownerName: command.ownerName,
     });
+    await this._groupRepository.save(group);
+    return group;
   }
 }

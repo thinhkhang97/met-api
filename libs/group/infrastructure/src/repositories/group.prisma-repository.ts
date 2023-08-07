@@ -2,7 +2,7 @@ import { Group, GroupProps } from '@lib/group/domain';
 import { GroupPrismaService, PrismaRepository, QueryParams } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/group-client';
-import _ from 'lodash';
+import { omit } from 'lodash';
 
 import {
   GroupOrmEntity,
@@ -25,6 +25,14 @@ export class GroupPrismaRepository extends PrismaRepository<
     super(_prismaService.group, _groupOrmMapper);
   }
 
+  getIncludeRelation(): { include: { [key in keyof GroupProps]?: boolean } } {
+    return {
+      include: {
+        roles: true,
+      },
+    };
+  }
+
   protected override getWhereCondition(
     props: QueryParams<GroupProps>,
   ): Prisma.GroupWhereInput {
@@ -39,47 +47,55 @@ export class GroupPrismaRepository extends PrismaRepository<
 
   protected override preSave(entity: Group): Prisma.GroupUpsertArgs {
     const ormProps = this._groupOrmMapper.toOrm(entity);
-
+    const roles = ormProps.roles.map((role) => omit(role, 'groupId'));
+    const members = ormProps.members.map((member) => omit(member, 'groupId'));
     return {
+      include: { roles: true, members: true },
       where: { id: ormProps.id },
       create: {
         ...ormProps,
-        roles: { createMany: { data: ormProps.roles } },
-        members: { createMany: { data: ormProps.members } },
+        roles: {
+          createMany: {
+            data: roles,
+          },
+        },
+        members: {
+          createMany: {
+            data: members,
+          },
+        },
       },
       update: {
         ...ormProps,
-        roles: this.preUpsertRoles(ormProps.roles),
-        members: this.preUpsertMembers(ormProps.members),
+        roles: this.preUpsertRoles(roles),
+        members: this.preUpsertMembers(members),
       },
     };
   }
 
   private preUpsertRoles(
-    roles: RoleOrmEntity[],
+    roles: Omit<RoleOrmEntity, 'groupId'>[],
   ): Prisma.RoleUpdateManyWithoutGroupNestedInput {
     return {
       upsert: roles.map((role) => {
-        const roleWithoutGroupId = _.omit(role, 'groupId');
         return {
           where: { id: role.id },
-          create: { ...roleWithoutGroupId },
-          update: { ...roleWithoutGroupId },
+          create: { ...role },
+          update: { ...role },
         };
       }),
     };
   }
 
   private preUpsertMembers(
-    members: MemberOrmEntity[],
+    members: Omit<MemberOrmEntity, 'groupId'>[],
   ): Prisma.MemberUpdateManyWithoutGroupNestedInput {
     return {
       upsert: members.map((member) => {
-        const memberWithoutGroupId = _.omit(member, 'groupId');
         return {
           where: { id: member.id },
-          create: { ...memberWithoutGroupId },
-          update: { ...memberWithoutGroupId },
+          create: { ...member },
+          update: { ...member },
         };
       }),
     };

@@ -1,5 +1,5 @@
 import {
-  GroupRepositoryPort,
+  GroupRepository,
   MemberRepositoryPort,
   RoleRepositoryPort,
 } from '@lib/group/domain';
@@ -19,7 +19,7 @@ export const repositories: Provider[] = [
     useClass: MemberPrismaRepository,
   },
   {
-    provide: GroupRepositoryPort,
+    provide: GroupRepository,
     useClass: GroupPrismaRepository,
   },
 ];

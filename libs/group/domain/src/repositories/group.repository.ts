@@ -2,7 +2,7 @@ import { BaseRepositoryPort } from '@lib/shared';
 
 import { Group, GroupProps } from '../aggregates';
 
-export abstract class GroupRepositoryPort extends BaseRepositoryPort<
+export abstract class GroupRepository extends BaseRepositoryPort<
   Group,
   GroupProps
 > {}

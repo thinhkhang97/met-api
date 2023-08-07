@@ -29,4 +29,10 @@ export class MemberPrismaRepository extends PrismaRepository<
 
     return whereInput;
   }
+
+  getIncludeRelation():
+    | { include: { [key in keyof MemberProps]?: boolean } }
+    | undefined {
+    return undefined;
+  }
 }
