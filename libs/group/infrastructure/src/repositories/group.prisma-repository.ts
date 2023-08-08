@@ -52,7 +52,9 @@ export class GroupPrismaRepository extends PrismaRepository<
   protected override preSave(entity: Group): Prisma.GroupUpsertArgs {
     const ormProps = this._groupOrmMapper.toOrm(entity);
     const roles = ormProps.roles.map((role) => omit(role, 'groupId'));
-    const members = ormProps.members.map((member) => omit(member, 'groupId'));
+    const members = (ormProps.members || []).map((member) =>
+      omit(member, 'groupId'),
+    );
     return {
       include: { roles: true, members: true },
       where: { id: ormProps.id },

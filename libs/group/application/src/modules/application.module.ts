@@ -2,9 +2,10 @@ import { GroupInfrastructureModule } from '@lib/group/infrastructure/modules/gro
 import { Module } from '@nestjs/common';
 
 import { commands } from '../commands';
+import { queries } from '../queries';
 
 @Module({
   imports: [GroupInfrastructureModule],
-  providers: [...commands],
+  providers: [...commands, ...queries],
 })
 export class GroupApplicationModule {}

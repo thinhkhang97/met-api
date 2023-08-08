@@ -53,6 +53,7 @@ export abstract class PrismaRepository<
   ): Promise<Entity> {
     const _id = id instanceof ID ? id.unpack() : id;
     const result = (await this._delegate.findFirst({
+      ...this.getIncludeRelation(),
       where: { id: _id },
     })) as OrmEntity;
     if (!result) {
