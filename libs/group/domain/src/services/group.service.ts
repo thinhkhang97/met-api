@@ -7,4 +7,6 @@ export abstract class GroupService {
     ownerName: string,
     userId: CUID,
   ): Promise<Group>;
+
+  abstract addMember(name: string, groupId: CUID, userId: CUID): Promise<Group>;
 }

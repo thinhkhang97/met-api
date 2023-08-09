@@ -1,7 +1,7 @@
 import {
   GroupRepository,
-  MemberRepositoryPort,
-  RoleRepositoryPort,
+  MemberRepository,
+  RoleRepository,
 } from '@lib/group/domain';
 import { Provider } from '@nestjs/common';
 
@@ -11,11 +11,11 @@ import { RolePrismaRepository } from './role.prisma-repository';
 
 export const repositories: Provider[] = [
   {
-    provide: RoleRepositoryPort,
+    provide: RoleRepository,
     useClass: RolePrismaRepository,
   },
   {
-    provide: MemberRepositoryPort,
+    provide: MemberRepository,
     useClass: MemberPrismaRepository,
   },
   {

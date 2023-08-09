@@ -27,6 +27,14 @@ export class MemberPrismaRepository extends PrismaRepository<
       whereInput.id = props.id.value;
     }
 
+    if (props.userId) {
+      whereInput.userId = props.userId.value;
+    }
+
+    if (props.groupId) {
+      whereInput.groupId = props.groupId.value;
+    }
+
     return whereInput;
   }
 

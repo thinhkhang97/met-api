@@ -1,4 +1,6 @@
-import { CreateGroupMutation } from '@lib/group/graphql-ui/mutations/create-group.mutation';
 import { Provider } from '@nestjs/common';
 
-export const mutations: Provider[] = [CreateGroupMutation];
+import { AddMemberMutation } from './add-member.mutation';
+import { CreateGroupMutation } from './create-group.mutation';
+
+export const mutations: Provider[] = [CreateGroupMutation, AddMemberMutation];
