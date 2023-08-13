@@ -2,6 +2,8 @@ import { Member } from '@lib/group/domain';
 import { BaseObject } from '@lib/shared';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
+import { RoleObject } from './role.object';
+
 @ObjectType('Member')
 export class MemberObject extends BaseObject {
   @Field(() => String)
@@ -13,11 +15,15 @@ export class MemberObject extends BaseObject {
   @Field(() => ID)
   public readonly roleId: string;
 
+  @Field(() => RoleObject)
+  public readonly role: RoleObject;
+
   constructor(member: Member) {
     const props = member.getProps();
     super(props);
     this.name = props.name;
     this.groupId = props.groupId.unpack();
     this.roleId = props.roleId.unpack();
+    this.role = new RoleObject(props.role);
   }
 }

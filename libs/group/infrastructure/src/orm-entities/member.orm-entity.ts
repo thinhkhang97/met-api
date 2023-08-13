@@ -1,3 +1,7 @@
 import { Member } from '@prisma/group-client';
 
-export type MemberOrmEntity = Member;
+import { RoleOrmEntity } from './role.orm-entity';
+
+export interface MemberOrmEntity extends Member {
+  role: RoleOrmEntity;
+}

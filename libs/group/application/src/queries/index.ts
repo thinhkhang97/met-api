@@ -1,6 +1,12 @@
-import { GetGroupQueryHandler } from '@lib/group/application/queries/get-group/get-group.query-handler';
 import { Provider } from '@nestjs/common';
 
-export * from './get-group/get-group.query';
+import { GetGroupQueryHandler } from './get-group/get-group.query-handler';
+import { GetMemberQueryHandler } from './get-member/get-member.query-handler';
 
-export const queries: Provider[] = [GetGroupQueryHandler];
+export * from './get-group/get-group.query';
+export * from './get-member/get-member.query';
+
+export const queries: Provider[] = [
+  GetGroupQueryHandler,
+  GetMemberQueryHandler,
+];
