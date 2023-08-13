@@ -1,7 +1,7 @@
 import { RoleName } from '@lib/group/domain/constant';
 import { BaseEntity, CUID } from '@lib/shared';
 
-type CreateRoleProps = { name: string; groupId: CUID };
+type CreateRoleProps = { name: RoleName; groupId: CUID };
 
 export type RoleProps = CreateRoleProps;
 

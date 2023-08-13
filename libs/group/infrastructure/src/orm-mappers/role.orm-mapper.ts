@@ -1,4 +1,5 @@
 import { Role, RoleProps } from '@lib/group/domain';
+import { RoleName } from '@lib/group/domain/constant';
 import { BaseOrmMapper, CUID } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
 
@@ -17,7 +18,7 @@ export class RoleOrmMapper extends BaseOrmMapper<
   protected toEntityProps(ormEntity: RoleOrmEntity): RoleProps {
     return {
       groupId: new CUID(ormEntity.groupId),
-      name: ormEntity.name,
+      name: ormEntity.name as RoleName,
     };
   }
 

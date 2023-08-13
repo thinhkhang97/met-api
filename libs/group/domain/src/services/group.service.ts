@@ -8,5 +8,10 @@ export abstract class GroupService {
     userId: CUID,
   ): Promise<Group>;
 
-  abstract addMember(name: string, groupId: CUID, userId: CUID): Promise<Group>;
+  abstract addMember(
+    name: string,
+    groupId: CUID,
+    userId: CUID,
+    memberId: CUID,
+  ): Promise<Group>;
 }

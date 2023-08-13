@@ -1,6 +1,7 @@
-import { AggregateRoot, CUID } from '@lib/shared';
+import { AggregateRoot, CUID, RuleValidator } from '@lib/shared';
 
 import { Member, Role } from '../entities';
+import { OnlyOwnerCanAddMemberRule } from '../rules';
 
 type CreateGroupProps = {
   userId: CUID;
@@ -15,6 +16,10 @@ export type GroupProps = {
 };
 
 export class Group extends AggregateRoot<GroupProps> {
+  get roles() {
+    return this._props.roles;
+  }
+
   public static create(props: CreateGroupProps) {
     const groupId = CUID.generate();
     const roles = Role.forCasual(groupId);
@@ -31,11 +36,16 @@ export class Group extends AggregateRoot<GroupProps> {
     );
   }
 
-  public addNewMember(name: string, userId: CUID) {
+  public addNewMember(
+    addedByMember: Member,
+    newMemberName: string,
+    newMemberId: CUID,
+  ) {
+    RuleValidator.validate(new OnlyOwnerCanAddMemberRule(this, addedByMember));
     this._props.members.push(
       new Member({
-        name,
-        userId,
+        name: newMemberName,
+        userId: newMemberId,
         avatar: null,
         groupId: this._props.id as CUID,
         roleId: Role.getMember(this._props.roles).id as CUID,
