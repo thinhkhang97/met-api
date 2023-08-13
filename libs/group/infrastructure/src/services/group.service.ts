@@ -4,6 +4,7 @@ import {
   GroupNotFoundException,
   GroupRepository,
   GroupService,
+  IdentityService,
   MemberExistedException,
   MemberRepository,
 } from '@lib/group/domain';
@@ -15,6 +16,7 @@ export class GroupServiceImpl extends GroupService {
   constructor(
     private readonly _groupRepository: GroupRepository,
     private readonly _memberRepository: MemberRepository,
+    private readonly _identityService: IdentityService,
   ) {
     super();
   }
@@ -40,13 +42,14 @@ export class GroupServiceImpl extends GroupService {
   }
 
   async addMember(name: string, groupId: CUID, userId: CUID): Promise<Group> {
+    await this._identityService.getUserById(userId);
     await this.checkMemberExist(userId, groupId);
     const group = await this._groupRepository.findOneByIdOrThrow(
       groupId,
       new GroupNotFoundException(),
     );
-    group.addNewMember(name, userId);
-    await this._groupRepository.save(group);
+    // group.addNewMember(name, userId);
+    // await this._groupRepository.save(group);
     return group;
   }
 

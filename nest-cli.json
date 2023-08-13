@@ -126,6 +126,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/group/application/tsconfig.lib.json"
       }
+    },
+    "user/rest-ui": {
+      "type": "library",
+      "root": "libs/user/rest-ui",
+      "entryFile": "index",
+      "sourceRoot": "libs/user/rest-ui/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/user/rest-ui/tsconfig.lib.json"
+      }
     }
   }
 }

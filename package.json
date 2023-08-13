@@ -29,6 +29,7 @@
     "@apollo/server": "^4.9.0",
     "@apollo/subgraph": "2.2.3",
     "@nestjs/apollo": "^12.0.7",
+    "@nestjs/axios": "^3.0.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.0.0",
     "@nestjs/core": "^10.0.0",
@@ -38,6 +39,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@paralleldrive/cuid2": "^2.2.1",
     "@prisma/client": "^4.14.1",
+    "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "graphql": "^16.7.0",
     "joi": "^17.9.2",
@@ -104,7 +106,8 @@
       "^@lib/group/domain(|/.*)$": "<rootDir>/libs/group/domain/src/$1",
       "^@lib/group/infrastructure(|/.*)$": "<rootDir>/libs/group/infrastructure/src/$1",
       "^@lib/group/graphql-ui(|/.*)$": "<rootDir>/libs/group/graphql-ui/src/$1",
-      "^@lib/group/application(|/.*)$": "<rootDir>/libs/group/application/src/$1"
+      "^@lib/group/application(|/.*)$": "<rootDir>/libs/group/application/src/$1",
+      "^@lib/user/rest-ui(|/.*)$": "<rootDir>/libs/user/rest-ui/src/$1"
     }
   }
 }

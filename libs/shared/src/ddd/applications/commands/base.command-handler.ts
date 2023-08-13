@@ -5,7 +5,7 @@ import { Err, Ok, Result } from 'oxide.ts';
 import { BaseCommand } from './base.command';
 
 export abstract class BaseCommandHandler<C extends BaseCommand, R>
-  implements ICommandHandler
+  implements ICommandHandler<C, Result<R, BaseException>>
 {
   private readonly _logger = new Logger(this.constructor.name);
 

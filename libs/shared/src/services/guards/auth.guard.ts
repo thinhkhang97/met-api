@@ -1,9 +1,9 @@
+import { UnauthorizedException } from '@lib/shared/exceptions';
 import {
   CanActivate,
   ExecutionContext,
   Injectable,
   SetMetadata,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
@@ -34,7 +34,7 @@ export class AuthGuard implements CanActivate {
     if (context.getType<GqlContextType>() === 'graphql') {
       request = GqlExecutionContext.create(context).getContext().req;
     } else {
-      request = context.switchToHttp().getRequest().req;
+      request = context.switchToHttp().getRequest();
     }
     const token = this.extractTokenFromHeader(request);
     if (!token) {

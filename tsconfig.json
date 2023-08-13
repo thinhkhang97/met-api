@@ -73,6 +73,12 @@
       ],
       "@lib/group/application/*": [
         "libs/group/application/src/*"
+      ],
+      "@lib/user/rest-ui": [
+        "libs/user/rest-ui/src"
+      ],
+      "@lib/user/rest-ui/*": [
+        "libs/user/rest-ui/src/*"
       ]
     }
   }
