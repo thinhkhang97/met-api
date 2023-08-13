@@ -4,6 +4,7 @@ export interface User {
   id: CUID;
   name?: string;
   email: string;
+  status: number;
 }
 
 export abstract class IdentityService {

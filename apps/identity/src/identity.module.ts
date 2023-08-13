@@ -10,10 +10,6 @@ import { APP_FILTER } from '@nestjs/core';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: './apps/identity/src/.env',
-      // validationSchema: Joi.object({
-      //   KEY: Joi.string().required(),
-      //   DB: Joi.string().required(),
-      // }),
     }),
     UserGraphqlUiModule,
     UserRestUiModule,
