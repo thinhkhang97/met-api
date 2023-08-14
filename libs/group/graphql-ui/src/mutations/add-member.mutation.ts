@@ -12,13 +12,21 @@ export class AddMemberMutation {
   async addMember(
     @Args({ type: () => String, name: 'nameInGroup' }) name: string,
     @Args({ type: () => String, name: 'groupId' }) groupId: string,
-    @Args({ type: () => String, name: 'memberId' }) memberId: string,
+    @Args({ type: () => String, name: 'newMemberUserId' })
+    newMemberUserId: string,
     @GraphQLUser() loggedUser: LoggedUser,
   ) {
     const result = await this._commandBus.execute<
       AddMemberCommand,
       Either<void>
-    >(new AddMemberCommand({ name, groupId, userId: loggedUser.id, memberId }));
+    >(
+      new AddMemberCommand({
+        name,
+        groupId,
+        userId: loggedUser.id,
+        newMemberUserId,
+      }),
+    );
     if (result.isErr()) {
       return {
         status: 'failed',

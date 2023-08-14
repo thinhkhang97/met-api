@@ -15,7 +15,12 @@ export class AddMemberCommandHandler extends BaseCommandHandler<
   async handle(command: AddMemberCommand): Promise<void> {
     const userId = new CUID(command.userId);
     const groupId = new CUID(command.groupId);
-    const memberId = new CUID(command.memberId);
-    await this._groupService.addMember(command.name, groupId, userId, memberId);
+    const newMemberUserId = new CUID(command.newMemberUserId);
+    await this._groupService.addMember(
+      command.name,
+      groupId,
+      userId,
+      newMemberUserId,
+    );
   }
 }

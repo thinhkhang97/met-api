@@ -46,19 +46,19 @@ export class GroupServiceImpl extends GroupService {
     name: string,
     groupId: CUID,
     userId: CUID,
-    memberId: CUID,
+    newMemberUserId: CUID,
   ): Promise<Group> {
     const group = await this._groupRepository.findOneByIdOrThrow(
       groupId,
       new GroupNotFoundException(),
     );
-    const member = await this._memberRepository.findOneByIdOrThrow(
-      userId,
-      new MemberNotFoundException(),
-    );
-    const newMember = await this._identityService.getUserById(memberId);
+    const member = await this._memberRepository.findOne({ userId, groupId });
+    if (!member) {
+      throw new MemberNotFoundException();
+    }
+    const newMember = await this._identityService.getUserById(newMemberUserId);
 
-    await this.checkMemberExist(memberId, groupId);
+    await this.checkMemberExist(newMemberUserId, groupId);
     group.addNewMember(member, name, newMember.id);
     await this._groupRepository.save(group);
     return group;

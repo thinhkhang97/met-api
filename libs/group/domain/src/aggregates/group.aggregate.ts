@@ -26,7 +26,7 @@ export class Group extends AggregateRoot<GroupProps> {
     const owner = Member.create({
       name: props.ownerName,
       userId: props.userId,
-      role: Role.getOwner(roles),
+      roleId: Role.getOwner(roles).id as CUID,
       avatar: null,
       groupId,
     });
@@ -48,7 +48,7 @@ export class Group extends AggregateRoot<GroupProps> {
         userId: newMemberId,
         avatar: null,
         groupId: this._props.id as CUID,
-        role: Role.getMember(this._props.roles),
+        roleId: Role.getMember(this._props.roles).id as CUID,
       }),
     );
     this.update();

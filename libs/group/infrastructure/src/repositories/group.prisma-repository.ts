@@ -53,7 +53,7 @@ export class GroupPrismaRepository extends PrismaRepository<
     const ormProps = this._groupOrmMapper.toOrm(entity);
     const roles = ormProps.roles.map((role) => omit(role, 'groupId'));
     const members = (ormProps.members || []).map((member) =>
-      omit(member, 'groupId'),
+      omit(member, ['groupId', 'role']),
     );
     return {
       include: { roles: true, members: true },
@@ -94,7 +94,7 @@ export class GroupPrismaRepository extends PrismaRepository<
   }
 
   private preUpsertMembers(
-    members: Omit<MemberOrmEntity, 'groupId'>[],
+    members: Omit<MemberOrmEntity, 'groupId' | 'role'>[],
   ): Prisma.MemberUpdateManyWithoutGroupNestedInput {
     return {
       upsert: members.map((member) => {

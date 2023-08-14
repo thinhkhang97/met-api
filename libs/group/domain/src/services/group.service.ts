@@ -12,6 +12,6 @@ export abstract class GroupService {
     name: string,
     groupId: CUID,
     userId: CUID,
-    memberId: CUID,
+    newMemberUserId: CUID,
   ): Promise<Group>;
 }

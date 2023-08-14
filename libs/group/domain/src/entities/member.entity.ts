@@ -7,16 +7,16 @@ type CreateMemberProps = {
   groupId: CUID;
   avatar: Nullable<string>;
   name: string;
-  role: Role;
+  roleId: CUID;
 };
 
 export interface MemberProps extends CreateMemberProps {
-  roleId: CUID;
+  role: Nullable<Role>;
 }
 
 export class Member extends BaseEntity<MemberProps> {
   public static create(props: CreateMemberProps) {
-    return new Member({ ...props, roleId: props.role.id as CUID });
+    return new Member({ ...props, role: null });
   }
 
   validate() {
