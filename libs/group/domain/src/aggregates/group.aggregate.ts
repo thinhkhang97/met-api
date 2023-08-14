@@ -1,7 +1,10 @@
 import { AggregateRoot, CUID, RuleValidator } from '@lib/shared';
 
 import { Member, Role } from '../entities';
-import { OnlyOwnerCanAddMemberRule } from '../rules';
+import {
+  OnlyOwnerCanAddMemberRule,
+  OnlyOwnerCanRemoveMemberRule,
+} from '../rules';
 
 /**
  * Properties to create a group
@@ -49,16 +52,16 @@ export class Group extends AggregateRoot<GroupProps> {
 
   /**
    * Add a new member into group, only the group owner can perform this action
-   * @param addedByMember Group owner
+   * @param byMember Group owner
    * @param newMemberName Name of new member in group
    * @param newMemberUserId user's id of new member to register
    */
   public addNewMember(
-    addedByMember: Member,
     newMemberName: string,
     newMemberUserId: CUID,
+    byMember: Member,
   ) {
-    RuleValidator.validate(new OnlyOwnerCanAddMemberRule(this, addedByMember));
+    RuleValidator.validate(new OnlyOwnerCanAddMemberRule(this, byMember));
     this._props.members.push(
       Member.create({
         name: newMemberName,
@@ -68,6 +71,30 @@ export class Group extends AggregateRoot<GroupProps> {
         roleId: Role.getMember(this._props.roles).id as CUID,
       }),
     );
+    this.update();
+  }
+
+  /**
+   * Reactivate a removed or left member
+   * @param member
+   * @param addedByMember
+   */
+  public reactivateMember(member: Member, addedByMember: Member) {
+    RuleValidator.validate(new OnlyOwnerCanAddMemberRule(this, addedByMember));
+    member.reactivate();
+    this._props.members.push(member);
+    this.update();
+  }
+
+  /**
+   * Remove a member from the group by group owner, the member's status will change to REMOVED
+   * @param member Member to be removed
+   * @param byMember The group owner
+   */
+  public removeMember(member: Member, byMember: Member) {
+    RuleValidator.validate(new OnlyOwnerCanRemoveMemberRule(this, byMember));
+    member.removed();
+    this._props.members.push(member);
     this.update();
   }
 

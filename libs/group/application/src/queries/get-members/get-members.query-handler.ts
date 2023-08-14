@@ -1,4 +1,5 @@
 import { Member, MemberRepository } from '@lib/group/domain';
+import { MemberStatus } from '@lib/group/domain/constant';
 import { BaseQueryHandler, CUID } from '@lib/shared';
 import { QueryHandler } from '@nestjs/cqrs';
 
@@ -23,6 +24,9 @@ export class GetMembersQueryHandler extends BaseQueryHandler<
     if (!memberInGroup) {
       return [];
     }
-    return await this._memberRepository.findMany({ groupId });
+    return await this._memberRepository.findMany({
+      groupId,
+      status: MemberStatus.ACTIVE,
+    });
   }
 }

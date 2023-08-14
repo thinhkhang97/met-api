@@ -25,7 +25,22 @@ export class Member extends BaseEntity<MemberProps> {
    * @param props Properties to create a member
    */
   public static create(props: CreateMemberProps) {
-    return new Member({ ...props, role: null, status: MemberStatus.ACITVE });
+    return new Member({ ...props, role: null, status: MemberStatus.ACTIVE });
+  }
+
+  public updateName(name: string) {
+    this._props.name = name;
+    this.update();
+  }
+
+  public removed() {
+    this._props.status = MemberStatus.REMOVED;
+    this.update();
+  }
+
+  public reactivate() {
+    this._props.status = MemberStatus.ACTIVE;
+    this.update();
   }
 
   validate() {

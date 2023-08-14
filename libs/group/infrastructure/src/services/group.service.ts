@@ -5,11 +5,11 @@ import {
   GroupRepository,
   GroupService,
   IdentityService,
-  MemberExistedException,
+  Member,
   MemberNotFoundException,
   MemberRepository,
 } from '@lib/group/domain';
-import { CUID } from '@lib/shared';
+import { CUID, Nullable } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -56,18 +56,54 @@ export class GroupServiceImpl extends GroupService {
     if (!member) {
       throw new MemberNotFoundException();
     }
-    const newMember = await this._identityService.getUserById(newMemberUserId);
+    const newMemberUserInfo = await this._identityService.getUserById(
+      newMemberUserId,
+    );
 
-    await this.checkMemberExist(newMemberUserId, groupId);
-    group.addNewMember(member, name, newMember.id);
+    const existMember = await this.getMemberByUserId(newMemberUserId, groupId);
+    if (!existMember) {
+      group.addNewMember(name, newMemberUserInfo.id, member);
+    } else {
+      existMember.updateName(name);
+      group.reactivateMember(existMember, member);
+    }
     await this._groupRepository.save(group);
     return group;
   }
 
-  private async checkMemberExist(userId: CUID, groupId: CUID): Promise<void> {
-    const member = await this._memberRepository.findOne({ userId, groupId });
-    if (member) {
-      throw new MemberExistedException();
+  public async removeMember(
+    groupId: CUID,
+    memberId: CUID,
+    byMemberUserId: CUID,
+  ) {
+    const group = await this._groupRepository.findOneByIdOrThrow(
+      groupId,
+      new GroupNotFoundException(),
+    );
+    const member = await this._memberRepository.findOne({
+      id: memberId,
+      groupId: groupId,
+    });
+    const byMember = await this._memberRepository.findOne({
+      userId: byMemberUserId,
+      groupId,
+    });
+
+    if (!member || !byMember) {
+      throw new MemberNotFoundException();
     }
+
+    group.removeMember(member, byMember);
+    await this._groupRepository.save(group);
+  }
+
+  private async getMemberByUserId(
+    userId: CUID,
+    groupId: CUID,
+  ): Promise<Nullable<Member>> {
+    return await this._memberRepository.findOne({
+      userId,
+      groupId,
+    });
   }
 }

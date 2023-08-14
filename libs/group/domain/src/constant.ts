@@ -18,7 +18,7 @@ export enum MemberStatus {
   /**
    * The member is already in the group
    */
-  ACITVE,
+  ACTIVE,
   /**
    * The member walked out on the group
    */
