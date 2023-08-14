@@ -51,6 +51,7 @@ model Member {
   userId  String
   groupId String
   roleId  String
+  status  Int     @default(1) @db.SmallInt // 0: Inactive, 1: Active, 2: Banned
 
   group Group @relation(fields: [groupId], references: [id])
   role  Role  @relation(fields: [roleId], references: [id])

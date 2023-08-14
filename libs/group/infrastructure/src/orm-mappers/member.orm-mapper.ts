@@ -23,6 +23,7 @@ export class MemberOrmMapper extends BaseOrmMapper<
       roleId: new CUID(ormEntity.roleId),
       avatar: ormEntity.avatar,
       role: ormEntity.role ? this._roleMapper.toEntity(ormEntity.role) : null,
+      status: ormEntity.status,
     };
   }
 
@@ -35,6 +36,7 @@ export class MemberOrmMapper extends BaseOrmMapper<
       userId: props.userId.unpack(),
       roleId: props.roleId.unpack(),
       role: props.role ? this._roleMapper.toOrm(props.role) : null,
+      status: props.status,
     };
   }
 }
