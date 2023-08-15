@@ -9,7 +9,7 @@ import { IQueryHandler } from '@nestjs/cqrs';
 import { Err, Ok } from 'oxide.ts';
 
 export abstract class BaseQueryHandler<Query extends BaseQuery, Response>
-  implements IQueryHandler
+  implements IQueryHandler<Query, Result<Response, BaseException>>
 {
   private readonly _logger = new Logger(this.constructor.name);
 

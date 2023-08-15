@@ -2,10 +2,20 @@ import { AggregateRoot, Email, Nullable } from '@lib/shared';
 import { Username } from '@lib/user/domain/value-objects';
 import { Password } from '@lib/user/domain/value-objects/password';
 
-export type UserProps = {
+export enum UserStatus {
+  NEW,
+  VERIFIED,
+  IN_ACTIVE,
+}
+
+export type CreateUserProps = {
   email: Email;
   name: Nullable<Username>;
   password: Password;
+};
+
+export type UserProps = CreateUserProps & {
+  status: UserStatus;
 };
 
 export class User extends AggregateRoot<UserProps> {
@@ -26,10 +36,11 @@ export class User extends AggregateRoot<UserProps> {
       email,
       password,
       name: null,
+      status: UserStatus.NEW,
     });
   }
 
-  valiate() {
+  validate() {
     return;
   }
 }

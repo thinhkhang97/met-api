@@ -10,15 +10,6 @@
   "monorepo": true,
   "root": "apps/lunch-together-api",
   "projects": {
-    "core": {
-      "type": "application",
-      "root": "apps/core",
-      "entryFile": "main",
-      "sourceRoot": "apps/core/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/core/tsconfig.app.json"
-      }
-    },
     "shared": {
       "type": "library",
       "root": "libs/shared",
@@ -71,6 +62,78 @@
       "sourceRoot": "libs/user/graphql-ui/src",
       "compilerOptions": {
         "tsConfigPath": "libs/user/graphql-ui/tsconfig.lib.json"
+      }
+    },
+    "group/domain": {
+      "type": "library",
+      "root": "libs/group/domain",
+      "entryFile": "index",
+      "sourceRoot": "libs/group/domain/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/group/domain/tsconfig.lib.json"
+      }
+    },
+    "group/infrastructure": {
+      "type": "library",
+      "root": "libs/group/infrastructure",
+      "entryFile": "index",
+      "sourceRoot": "libs/group/infrastructure/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/group/infrastructure/tsconfig.lib.json"
+      }
+    },
+    "identity": {
+      "type": "application",
+      "root": "apps/identity",
+      "entryFile": "main",
+      "sourceRoot": "apps/identity/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/identity/tsconfig.app.json"
+      }
+    },
+    "graphql-gateway": {
+      "type": "application",
+      "root": "apps/graphql-gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/graphql-gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/graphql-gateway/tsconfig.app.json"
+      }
+    },
+    "group/graphql-ui": {
+      "type": "library",
+      "root": "libs/group/graphql-ui",
+      "entryFile": "index",
+      "sourceRoot": "libs/group/graphql-ui/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/group/graphql-ui/tsconfig.lib.json"
+      }
+    },
+    "group": {
+      "type": "application",
+      "root": "apps/group",
+      "entryFile": "main",
+      "sourceRoot": "apps/group/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/group/tsconfig.app.json"
+      }
+    },
+    "group/application": {
+      "type": "library",
+      "root": "libs/group/application",
+      "entryFile": "index",
+      "sourceRoot": "libs/group/application/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/group/application/tsconfig.lib.json"
+      }
+    },
+    "user/rest-ui": {
+      "type": "library",
+      "root": "libs/user/rest-ui",
+      "entryFile": "index",
+      "sourceRoot": "libs/user/rest-ui/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/user/rest-ui/tsconfig.lib.json"
       }
     }
   }

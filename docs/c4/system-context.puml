@@ -1,0 +1,8 @@
+@startuml C4_Elements
+!include  https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(personAlias, "User", "A member of a group or an organization")
+System(ltSystemAlias, "Lunch Together System", "Provides services to help user making a meal with their friends")
+
+Rel(personAlias, ltSystemAlias, "", "View and get information, host a meal with friends using")
+@enduml

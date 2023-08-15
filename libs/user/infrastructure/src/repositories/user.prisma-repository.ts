@@ -1,8 +1,8 @@
-import { PrismaRepository, PrismaService, QueryParams } from '@lib/shared';
+import { PrismaRepository, QueryParams, UserPrismaService } from '@lib/shared';
 import { User, UserProps } from '@lib/user/domain';
 import { UserOrmMapper } from '@lib/user/infrastructure/orm-mappers';
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/user-client';
 
 import { UserOrmEntity } from '../orm-entities';
 
@@ -14,7 +14,7 @@ export class UserPrismaRepository extends PrismaRepository<
   Prisma.UserDelegate<undefined>
 > {
   constructor(
-    private readonly _prismaService: PrismaService,
+    private readonly _prismaService: UserPrismaService,
     _ormMapper: UserOrmMapper,
   ) {
     super(_prismaService.user, _ormMapper);
@@ -31,5 +31,11 @@ export class UserPrismaRepository extends PrismaRepository<
     }
 
     return whereCondition;
+  }
+
+  getIncludeRelation():
+    | { include: { [key in keyof UserProps]?: boolean } }
+    | undefined {
+    return undefined;
   }
 }

@@ -21,14 +21,17 @@ export abstract class PrismaRepository<
     private readonly _ormMapper: BaseOrmMapper<Entity, EntityProps, OrmEntity>,
   ) {}
 
-  public abstract getWhereCondition(
-    props: QueryParams<EntityProps>,
-  ): WhereCondition;
+  public abstract getIncludeRelation():
+    | {
+        include: { [key in keyof EntityProps]?: boolean };
+      }
+    | undefined;
 
   public async findMany(
     props: QueryParams<EntityProps>,
   ): Promise<Array<Entity>> {
     const result = (await this._delegate.findMany({
+      ...this.getIncludeRelation(),
       where: this.getWhereCondition(props),
     })) as Array<OrmEntity>;
     return result.map((r) => this._ormMapper.toEntity(r));
@@ -37,7 +40,8 @@ export abstract class PrismaRepository<
   public async findOne(
     props: QueryParams<EntityProps>,
   ): Promise<Nullable<Entity>> {
-    const result = (await this._delegate.findUnique({
+    const result = (await this._delegate.findFirst({
+      ...this.getIncludeRelation(),
       where: this.getWhereCondition(props),
     })) as OrmEntity;
     return result ? this._ormMapper.toEntity(result) : null;
@@ -49,6 +53,7 @@ export abstract class PrismaRepository<
   ): Promise<Entity> {
     const _id = id instanceof ID ? id.unpack() : id;
     const result = (await this._delegate.findFirst({
+      ...this.getIncludeRelation(),
       where: { id: _id },
     })) as OrmEntity;
     if (!result) {
@@ -57,20 +62,24 @@ export abstract class PrismaRepository<
     return this._ormMapper.toEntity(result);
   }
 
-  public preSave(entity: Entity) {
-    const ormProps = this._ormMapper.toOrm(entity);
-    return {
-      where: { id: ormProps.id },
-      create: { ...ormProps },
-      update: { ...ormProps, version: ormProps.version + 1 },
-    };
-  }
-
   public async save(entity: Entity): Promise<Entity> {
-    entity.valiate();
+    entity.validate();
     const ormEntity = (await this._delegate.upsert(
       this.preSave(entity),
     )) as OrmEntity;
     return this._ormMapper.toEntity(ormEntity);
+  }
+
+  protected abstract getWhereCondition(
+    props: QueryParams<EntityProps>,
+  ): WhereCondition;
+
+  protected preSave(entity: Entity): any {
+    const ormProps = this._ormMapper.toOrm(entity);
+    return {
+      where: { id: ormProps.id },
+      create: { ...ormProps },
+      update: { ...ormProps },
+    };
   }
 }

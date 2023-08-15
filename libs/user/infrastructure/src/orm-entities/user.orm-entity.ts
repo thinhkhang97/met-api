@@ -1,3 +1,3 @@
-import { User } from '@prisma/client';
+import { User } from '@prisma/user-client';
 
 export type UserOrmEntity = User;

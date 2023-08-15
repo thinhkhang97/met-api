@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../node_modules/@prisma/group-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB")
+}
+
+model Group {
+  id        String   @id @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  version   Int      @default(0)
+
+  name    String
+  members Member[]
+  roles   Role[]
+
+  @@map("group")
+}
+
+model Role {
+  id        String   @id @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  version   Int      @default(0)
+
+  name    String // Group owner, admin, member
+  groupId String
+
+  group   Group    @relation(fields: [groupId], references: [id])
+  members Member[]
+
+  @@index([groupId])
+  @@map("role")
+}
+
+model Member {
+  id        String   @id @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  version   Int      @default(0)
+
+  name    String
+  avatar  String?
+  userId  String
+  groupId String
+  roleId  String
+  status  Int     @default(1) @db.SmallInt // 0: Inactive, 1: Active, 2: Banned
+
+  group Group @relation(fields: [groupId], references: [id])
+  role  Role  @relation(fields: [roleId], references: [id])
+
+  @@index([groupId, roleId])
+  @@map("member")
+}

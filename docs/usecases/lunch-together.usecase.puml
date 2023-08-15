@@ -1,0 +1,49 @@
+@startuml
+left to right direction
+actor User as u
+actor GroupOwner as go 
+actor GroupMember as gm
+package LunchTogether {
+    usecase "Register" as app_uc1
+    usecase "Login" as app_uc2
+    usecase "Verify" as app_uc3
+    usecase "Create group" as app_uc4
+
+    usecase "Update group info" as g_uc4
+    usecase "Add member" as g_uc1
+    usecase "Remove member" as g_uc2
+    usecase "Leave group" as g_uc6
+    usecase "View list member" as g_uc3
+    usecase "Update member info" as g_uc5
+
+    usecase "Create a meal" as m_uc1
+    usecase "View list of restaurants" as m_uc2
+    usecase "Add member into a meal" as m_uc3
+    usecase "View dishes in the restaurants" as m_uc4
+    usecase "Pick dishes for the meal" as m_uc5
+    usecase "View meal sumary before making order" as m_uc6
+    usecase "Make order" as m_uc7
+    usecase "View meal history" as m_uc8
+}
+
+u --> app_uc1
+u --> app_uc2
+u --> app_uc3
+u --> app_uc4
+go --> g_uc1
+go --> g_uc2
+go --> g_uc4
+gm --> g_uc3
+gm --> g_uc5
+gm --> g_uc6
+
+gm --> m_uc1
+gm --> m_uc2
+gm --> m_uc3
+gm --> m_uc4
+gm --> m_uc5
+gm --> m_uc6
+gm --> m_uc7
+gm --> m_uc8
+
+@enduml

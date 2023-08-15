@@ -17,7 +17,7 @@ export interface PrismaDelegate {
 
   findMany(data: unknown): Promise<unknown>;
 
-  findUnique(data: unknown): Promise<unknown>;
+  findUnique(data: unknown): Promise<unknown> | unknown;
 
   update(data: unknown): Promise<unknown>;
 

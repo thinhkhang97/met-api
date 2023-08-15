@@ -50,7 +50,7 @@ export abstract class BaseEntity<T> {
     return object instanceof BaseEntity;
   }
 
-  public abstract valiate();
+  public abstract validate();
 
   public getProps(): T & BaseEntityProps {
     const propsCopy = {
@@ -77,5 +77,10 @@ export abstract class BaseEntity<T> {
     }
 
     return this._id.equals(entity._id);
+  }
+
+  protected update() {
+    this._props.updatedAt = DateVO.now();
+    this._props.version += 1;
   }
 }
