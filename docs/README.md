@@ -43,10 +43,8 @@ the basic roles are OWNER and MEMBER, only group owner can add more roles. Becau
 supported adding more roles yet, in the future, a group can create more role as demand of business.
 
 A group certainly has some members, a member in the group has their own name and one role, and it should be distinction
-with other
-member. Only the group owner can add a new member into the group. The group owner also has ability to remove a member
-out of the
-group. In the next version, we may have more features to manage group better.
+with other member. Only the group owner can add a new member into the group. The group owner also has ability to remove
+a member out of the group. In the next version, we may have more features to manage group better.
 
 #### View groups
 
@@ -69,3 +67,45 @@ Like any member, a new member should provide their name in group, and it must be
 A group owner can remove a member out of their group
 
 ### Meeting
+
+A meeting is a session that every member in a group can be together to do a specific action like deep dive, planing,
+etc.
+For the MVP, we already have planing meeting type, other types is coming soon.
+
+#### Create a planing meeting
+
+A planing meeting is a session in which every single member in a team will give their opinions about the tasks in a
+sprint. Every member in a group can create a planing meeting by creating a meeting by providing title, description and
+choose planing type.
+
+#### Add more member into a meeting
+
+Any attended member can add other members in their group into the meeting. There should be a place to show the list of
+members in the meeting
+
+#### Remove member
+
+Any attended member can remove a member out of the meeting
+
+#### Add a task for planing or deep dive
+
+Any member in the meeting can add a task for deep dive or planing, a task should have title and description
+
+#### Remove task for the planing
+
+Any member can remove a task out of the meeting
+
+#### Vote for a task
+
+Before voting, at anytime, a member can switch between two role that are VOTER and SUPER VISOR. A voter can give their
+value for a task, otherwise supervisors just watch what will happen.
+
+When a member start a vote session for a task, everyone in the meeting will be put into the session. The voters have
+some values which might be cards or something to pick. The voter can pick one value or not, the picked value is secret
+and no one can know it. After a while, any member can stop the vote and show all the values. The estimation value is
+calculated by the average values of voters
+
+#### View meeting history
+
+There will be a place to view all the meeting history, including members, tasks and vote in the planing meeting.
+
