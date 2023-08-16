@@ -79,6 +79,12 @@
       ],
       "@lib/user/rest-ui/*": [
         "libs/user/rest-ui/src/*"
+      ],
+      "@lib/meeting/domain": [
+        "libs/meeting/domain/src"
+      ],
+      "@lib/meeting/domain/*": [
+        "libs/meeting/domain/src/*"
       ]
     }
   }

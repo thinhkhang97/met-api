@@ -135,6 +135,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/user/rest-ui/tsconfig.lib.json"
       }
+    },
+    "meeting/domain": {
+      "type": "library",
+      "root": "libs/meeting/domain",
+      "entryFile": "index",
+      "sourceRoot": "libs/meeting/domain/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/meeting/domain/tsconfig.lib.json"
+      }
     }
   }
 }

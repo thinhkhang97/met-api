@@ -107,7 +107,8 @@
       "^@lib/group/infrastructure(|/.*)$": "<rootDir>/libs/group/infrastructure/src/$1",
       "^@lib/group/graphql-ui(|/.*)$": "<rootDir>/libs/group/graphql-ui/src/$1",
       "^@lib/group/application(|/.*)$": "<rootDir>/libs/group/application/src/$1",
-      "^@lib/user/rest-ui(|/.*)$": "<rootDir>/libs/user/rest-ui/src/$1"
+      "^@lib/user/rest-ui(|/.*)$": "<rootDir>/libs/user/rest-ui/src/$1",
+      "^@lib/meeting/domain(|/.*)$": "<rootDir>/libs/meeting/domain/src/$1"
     }
   }
 }
