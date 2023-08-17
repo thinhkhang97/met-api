@@ -144,6 +144,33 @@
       "compilerOptions": {
         "tsConfigPath": "libs/meeting/domain/tsconfig.lib.json"
       }
+    },
+    "meeting": {
+      "type": "application",
+      "root": "apps/meeting",
+      "entryFile": "main",
+      "sourceRoot": "apps/meeting/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/meeting/tsconfig.app.json"
+      }
+    },
+    "socket": {
+      "type": "application",
+      "root": "apps/socket",
+      "entryFile": "main",
+      "sourceRoot": "apps/socket/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/socket/tsconfig.app.json"
+      }
+    },
+    "meeting/socket": {
+      "type": "library",
+      "root": "libs/meeting/socket",
+      "entryFile": "index",
+      "sourceRoot": "libs/meeting/socket/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/meeting/socket/tsconfig.lib.json"
+      }
     }
   }
 }

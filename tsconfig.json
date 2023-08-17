@@ -85,6 +85,12 @@
       ],
       "@lib/meeting/domain/*": [
         "libs/meeting/domain/src/*"
+      ],
+      "@lib/meeting/socket": [
+        "libs/meeting/socket/src"
+      ],
+      "@lib/meeting/socket/*": [
+        "libs/meeting/socket/src/*"
       ]
     }
   }
