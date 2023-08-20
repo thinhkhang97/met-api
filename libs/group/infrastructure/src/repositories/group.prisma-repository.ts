@@ -148,11 +148,10 @@ export class GroupPrismaRepository
   ): Prisma.MemberUpdateManyWithoutGroupNestedInput {
     return {
       upsert: members.map((member) => {
-        const memberWithoutRole = omit(member, 'role');
         return {
           where: { id: member.id },
-          create: { ...memberWithoutRole },
-          update: { ...memberWithoutRole },
+          create: { ...member },
+          update: { ...member },
         };
       }),
     };

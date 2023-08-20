@@ -43,12 +43,13 @@ export class Group extends AggregateRoot<GroupProps> {
     );
     const groupId = CUID.generate();
     const roles = Role.forCasual(groupId);
+    const ownerRole = Role.getOwner(roles);
     const owner = Member.create({
       name: props.ownerName,
       userId: props.userId,
-      roleId: Role.getOwner(roles).id as CUID,
       avatar: null,
       groupId,
+      role: ownerRole,
     });
     return new Group(
       { name: props.name.toLowerCase(), roles, members: [owner] },
@@ -68,16 +69,17 @@ export class Group extends AggregateRoot<GroupProps> {
     byMember: Member,
   ) {
     RuleValidator.validate(new OnlyOwnerCanAddMemberRule(this, byMember));
-    this._props.members.push(
-      Member.create({
-        name: newMemberName,
-        userId: newMemberUserId,
-        avatar: null,
-        groupId: this._props.id as CUID,
-        roleId: Role.getMember(this._props.roles).id as CUID,
-      }),
-    );
+    const role = Role.getMember(this._props.roles);
+    const newMember = Member.create({
+      name: newMemberName,
+      userId: newMemberUserId,
+      avatar: null,
+      groupId: this._props.id as CUID,
+      role,
+    });
+    this._props.members.push(newMember);
     this.update();
+    return newMember;
   }
 
   /**

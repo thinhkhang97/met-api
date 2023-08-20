@@ -1,4 +1,4 @@
-import { CUID } from '@lib/shared';
+import { CUID, Email } from '@lib/shared';
 
 export interface User {
   id: CUID;
@@ -16,4 +16,10 @@ export abstract class IdentityService {
    * @param userId
    */
   public abstract getUserById(userId: CUID): Promise<User>;
+
+  /**
+   * Get the user information in the internal identity service by email
+   * @param email
+   */
+  public abstract getUserByEmail(email: Email): Promise<User>;
 }

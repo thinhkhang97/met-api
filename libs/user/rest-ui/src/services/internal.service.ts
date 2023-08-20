@@ -1,5 +1,8 @@
 import { Either } from '@lib/shared';
-import { GetUserQuery } from '@lib/user/application/queries';
+import {
+  GetUserByEmailQuery,
+  GetUserQuery,
+} from '@lib/user/application/queries';
 import { User, UserNotFoundException } from '@lib/user/domain';
 import { Injectable } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
@@ -12,6 +15,25 @@ export class InternalService {
     const result = await this._queryBus.execute<GetUserQuery, Either<User>>(
       new GetUserQuery({ userId }),
     );
+
+    if (result.isErr()) {
+      throw new UserNotFoundException();
+    }
+
+    const user = result.unwrap().getProps();
+
+    return {
+      id: user.id.unpack(),
+      email: user.email.unpack(),
+      status: user.status,
+    };
+  }
+
+  public async getUserByEmail(email: string) {
+    const result = await this._queryBus.execute<
+      GetUserByEmailQuery,
+      Either<User>
+    >(new GetUserByEmailQuery({ email }));
 
     if (result.isErr()) {
       throw new UserNotFoundException();

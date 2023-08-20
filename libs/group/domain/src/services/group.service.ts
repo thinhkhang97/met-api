@@ -1,5 +1,6 @@
 import { Group } from '@lib/group/domain/aggregates';
-import { CUID } from '@lib/shared';
+import { Member } from '@lib/group/domain/entities';
+import { CUID, Email } from '@lib/shared';
 
 export abstract class GroupService {
   /**
@@ -19,14 +20,14 @@ export abstract class GroupService {
    * @param name Name of the new member in group
    * @param groupId
    * @param userId
-   * @param newMemberUserId User id of the member to identity they exist in the system
+   * @param email User email
    */
   abstract addMember(
     name: string,
     groupId: CUID,
     userId: CUID,
-    newMemberUserId: CUID,
-  ): Promise<Group>;
+    email: Email,
+  ): Promise<Member>;
 
   /**
    * Remove a member out of the group by group owner

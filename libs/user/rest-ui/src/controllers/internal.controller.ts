@@ -12,4 +12,9 @@ export class InternalController {
   public async getUserById(@Query() query) {
     return await this._identityService.getUserById(query.id);
   }
+
+  @Get('user-by-email')
+  public async getUserByEmail(@Query() query) {
+    return await this._identityService.getUserByEmail(query.email);
+  }
 }

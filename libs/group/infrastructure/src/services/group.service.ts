@@ -9,7 +9,7 @@ import {
   MemberNotFoundException,
   MemberRepository,
 } from '@lib/group/domain';
-import { CUID, Nullable } from '@lib/shared';
+import { CUID, Email, Nullable } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -46,8 +46,8 @@ export class GroupServiceImpl extends GroupService {
     name: string,
     groupId: CUID,
     userId: CUID,
-    newMemberUserId: CUID,
-  ): Promise<Group> {
+    email: Email,
+  ): Promise<Member> {
     const group = await this._groupRepository.findOneByIdOrThrow(
       groupId,
       new GroupNotFoundException(),
@@ -56,19 +56,17 @@ export class GroupServiceImpl extends GroupService {
     if (!member) {
       throw new MemberNotFoundException();
     }
-    const newMemberUserInfo = await this._identityService.getUserById(
-      newMemberUserId,
-    );
+    const newMemberUserInfo = await this._identityService.getUserByEmail(email);
 
-    const existMember = await this.getMemberByUserId(newMemberUserId, groupId);
-    if (!existMember) {
-      group.addNewMember(name, newMemberUserInfo.id, member);
+    let newMember = await this.getMemberByUserId(newMemberUserInfo.id, groupId);
+    if (!newMember) {
+      newMember = group.addNewMember(name, newMemberUserInfo.id, member);
     } else {
-      existMember.updateName(name);
-      group.reactivateMember(existMember, member);
+      newMember.updateName(name);
+      group.reactivateMember(newMember, member);
     }
     await this._groupRepository.save(group);
-    return group;
+    return newMember;
   }
 
   public async removeMember(
