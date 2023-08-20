@@ -1,5 +1,10 @@
-import { Group, GroupProps } from '@lib/group/domain';
-import { GroupPrismaService, PrismaRepository, QueryParams } from '@lib/shared';
+import { Group, GroupProps, GroupRepository } from '@lib/group/domain';
+import {
+  CUID,
+  GroupPrismaService,
+  PrismaRepository,
+  QueryParams,
+} from '@lib/shared';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/group-client';
 import { omit } from 'lodash';
@@ -12,12 +17,15 @@ import {
 import { GroupOrmMapper } from '../orm-mappers';
 
 @Injectable()
-export class GroupPrismaRepository extends PrismaRepository<
-  Group,
-  GroupProps,
-  GroupOrmEntity,
-  Prisma.GroupDelegate<undefined>
-> {
+export class GroupPrismaRepository
+  extends PrismaRepository<
+    Group,
+    GroupProps,
+    GroupOrmEntity,
+    Prisma.GroupDelegate<undefined>
+  >
+  implements GroupRepository
+{
   constructor(
     private readonly _prismaService: GroupPrismaService,
     private readonly _groupOrmMapper: GroupOrmMapper,
@@ -31,6 +39,26 @@ export class GroupPrismaRepository extends PrismaRepository<
         roles: true,
       },
     };
+  }
+
+  async getManyByUserId(userId: CUID): Promise<Group[]> {
+    const queryArgs: Prisma.GroupFindManyArgs = {
+      ...this.getIncludeRelation(),
+      where: {
+        members: {
+          some: {
+            userId: userId.value,
+          },
+        },
+      },
+    };
+    const result = (await this._prismaService.group.findMany(
+      queryArgs,
+    )) as GroupOrmEntity[];
+    if (!result) {
+      return [];
+    }
+    return result.map((groupOrm) => this._groupOrmMapper.toEntity(groupOrm));
   }
 
   protected override getWhereCondition(
