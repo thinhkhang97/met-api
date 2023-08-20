@@ -14,6 +14,6 @@ export class GetGroupsQueryHandler extends BaseQueryHandler<
   }
 
   protected handle(query: GetGroupsQuery): Promise<Group[]> {
-    return this._groupRepository.getManyByUserId(new CUID(query.userId));
+    return this._groupRepository.findManyByUserId(new CUID(query.userId));
   }
 }

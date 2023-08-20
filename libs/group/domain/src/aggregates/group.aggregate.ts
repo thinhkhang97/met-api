@@ -2,6 +2,8 @@ import { AggregateRoot, CUID, RuleValidator } from '@lib/shared';
 
 import { Member, Role } from '../entities';
 import {
+  GroupMustHaveNameRule,
+  MemberMustHaveNameRule,
   OnlyOwnerCanAddMemberRule,
   OnlyOwnerCanRemoveMemberRule,
 } from '../rules';
@@ -35,6 +37,10 @@ export class Group extends AggregateRoot<GroupProps> {
    * @param props Properties to create a group
    */
   public static create(props: CreateGroupProps) {
+    RuleValidator.validate(
+      new GroupMustHaveNameRule(props.name),
+      new MemberMustHaveNameRule(props.ownerName),
+    );
     const groupId = CUID.generate();
     const roles = Role.forCasual(groupId);
     const owner = Member.create({

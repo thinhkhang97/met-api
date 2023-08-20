@@ -18,9 +18,10 @@ export class GroupQuery {
   @Query(() => GroupResult, { name: 'group' })
   public async getGroup(
     @Args({ type: () => ID, name: 'groupId' }) groupId: string,
+    @GraphQLUser() loggedUser: LoggedUser,
   ) {
     const result = await this._queryBus.execute<GetGroupQuery, Either<Group>>(
-      new GetGroupQuery({ groupId }),
+      new GetGroupQuery({ groupId, userId: loggedUser.id }),
     );
     if (result.isErr()) {
       return {

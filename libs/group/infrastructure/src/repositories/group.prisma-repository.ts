@@ -2,6 +2,7 @@ import { Group, GroupProps, GroupRepository } from '@lib/group/domain';
 import {
   CUID,
   GroupPrismaService,
+  Nullable,
   PrismaRepository,
   QueryParams,
 } from '@lib/shared';
@@ -41,7 +42,28 @@ export class GroupPrismaRepository
     };
   }
 
-  async getManyByUserId(userId: CUID): Promise<Group[]> {
+  async findOneByUserId(userId: CUID, groupId: CUID): Promise<Nullable<Group>> {
+    const queryArgs: Prisma.GroupFindFirstArgs = {
+      ...this.getIncludeRelation(),
+      where: {
+        id: groupId.value,
+        members: {
+          some: {
+            userId: userId.value,
+          },
+        },
+      },
+    };
+    const result = (await this._prismaService.group.findFirst(
+      queryArgs,
+    )) as GroupOrmEntity;
+    if (!result) {
+      return null;
+    }
+    return this._groupOrmMapper.toEntity(result);
+  }
+
+  async findManyByUserId(userId: CUID): Promise<Group[]> {
     const queryArgs: Prisma.GroupFindManyArgs = {
       ...this.getIncludeRelation(),
       where: {
