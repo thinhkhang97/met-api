@@ -1,3 +1,3 @@
-export * from './planing-member.entity';
-export * from './planing-member-vote.entity';
-export * from './planing-task.entity';
+export * from './member.entity';
+export * from './member-estimation.entity';
+export * from './task.entity';

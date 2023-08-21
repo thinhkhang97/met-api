@@ -1,1 +1,1 @@
-export * from './only-voter-can-vote.rule';
+export * from './only-voter-can-estimate.rule';

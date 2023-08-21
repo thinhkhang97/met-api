@@ -1,21 +1,22 @@
 import { AggregateRoot, CUID } from '@lib/shared/ddd';
 
-import { MeetingPurpose } from '../constance';
-import { PlaningMember } from '../entities';
+import { Member } from '../entities';
 
 export interface CreateMeetingProps {
   /**
    * Group id
    */
   groupId: CUID;
+
   /**
-   * The purpose of the meeting, it can be a deep dive meeting or a meal
+   * Meeting title
    */
-  purpose: MeetingPurpose;
+  title: string;
+
   /**
    * Member who create the meeting
    */
-  members: PlaningMember[];
+  members: Member[];
 }
 
 export type MeetProps = CreateMeetingProps;
@@ -28,7 +29,7 @@ export abstract class Meeting<C extends MeetProps> extends AggregateRoot<C> {
    * Remove a member out of the meeting
    * @param member
    */
-  public removeMember(member: PlaningMember) {
+  public removeMember(member: Member) {
     this._props.members = this._props.members.filter(
       (_member) => !member.equals(_member),
     );
@@ -39,8 +40,13 @@ export abstract class Meeting<C extends MeetProps> extends AggregateRoot<C> {
    * Add a member into the meeting
    * @param member
    */
-  public addMember(member: PlaningMember) {
-    this._props.members.push(member);
+  public addMember(member: Member) {
+    const existMember = this._props.members.find((_member) =>
+      _member.equals(member),
+    );
+    if (!existMember) {
+      this._props.members.push(member);
+    }
     this.update();
   }
 }

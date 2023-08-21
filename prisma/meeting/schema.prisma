@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../node_modules/@prisma/meeting-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB")
+}
+
+model Meeting {
+  id        String   @id @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  version   Int      @default(0)
+
+  name String
+
+  @@map("meeting")
+}

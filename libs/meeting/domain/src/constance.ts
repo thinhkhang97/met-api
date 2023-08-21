@@ -1,13 +1,13 @@
-export enum MeetingPurpose {
-  DEEP_DIVE,
-  MEAL,
+export enum TaskEstimationStatus {
+  REMOVED,
+  ACTIVE,
 }
 
-export enum PlaningMemberRole {
+export enum MemberRole {
   /**
    * Only watch the process
    */
-  SUPER_VISOR,
+  WATCHER,
   /**
    * Vote the point for the ticket
    */

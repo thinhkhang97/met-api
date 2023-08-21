@@ -1,5 +1,6 @@
+import { AuthGuard } from '@lib/shared';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, OnModuleInit } from '@nestjs/common';
+import { Inject, OnModuleInit, UseGuards } from '@nestjs/common';
 import {
   MessageBody,
   OnGatewayConnection,
@@ -40,7 +41,10 @@ export class PlaningMeetingSocketGateway
     });
   }
 
+  @UseGuards(AuthGuard)
   async handleConnection(client: Socket) {
+    const [_, token] = client.handshake.headers.authorization?.split(' ') || [];
+
     const userName = client.handshake.headers['user-name'];
     const user: UserData = {
       name: userName as string,
