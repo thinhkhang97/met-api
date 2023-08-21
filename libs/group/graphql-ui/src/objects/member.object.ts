@@ -15,6 +15,9 @@ export class MemberObject extends BaseObject {
   @Field(() => ID)
   public readonly roleId: string;
 
+  @Field(() => ID)
+  public readonly userId: string;
+
   @Field(() => RoleObject, { nullable: true })
   public readonly role: Nullable<RoleObject>;
 
@@ -24,6 +27,7 @@ export class MemberObject extends BaseObject {
     this.name = props.name;
     this.groupId = props.groupId.unpack();
     this.roleId = props.roleId.unpack();
+    this.userId = props.userId.unpack();
     this.role = props.role ? new RoleObject(props.role) : null;
   }
 }
