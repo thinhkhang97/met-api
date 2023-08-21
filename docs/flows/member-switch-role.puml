@@ -1,0 +1,7 @@
+@startuml
+Member -> Gateway: meeting id, member id, new role
+Gateway -> MeetingService: data
+MeetingService -> MeetingService: validate, update member role
+MeetingService -> SocketGateway: member switched role event
+SocketGateway -> Member: member switched role event
+@enduml

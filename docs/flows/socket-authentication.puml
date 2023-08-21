@@ -1,0 +1,6 @@
+@startuml
+Member -> SocketGateway: api key, jwt
+SocketGateway -> IdentityService: user id
+IdentityService -> SocketGateway: user data
+SocketGateway -> SocketGateway: store user in cache
+@enduml

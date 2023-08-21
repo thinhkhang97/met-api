@@ -1,0 +1,7 @@
+@startuml
+Member -> Gateway: task data
+Gateway -> MeetingService: data
+MeetingService -> MeetingService: validate, add task
+MeetingService -> SocketGateway: task added event
+SocketGateway -> Member: added task data
+@enduml

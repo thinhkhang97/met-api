@@ -1,0 +1,7 @@
+@startuml
+Member -> Gateway: task id
+Gateway -> MeetingService: data
+MeetingService -> MeetingService: validate, remove task
+MeetingService -> SocketGateway: task removed event
+SocketGateway -> Member: removed task event
+@enduml

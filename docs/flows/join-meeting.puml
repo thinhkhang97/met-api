@@ -1,0 +1,8 @@
+@startuml
+Member -> Gateway: meeting id, member id
+Gateway -> MeetingService: data
+MeetingService -> GroupService: get member data
+MeetingService -> MeetingService: validate, add member to meeting
+MeetingService -> SocketGateway: member joined event
+SocketGateway -> Member: member joined data
+@enduml
