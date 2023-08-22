@@ -91,6 +91,12 @@
       ],
       "@lib/meeting/socket/*": [
         "libs/meeting/socket/src/*"
+      ],
+      "@lib/meeting/infrastructure": [
+        "libs/meeting/infrastructure/src"
+      ],
+      "@lib/meeting/infrastructure/*": [
+        "libs/meeting/infrastructure/src/*"
       ]
     }
   }

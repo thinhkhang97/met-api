@@ -116,7 +116,8 @@
       "^@lib/group/application(|/.*)$": "<rootDir>/libs/group/application/src/$1",
       "^@lib/user/rest-ui(|/.*)$": "<rootDir>/libs/user/rest-ui/src/$1",
       "^@lib/meeting/domain(|/.*)$": "<rootDir>/libs/meeting/domain/src/$1",
-      "^@lib/meeting/socket(|/.*)$": "<rootDir>/libs/meeting/socket/src/$1"
+      "^@lib/meeting/socket(|/.*)$": "<rootDir>/libs/meeting/socket/src/$1",
+      "^@lib/meeting/infrastructure(|/.*)$": "<rootDir>/libs/meeting/infrastructure/src/$1"
     }
   }
 }

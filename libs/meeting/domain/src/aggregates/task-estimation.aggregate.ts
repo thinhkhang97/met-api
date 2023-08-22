@@ -5,6 +5,11 @@ import { MemberEstimation } from '../entities';
 
 interface CreateTaskEstimationProps {
   /**
+   * Meeting id
+   */
+  meetingId: CUID;
+
+  /**
    * Title of task
    */
   title: string;
@@ -61,6 +66,7 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
       memberEstimation = MemberEstimation.create({
         meetingMemberId,
         estimation: value,
+        taskEstimationId: this.id as CUID,
       });
       this._props.memberEstimations.push(memberEstimation);
     } else {

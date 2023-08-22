@@ -1,4 +1,4 @@
-import { MeetingStatus } from '@lib/meeting/domain/constance';
+import { MeetingStatus, MemberRole } from '@lib/meeting/domain/constance';
 import { AggregateRoot, CUID } from '@lib/shared/ddd';
 
 import { Member } from '../entities';
@@ -44,15 +44,23 @@ export abstract class Meeting<C extends MeetProps> extends AggregateRoot<C> {
 
   /**
    * Add a member into the meeting
-   * @param member
+   * @param memberId
+   * @param name
    */
-  public addMember(member: Member) {
-    const existMember = this._props.members.find((_member) =>
-      _member.equals(member),
+  public addMember(memberId: CUID, name: string) {
+    let member = this._props.members.find((_member) =>
+      _member.memberId.equals(memberId),
     );
-    if (!existMember) {
-      this._props.members.push(member);
+    if (!member) {
+      member = Member.create({
+        name,
+        memberId,
+        role: MemberRole.VOTER,
+        meetingId: this.id as CUID,
+      });
     }
+    this._props.members.push(member);
+
     this.update();
   }
 }

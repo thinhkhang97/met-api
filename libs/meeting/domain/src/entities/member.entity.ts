@@ -1,23 +1,34 @@
 import { BaseEntity, CUID } from '@lib/shared';
 
-import { MemberRole } from '../constance';
+import { MemberRole, MemberStatus } from '../constance';
 
 export interface CreateMemberProps {
   /**
    * Member's id in the group
    */
   memberId: CUID;
+
   /**
    * Type of member in the meeting
    */
-  type: MemberRole;
+  role: MemberRole;
   /**
    * Name of member in group
    */
   name: string;
+
+  /**
+   * Meeting id
+   */
+  meetingId: CUID;
 }
 
-export type MemberProps = CreateMemberProps;
+export interface MemberProps extends CreateMemberProps {
+  /**
+   * Status
+   */
+  status: MemberStatus;
+}
 
 /**
  * A member in a meeting
@@ -25,12 +36,16 @@ export type MemberProps = CreateMemberProps;
 export class Member<
   PM extends MemberProps = MemberProps,
 > extends BaseEntity<PM> {
-  get type() {
-    return this._props.type;
+  get memberId() {
+    return this._props.memberId;
   }
 
-  public static create(props: MemberProps) {
-    return new Member(props);
+  get role() {
+    return this._props.role;
+  }
+
+  public static create(props: CreateMemberProps) {
+    return new Member({ ...props, status: MemberStatus.OFFLINE });
   }
 
   validate() {

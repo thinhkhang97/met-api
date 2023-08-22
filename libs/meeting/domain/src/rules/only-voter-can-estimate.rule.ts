@@ -13,6 +13,6 @@ export class OnlyVoterCanEstimateRule extends BaseRule {
   }
 
   isFailed(): boolean {
-    return this._member.type !== MemberRole.VOTER;
+    return this._member.role !== MemberRole.VOTER;
   }
 }

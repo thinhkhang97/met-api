@@ -11,7 +11,7 @@ import { TaskEstimation } from './task-estimation.aggregate';
 
 type CreateEstimationMeetingProps = CreateMeetingProps;
 
-interface EstimationMeetingProps extends CreateEstimationMeetingProps {
+export interface EstimationMeetingProps extends CreateEstimationMeetingProps {
   /**
    * Tasks need to be considered and estimated by the members in the meeting
    */
@@ -43,6 +43,7 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
     description: Nullable<string>,
   ) {
     const taskEstimation = TaskEstimation.create({
+      meetingId: this.id as CUID,
       title,
       description,
       averageEstimation: null,

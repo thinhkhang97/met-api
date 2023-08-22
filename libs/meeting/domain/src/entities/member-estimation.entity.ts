@@ -10,6 +10,11 @@ export interface CreateMemberEstimationProps {
    * Estimation value of member for the task
    */
   estimation: Nullable<number>;
+
+  /**
+   * task estimation id
+   */
+  taskEstimationId: CUID;
 }
 
 export type MemberEstimationProps = CreateMemberEstimationProps;

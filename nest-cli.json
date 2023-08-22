@@ -171,6 +171,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/meeting/socket/tsconfig.lib.json"
       }
+    },
+    "meeting/infrastructure": {
+      "type": "library",
+      "root": "libs/meeting/infrastructure",
+      "entryFile": "index",
+      "sourceRoot": "libs/meeting/infrastructure/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/meeting/infrastructure/tsconfig.lib.json"
+      }
     }
   }
 }
