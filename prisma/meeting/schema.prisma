@@ -14,7 +14,62 @@ model Meeting {
   updatedAt DateTime @default(now())
   version   Int      @default(0)
 
-  name String
+  title           String
+  groupId         String
+  status          Int              @default(1) @db.SmallInt
+  members         Member[]
+  taskEstimations TaskEstimation[]
 
   @@map("meeting")
+}
+
+model Member {
+  id        String   @id @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  version   Int      @default(0)
+
+  memberId  String
+  name      String
+  role      Int    @default(1) @db.SmallInt
+  meetingId String
+
+  meeting Meeting @relation(references: [id], fields: [meetingId])
+
+  @@index([meetingId])
+  @@map("member")
+}
+
+model TaskEstimation {
+  id        String   @id @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  version   Int      @default(0)
+
+  title             String
+  description       String?
+  meetingId         String
+  averageEstimation Float?
+
+  meeting           Meeting            @relation(references: [id], fields: [meetingId])
+  memberEstimations MemberEstimation[]
+
+  @@index([meetingId])
+  @@map("task_estimation")
+}
+
+model MemberEstimation {
+  id        String   @id @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  version   Int      @default(0)
+
+  meetingMemberId String
+  estimation      Float?
+
+  taskEstimationId String
+  taskEstimation   TaskEstimation @relation(references: [id], fields: [taskEstimationId])
+
+  @@index([taskEstimationId])
+  @@map("member_estimation")
 }

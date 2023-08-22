@@ -1,3 +1,4 @@
+import { MeetingStatus } from '@lib/meeting/domain/constance';
 import { AggregateRoot, CUID } from '@lib/shared/ddd';
 
 import { Member } from '../entities';
@@ -17,6 +18,11 @@ export interface CreateMeetingProps {
    * Member who create the meeting
    */
   members: Member[];
+
+  /**
+   * Meeting status, active or ended
+   */
+  status: MeetingStatus;
 }
 
 export type MeetProps = CreateMeetingProps;

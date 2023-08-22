@@ -13,7 +13,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/lunch-together-api/main",
     "prisma:migrate-dev": "npx prisma migrate dev --schema",
-    "prisma:generate": "npx prisma generate --schema prisma/group/schema.prisma & npx prisma generate --schema prisma/user/schema.prisma",
+    "prisma:generate": "npx prisma generate --schema prisma/group/schema.prisma & npx prisma generate --schema prisma/user/schema.prisma & npx prisma generate --schema prisma/meeting/schema.prisma",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",

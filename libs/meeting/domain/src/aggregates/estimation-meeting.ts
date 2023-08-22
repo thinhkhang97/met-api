@@ -1,7 +1,6 @@
 import { CUID, Nullable, RuleValidator } from '@lib/shared';
 
 import { TaskEstimationStatus } from '../constance';
-import { Task } from '../entities';
 import {
   MeetingMemberNotFoundException,
   TaskEstimationNotFoundException,
@@ -43,9 +42,9 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
     title: string,
     description: Nullable<string>,
   ) {
-    const task = Task.create({ title, description });
     const taskEstimation = TaskEstimation.create({
-      task,
+      title,
+      description,
       averageEstimation: null,
       memberEstimations: [],
     });

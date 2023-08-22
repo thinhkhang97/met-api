@@ -1,13 +1,18 @@
 import { AggregateRoot, CUID, Nullable } from '@lib/shared';
 
 import { TaskEstimationStatus } from '../constance';
-import { MemberEstimation, Task } from '../entities';
+import { MemberEstimation } from '../entities';
 
 interface CreateTaskEstimationProps {
   /**
-   * The task need to be estimated
+   * Title of task
    */
-  task: Task;
+  title: string;
+
+  /**
+   * The description for the task
+   */
+  description: Nullable<string>;
 
   /**
    * The members attended to the estimation
@@ -25,10 +30,6 @@ export interface TaskEstimationProps extends CreateTaskEstimationProps {
 }
 
 export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
-  public get task() {
-    return this._props.task;
-  }
-
   public get status() {
     return this._props.status;
   }

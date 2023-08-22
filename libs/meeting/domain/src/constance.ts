@@ -13,3 +13,8 @@ export enum MemberRole {
    */
   VOTER,
 }
+
+export enum MeetingStatus {
+  ENDED,
+  ACTIVE,
+}
