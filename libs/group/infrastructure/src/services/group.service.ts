@@ -38,7 +38,7 @@ export class GroupServiceImpl extends GroupService {
       name,
       ownerName,
     });
-    await this._groupRepository.save(group);
+    await this._groupRepository.upsert(group);
     return group;
   }
 
@@ -65,7 +65,7 @@ export class GroupServiceImpl extends GroupService {
       newMember.updateName(name);
       group.reactivateMember(newMember, member);
     }
-    await this._groupRepository.save(group);
+    await this._groupRepository.upsert(group);
     return newMember;
   }
 
@@ -92,7 +92,7 @@ export class GroupServiceImpl extends GroupService {
     }
 
     group.removeMember(member, byMember);
-    await this._groupRepository.save(group);
+    await this._groupRepository.upsert(group);
   }
 
   private async getMemberByUserId(

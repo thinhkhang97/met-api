@@ -24,6 +24,6 @@ export class RegisterCommandHandler extends BaseCommandHandler<
     }
 
     const user = User.create(email, password);
-    await this._userRepository.save(user);
+    await this._userRepository.upsert(user);
   }
 }

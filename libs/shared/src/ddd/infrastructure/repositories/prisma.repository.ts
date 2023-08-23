@@ -62,10 +62,18 @@ export abstract class PrismaRepository<
     return this._ormMapper.toEntity(result);
   }
 
-  public async save(entity: Entity): Promise<Entity> {
+  public async upsert(entity: Entity): Promise<Entity> {
     entity.validate();
     const ormEntity = (await this._delegate.upsert(
-      this.preSave(entity),
+      this.preUpsert(entity),
+    )) as OrmEntity;
+    return this._ormMapper.toEntity(ormEntity);
+  }
+
+  public async create(entity: Entity): Promise<Entity> {
+    entity.validate();
+    const ormEntity = (await this._delegate.create(
+      this.preCreate(entity),
     )) as OrmEntity;
     return this._ormMapper.toEntity(ormEntity);
   }
@@ -74,12 +82,20 @@ export abstract class PrismaRepository<
     props: QueryParams<EntityProps>,
   ): WhereCondition;
 
-  protected preSave(entity: Entity): any {
+  protected preUpsert(entity: Entity): any {
     const ormProps = this._ormMapper.toOrm(entity);
     return {
       where: { id: ormProps.id },
       create: { ...ormProps },
       update: { ...ormProps },
+    };
+  }
+
+  protected preCreate(entity: Entity): any {
+    const ormProps = this._ormMapper.toOrm(entity);
+    return {
+      where: { id: ormProps.id },
+      create: { ...ormProps },
     };
   }
 }

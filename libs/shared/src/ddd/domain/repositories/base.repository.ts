@@ -15,7 +15,7 @@ export abstract class BaseRepositoryPort<
   Entity extends BaseEntity<unknown>,
   EntityProps,
 > {
-  public abstract save(entity: Entity): Promise<Entity>;
+  public abstract upsert(entity: Entity): Promise<Entity>;
 
   public abstract findOneByIdOrThrow(
     id: ID | string,

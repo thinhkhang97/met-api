@@ -53,7 +53,7 @@ export class MemberPrismaRepository extends PrismaRepository<
     };
   }
 
-  protected preSave(entity: Member): Prisma.MemberUpsertArgs {
+  protected preUpsert(entity: Member): Prisma.MemberUpsertArgs {
     const memberOrm = this._memberOrmMapper.toOrm(entity);
     const memberWithoutOrm = omit(memberOrm, 'role');
     return {
