@@ -1,17 +1,17 @@
 import { CUID, Nullable, RuleValidator } from '@lib/shared';
 
-import { TaskEstimationStatus } from '../constance';
+import { MeetingStatus, TaskEstimationStatus } from '../constance';
 import {
   MeetingMemberNotFoundException,
   TaskEstimationNotFoundException,
 } from '../exceptions';
 import { OnlyVoterCanEstimateRule } from '../rules';
-import { CreateMeetingProps, Meeting } from './meeting.aggregate';
+import { CreateMeetingProps, Meeting, MeetProps } from './meeting.aggregate';
 import { TaskEstimation } from './task-estimation.aggregate';
 
 type CreateEstimationMeetingProps = CreateMeetingProps;
 
-export interface EstimationMeetingProps extends CreateEstimationMeetingProps {
+export interface EstimationMeetingProps extends MeetProps {
   /**
    * Tasks need to be considered and estimated by the members in the meeting
    */
@@ -28,7 +28,12 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
    * @param props Properties to create an estimation meeting
    */
   public static create(props: CreateEstimationMeetingProps) {
-    return new EstimationMeeting({ ...props, taskEstimations: [] });
+    return new EstimationMeeting({
+      ...props,
+      taskEstimations: [],
+      members: [],
+      status: MeetingStatus.ACTIVE,
+    });
   }
 
   /**

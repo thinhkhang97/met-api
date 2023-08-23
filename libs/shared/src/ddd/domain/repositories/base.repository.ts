@@ -17,6 +17,8 @@ export abstract class BaseRepositoryPort<
 > {
   public abstract upsert(entity: Entity): Promise<Entity>;
 
+  public abstract create(entity: Entity): Promise<Entity>;
+
   public abstract findOneByIdOrThrow(
     id: ID | string,
     exception: BaseException,

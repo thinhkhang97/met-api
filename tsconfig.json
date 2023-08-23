@@ -97,6 +97,12 @@
       ],
       "@lib/meeting/infrastructure/*": [
         "libs/meeting/infrastructure/src/*"
+      ],
+      "@lib/meeting/application": [
+        "libs/meeting/application/src"
+      ],
+      "@lib/meeting/application/*": [
+        "libs/meeting/application/src/*"
       ]
     }
   }

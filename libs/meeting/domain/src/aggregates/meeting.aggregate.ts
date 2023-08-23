@@ -13,7 +13,9 @@ export interface CreateMeetingProps {
    * Meeting title
    */
   title: string;
+}
 
+export interface MeetProps extends CreateMeetingProps {
   /**
    * Member who create the meeting
    */
@@ -24,8 +26,6 @@ export interface CreateMeetingProps {
    */
   status: MeetingStatus;
 }
-
-export type MeetProps = CreateMeetingProps;
 
 /**
  * Everyone in a group has ability to hold a meeting with other member in the group
