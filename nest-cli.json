@@ -189,6 +189,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/meeting/application/tsconfig.lib.json"
       }
+    },
+    "meeting/graphql-ui": {
+      "type": "library",
+      "root": "libs/meeting/graphql-ui",
+      "entryFile": "index",
+      "sourceRoot": "libs/meeting/graphql-ui/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/meeting/graphql-ui/tsconfig.lib.json"
+      }
     }
   }
 }

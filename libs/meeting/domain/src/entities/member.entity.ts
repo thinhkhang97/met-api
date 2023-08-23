@@ -12,6 +12,7 @@ export interface CreateMemberProps {
    * Type of member in the meeting
    */
   role: MemberRole;
+
   /**
    * Name of member in group
    */

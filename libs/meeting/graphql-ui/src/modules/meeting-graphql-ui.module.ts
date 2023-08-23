@@ -1,0 +1,13 @@
+import { WrappedGraphqlModule } from '@lib/shared/modules/wapped-graphql/wrapped-graphql.module';
+import { UserApplicationModule } from '@lib/user/application';
+import { Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
+
+@Module({
+  imports: [
+    CqrsModule,
+    WrappedGraphqlModule.forSubgraph(),
+    UserApplicationModule,
+  ],
+})
+export class MeetingGraphqlUiModule {}

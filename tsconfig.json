@@ -103,6 +103,12 @@
       ],
       "@lib/meeting/application/*": [
         "libs/meeting/application/src/*"
+      ],
+      "@lib/meeting/graphql-ui": [
+        "libs/meeting/graphql-ui/src"
+      ],
+      "@lib/meeting/graphql-ui/*": [
+        "libs/meeting/graphql-ui/src/*"
       ]
     }
   }
