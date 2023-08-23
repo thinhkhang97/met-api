@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 
 import { ormMappers } from '../orm-mappers';
+import { repositories } from '../repositories';
 
 @Module({
-  providers: [...ormMappers],
+  providers: [...ormMappers, ...repositories],
 })
 export class MeetingInfrastructureModule {}

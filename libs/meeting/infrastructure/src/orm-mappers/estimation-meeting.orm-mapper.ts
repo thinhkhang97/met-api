@@ -1,5 +1,5 @@
 import { EstimationMeeting, EstimationMeetingProps } from '@lib/meeting/domain';
-import { MeetingOrmEntity } from '@lib/meeting/infrastructure/orm-entities';
+import { EstimationMeetingOrmEntity } from '@lib/meeting/infrastructure/orm-entities';
 import { BaseOrmEntity, BaseOrmMapper, CUID } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
 
@@ -10,7 +10,7 @@ import { TaskEstimationOrmMapper } from './task-estimation.orm-mapper';
 export class EstimationMeetingOrmMapper extends BaseOrmMapper<
   EstimationMeeting,
   EstimationMeetingProps,
-  MeetingOrmEntity
+  EstimationMeetingOrmEntity
 > {
   constructor(
     private readonly _memberOrmMapper: MemberOrmMapper,
@@ -19,7 +19,9 @@ export class EstimationMeetingOrmMapper extends BaseOrmMapper<
     super(EstimationMeeting);
   }
 
-  protected toEntityProps(ormEntity: MeetingOrmEntity): EstimationMeetingProps {
+  protected toEntityProps(
+    ormEntity: EstimationMeetingOrmEntity,
+  ): EstimationMeetingProps {
     return {
       groupId: new CUID(ormEntity.groupId),
       title: ormEntity.title,
@@ -35,7 +37,7 @@ export class EstimationMeetingOrmMapper extends BaseOrmMapper<
 
   protected toOrmProps(
     entity: EstimationMeeting,
-  ): Omit<MeetingOrmEntity, keyof BaseOrmEntity> {
+  ): Omit<EstimationMeetingOrmEntity, keyof BaseOrmEntity> {
     const props = entity.getProps();
     return {
       groupId: props.groupId.unpack(),
