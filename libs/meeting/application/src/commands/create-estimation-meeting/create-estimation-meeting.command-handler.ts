@@ -21,6 +21,7 @@ export class CreateEstimationMeetingCommandHandler extends BaseCommandHandler<
   ): Promise<EstimationMeeting> {
     return this._estimationMeetingService.create(
       new CUID(command.groupId),
+      new CUID(command.userId),
       command.title,
     );
   }

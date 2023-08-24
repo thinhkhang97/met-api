@@ -12,14 +12,19 @@ export class GroupServiceImpl implements GroupService {
     private readonly groupInternalClient: ClientProxy,
   ) {}
 
-  async getGroupById(id: CUID): Promise<Nullable<Group>> {
+  async getGroupById(id: CUID, userId: CUID): Promise<Nullable<Group>> {
     const result = await this.groupInternalClient.send(
       { action: 'get-group-by-id' },
-      id.unpack(),
+      { groupId: id.unpack(), userId: userId.unpack() },
     );
-    const data = await firstValueFrom(result);
-    console.log(data);
-    return null;
+    const data = await firstValueFrom<{ id: string; name: string }>(result);
+    if (!data) {
+      return null;
+    }
+    return {
+      id: new CUID(data.id),
+      name: data.name,
+    };
   }
 
   // getGroupMember(memberId: CUID): Promise<GroupMember> {

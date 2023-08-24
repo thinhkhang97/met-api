@@ -14,8 +14,8 @@ export class EstimationMeetingService {
     private readonly _estimationMeetingRepository: EstimationMeetingRepository,
   ) {}
 
-  async create(groupId: CUID, title: string) {
-    const group = await this._groupService.getGroupById(groupId);
+  async create(groupId: CUID, userId: CUID, title: string) {
+    const group = await this._groupService.getGroupById(groupId, userId);
     if (!group) {
       throw new GroupNotFoundException();
     }

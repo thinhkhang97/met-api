@@ -26,12 +26,16 @@ export class EstimationMeetingOrmMapper extends BaseOrmMapper<
       groupId: new CUID(ormEntity.groupId),
       title: ormEntity.title,
       status: ormEntity.status,
-      members: ormEntity.members.map((member) =>
-        this._memberOrmMapper.toEntity(member),
-      ),
-      taskEstimations: ormEntity.taskEstimations.map((taskEstimation) =>
-        this._taskEstimationOrmMapper.toEntity(taskEstimation),
-      ),
+      members: ormEntity.members
+        ? ormEntity.members.map((member) =>
+            this._memberOrmMapper.toEntity(member),
+          )
+        : [],
+      taskEstimations: ormEntity.taskEstimations
+        ? ormEntity.taskEstimations.map((taskEstimation) =>
+            this._taskEstimationOrmMapper.toEntity(taskEstimation),
+          )
+        : [],
     };
   }
 
