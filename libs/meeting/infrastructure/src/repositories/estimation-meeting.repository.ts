@@ -58,12 +58,12 @@ export class EstimationMeetingRepositoryImpl
         ...ormProps,
         members: {
           createMany: {
-            data: ormProps.members,
+            data: ormProps.members || [],
           },
         },
         taskEstimations: {
           createMany: {
-            data: ormProps.taskEstimations,
+            data: ormProps.taskEstimations || [],
           },
         },
       },
