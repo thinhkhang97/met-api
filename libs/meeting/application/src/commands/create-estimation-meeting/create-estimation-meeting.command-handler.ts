@@ -1,6 +1,6 @@
 import {
   EstimationMeeting,
-  EstimationMeetingRepository,
+  EstimationMeetingService,
 } from '@lib/meeting/domain';
 import { BaseCommandHandler, CUID } from '@lib/shared';
 import { CommandHandler } from '@nestjs/cqrs';
@@ -13,7 +13,7 @@ export class CreateEstimationMeetingCommandHandler extends BaseCommandHandler<
   EstimationMeeting
 > {
   constructor(
-    private readonly _estimationMeetingRepository: EstimationMeetingRepository,
+    private readonly _estimationMeetingService: EstimationMeetingService,
   ) {
     super();
   }
@@ -21,10 +21,9 @@ export class CreateEstimationMeetingCommandHandler extends BaseCommandHandler<
   async handle(
     command: CreateEstimationMeetingCommand,
   ): Promise<EstimationMeeting> {
-    const estimationMeeting = EstimationMeeting.create({
-      title: command.title,
-      groupId: new CUID(command.groupId),
-    });
-    return this._estimationMeetingRepository.create(estimationMeeting);
+    return this._estimationMeetingService.create(
+      new CUID(command.groupId),
+      command.title,
+    );
   }
 }
