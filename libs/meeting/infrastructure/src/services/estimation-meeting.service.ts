@@ -1,13 +1,11 @@
 import {
   EstimationMeeting,
   EstimationMeetingRepository,
-  MeetingNotFoundException,
+  GroupNotFoundException,
+  GroupService,
 } from '@lib/meeting/domain';
 import { CUID } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
-
-import { GroupNotFoundException } from '../exceptions';
-import { GroupService } from './group.service';
 
 @Injectable()
 export class EstimationMeetingService {
@@ -28,13 +26,13 @@ export class EstimationMeetingService {
     return await this._estimationMeetingRepository.create(estimationMeeting);
   }
 
-  async addMember(meetingId: CUID, memberId: CUID) {
-    const groupMember = await this._groupService.getGroupMember(memberId);
-    const meeting = await this._estimationMeetingRepository.findOneByIdOrThrow(
-      meetingId,
-      new MeetingNotFoundException(),
-    );
-    meeting.addMember(memberId, groupMember.name);
-    return await this._estimationMeetingRepository.create(meeting);
-  }
+  // async addMember(meetingId: CUID, memberId: CUID) {
+  //   const groupMember = await this._groupService.getGroupMember(memberId);
+  //   const meeting = await this._estimationMeetingRepository.findOneByIdOrThrow(
+  //     meetingId,
+  //     new MeetingNotFoundException(),
+  //   );
+  //   meeting.addMember(memberId, groupMember.name);
+  //   return await this._estimationMeetingRepository.create(meeting);
+  // }
 }

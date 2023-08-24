@@ -5,11 +5,13 @@ import { Either } from '@lib/shared';
 import { CommandBus } from '@nestjs/cqrs';
 import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
 
+import { CreateEstimationMeetingResultUnion } from '../unions';
+
 @Resolver()
 export class MeetingMutation {
   constructor(private readonly _commandBus: CommandBus) {}
 
-  @Mutation(() => EstimationMeetingObject)
+  @Mutation(() => CreateEstimationMeetingResultUnion)
   async createEstimationMeeting(
     @Args({ type: () => ID, name: 'groupId' }) groupId: string,
     @Args({ type: () => String, name: 'title' }) title: string,

@@ -109,6 +109,12 @@
       ],
       "@lib/meeting/graphql-ui/*": [
         "libs/meeting/graphql-ui/src/*"
+      ],
+      "@lib/group/tcp-ui": [
+        "libs/group/tcp-ui/src"
+      ],
+      "@lib/group/tcp-ui/*": [
+        "libs/group/tcp-ui/src/*"
       ]
     }
   }

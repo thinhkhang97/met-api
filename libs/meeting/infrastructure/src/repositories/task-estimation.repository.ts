@@ -10,8 +10,10 @@ import {
   PrismaRepository,
   QueryParams,
 } from '@lib/shared';
+import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/meeting-client';
 
+@Injectable()
 export class TaskEstimationRepositoryImpl
   extends PrismaRepository<
     TaskEstimation,

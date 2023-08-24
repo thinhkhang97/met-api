@@ -37,6 +37,7 @@
     "@nestjs/cqrs": "^10.0.3",
     "@nestjs/graphql": "^12.0.8",
     "@nestjs/jwt": "^10.1.0",
+    "@nestjs/microservices": "^10.2.1",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/platform-socket.io": "^10.1.3",
     "@nestjs/websockets": "^10.1.3",
@@ -119,7 +120,8 @@
       "^@lib/meeting/socket(|/.*)$": "<rootDir>/libs/meeting/socket/src/$1",
       "^@lib/meeting/infrastructure(|/.*)$": "<rootDir>/libs/meeting/infrastructure/src/$1",
       "^@lib/meeting/application(|/.*)$": "<rootDir>/libs/meeting/application/src/$1",
-      "^@lib/meeting/graphql-ui(|/.*)$": "<rootDir>/libs/meeting/graphql-ui/src/$1"
+      "^@lib/meeting/graphql-ui(|/.*)$": "<rootDir>/libs/meeting/graphql-ui/src/$1",
+      "^@lib/group/tcp-ui(|/.*)$": "<rootDir>/libs/group/tcp-ui/src/$1"
     }
   }
 }

@@ -198,6 +198,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/meeting/graphql-ui/tsconfig.lib.json"
       }
+    },
+    "group/tcp-ui": {
+      "type": "library",
+      "root": "libs/group/tcp-ui",
+      "entryFile": "index",
+      "sourceRoot": "libs/group/tcp-ui/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/group/tcp-ui/tsconfig.lib.json"
+      }
     }
   }
 }

@@ -24,5 +24,5 @@ export abstract class GroupService {
    * Get member information by id
    * @param memberId
    */
-  public abstract getGroupMember(memberId: CUID): Promise<GroupMember>;
+  // public abstract getGroupMember(memberId: CUID): Promise<GroupMember>;
 }

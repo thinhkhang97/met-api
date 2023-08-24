@@ -11,8 +11,10 @@ import {
   QueryParams,
   WhereCondition,
 } from '@lib/shared';
+import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/meeting-client';
 
+@Injectable()
 export class EstimationMeetingRepositoryImpl
   extends PrismaRepository<
     EstimationMeeting,
