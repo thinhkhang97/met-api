@@ -5,6 +5,8 @@ CREATE TABLE "meeting" (
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "version" INTEGER NOT NULL DEFAULT 0,
     "title" TEXT NOT NULL,
+    "from" TIMESTAMP(3) NOT NULL,
+    "to" TIMESTAMP(3) NOT NULL,
     "groupId" TEXT NOT NULL,
     "status" SMALLINT NOT NULL DEFAULT 1,
 

@@ -1,5 +1,5 @@
 import { MeetingStatus, MemberRole } from '@lib/meeting/domain/constance';
-import { AggregateRoot, CUID } from '@lib/shared/ddd';
+import { AggregateRoot, CUID, DateVO } from '@lib/shared/ddd';
 
 import { Member } from '../entities';
 
@@ -13,6 +13,16 @@ export interface CreateMeetingProps {
    * Meeting title
    */
   title: string;
+
+  /**
+   * Start the meeting
+   */
+  from: DateVO;
+
+  /**
+   * End the meeting
+   */
+  to: DateVO;
 }
 
 export interface MeetProps extends CreateMeetingProps {

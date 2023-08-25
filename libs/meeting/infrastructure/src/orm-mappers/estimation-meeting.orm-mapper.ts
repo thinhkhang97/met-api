@@ -1,6 +1,6 @@
 import { EstimationMeeting, EstimationMeetingProps } from '@lib/meeting/domain';
 import { EstimationMeetingOrmEntity } from '@lib/meeting/infrastructure/orm-entities';
-import { BaseOrmEntity, BaseOrmMapper, CUID } from '@lib/shared';
+import { BaseOrmEntity, BaseOrmMapper, CUID, DateVO } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
 
 import { MemberOrmMapper } from './member.orm-mapper';
@@ -26,6 +26,8 @@ export class EstimationMeetingOrmMapper extends BaseOrmMapper<
       groupId: new CUID(ormEntity.groupId),
       title: ormEntity.title,
       status: ormEntity.status,
+      from: new DateVO(ormEntity.from),
+      to: new DateVO(ormEntity.to),
       members: ormEntity.members
         ? ormEntity.members.map((member) =>
             this._memberOrmMapper.toEntity(member),
@@ -47,6 +49,8 @@ export class EstimationMeetingOrmMapper extends BaseOrmMapper<
       groupId: props.groupId.unpack(),
       title: props.title,
       status: props.status,
+      from: props.from.unpack(),
+      to: props.to.unpack(),
       members: props.members.map((member) =>
         this._memberOrmMapper.toOrm(member),
       ),

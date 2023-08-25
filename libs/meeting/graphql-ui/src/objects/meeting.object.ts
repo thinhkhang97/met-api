@@ -1,9 +1,8 @@
-import { EstimationMeeting } from '@lib/meeting/domain';
+import { Meeting } from '@lib/meeting/domain';
 import { MeetingStatus } from '@lib/meeting/domain/constance';
+import { MemberObject } from '@lib/meeting/graphql-ui/objects/member.object';
 import { BaseObject } from '@lib/shared';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
-
-import { MemberObject } from './member.object';
+import { Field, GraphQLISODateTime, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType({ isAbstract: true })
 export abstract class MeetingObject extends BaseObject {
@@ -19,12 +18,20 @@ export abstract class MeetingObject extends BaseObject {
   @Field(() => [MemberObject])
   public readonly members: MemberObject[];
 
-  constructor(entity: EstimationMeeting) {
+  @Field(() => GraphQLISODateTime)
+  public readonly from: Date;
+
+  @Field(() => GraphQLISODateTime)
+  public readonly to: Date;
+
+  constructor(entity: Meeting<any>) {
     super(entity);
     const props = entity.getProps();
     this.groupId = props.groupId.unpack();
     this.title = props.title;
     this.status = props.status;
     this.members = props.members.map((member) => new MemberObject(member));
+    this.from = props.from.unpack();
+    this.to = props.to.unpack();
   }
 }

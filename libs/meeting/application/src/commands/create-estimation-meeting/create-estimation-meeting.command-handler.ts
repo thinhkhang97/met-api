@@ -1,6 +1,6 @@
 import { EstimationMeeting } from '@lib/meeting/domain';
 import { EstimationMeetingService } from '@lib/meeting/infrastructure/services/estimation-meeting.service';
-import { BaseCommandHandler, CUID } from '@lib/shared';
+import { BaseCommandHandler, CUID, DateVO } from '@lib/shared';
 import { CommandHandler } from '@nestjs/cqrs';
 
 import { CreateEstimationMeetingCommand } from './create-estimation-meeting.command';
@@ -23,6 +23,8 @@ export class CreateEstimationMeetingCommandHandler extends BaseCommandHandler<
       new CUID(command.groupId),
       new CUID(command.userId),
       command.title,
+      new DateVO(command.from),
+      new DateVO(command.to),
     );
   }
 }

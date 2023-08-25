@@ -1,15 +1,14 @@
-import { MeetingObject } from '@lib/meeting/graphql-ui/objects';
 import { createUnionType } from '@nestjs/graphql';
 
-import { MeetingErrorObject } from '../objects';
+import { EstimationMeetingObject, MeetingErrorObject } from '../objects';
 
 export const CreateEstimationMeetingResultUnion = createUnionType({
   name: 'CreateEstimationMeetingResult',
-  types: () => [MeetingObject, MeetingErrorObject],
+  types: () => [EstimationMeetingObject, MeetingErrorObject],
   resolveType: (value) => {
     if ('errorMessage' in value) {
       return MeetingErrorObject;
     }
-    return MeetingObject;
+    return EstimationMeetingObject;
   },
 });
