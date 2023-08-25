@@ -4,6 +4,7 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
 import { mutations } from '../mutations';
+import { queries } from '../queries';
 
 @Module({
   imports: [
@@ -11,6 +12,6 @@ import { mutations } from '../mutations';
     WrappedGraphqlModule.forSubgraph(),
     MeetingApplicationModule,
   ],
-  providers: [...mutations],
+  providers: [...mutations, ...queries],
 })
 export class MeetingGraphqlUiModule {}

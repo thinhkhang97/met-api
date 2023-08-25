@@ -1,6 +1,6 @@
 import { CreateEstimationMeetingCommand } from '@lib/meeting/application';
 import { EstimationMeeting } from '@lib/meeting/domain';
-import { EstimationMeetingObject } from '@lib/meeting/graphql-ui/objects';
+import { MeetingObject } from '@lib/meeting/graphql-ui/objects';
 import { Either, GraphQLUser, LoggedUser } from '@lib/shared';
 import { CommandBus } from '@nestjs/cqrs';
 import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
@@ -32,6 +32,6 @@ export class MeetingMutation {
         errorMessage: result.unwrapErr().message,
       };
     }
-    return new EstimationMeetingObject(result.unwrap());
+    return new MeetingObject(result.unwrap());
   }
 }
