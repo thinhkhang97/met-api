@@ -25,7 +25,7 @@ export interface CreateMeetingProps {
   to: DateVO;
 }
 
-export interface MeetProps extends CreateMeetingProps {
+export interface MeetingProps extends CreateMeetingProps {
   /**
    * Member who create the meeting
    */
@@ -40,7 +40,7 @@ export interface MeetProps extends CreateMeetingProps {
 /**
  * Everyone in a group has ability to hold a meeting with other member in the group
  */
-export abstract class Meeting<C extends MeetProps> extends AggregateRoot<C> {
+export abstract class Meeting<C extends MeetingProps> extends AggregateRoot<C> {
   /**
    * Remove a member out of the meeting
    * @param member

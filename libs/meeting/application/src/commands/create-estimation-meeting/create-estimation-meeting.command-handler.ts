@@ -1,5 +1,7 @@
-import { EstimationMeeting } from '@lib/meeting/domain';
-import { EstimationMeetingService } from '@lib/meeting/infrastructure/services/estimation-meeting.service';
+import {
+  EstimationMeeting,
+  EstimationMeetingService,
+} from '@lib/meeting/domain';
 import { BaseCommandHandler, CUID, DateVO } from '@lib/shared';
 import { CommandHandler } from '@nestjs/cqrs';
 

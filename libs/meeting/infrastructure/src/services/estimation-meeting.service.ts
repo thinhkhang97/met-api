@@ -1,6 +1,7 @@
 import {
   EstimationMeeting,
   EstimationMeetingRepository,
+  EstimationMeetingService,
   GroupNotFoundException,
   GroupService,
 } from '@lib/meeting/domain';
@@ -8,7 +9,7 @@ import { CUID, DateVO } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class EstimationMeetingService {
+export class EstimationMeetingServiceImpl implements EstimationMeetingService {
   constructor(
     private readonly _groupService: GroupService,
     private readonly _estimationMeetingRepository: EstimationMeetingRepository,

@@ -6,12 +6,12 @@ import {
   TaskEstimationNotFoundException,
 } from '../exceptions';
 import { OnlyVoterCanEstimateRule } from '../rules';
-import { CreateMeetingProps, Meeting, MeetProps } from './meeting.aggregate';
+import { CreateMeetingProps, Meeting, MeetingProps } from './meeting.aggregate';
 import { TaskEstimation } from './task-estimation.aggregate';
 
 type CreateEstimationMeetingProps = CreateMeetingProps;
 
-export interface EstimationMeetingProps extends MeetProps {
+export interface EstimationMeetingProps extends MeetingProps {
   /**
    * Tasks need to be considered and estimated by the members in the meeting
    */
