@@ -48,6 +48,7 @@
     "cache-manager": "^5.2.3",
     "cache-manager-redis-store": "^3.0.1",
     "graphql": "^16.7.0",
+    "ioredis": "^5.3.2",
     "joi": "^17.9.2",
     "lodash": "^4.17.21",
     "oxide.ts": "^1.1.0",

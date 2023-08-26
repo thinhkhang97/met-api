@@ -1,1 +1,1 @@
-export * from './gateway';
+export * from './modules/meeting-socket.module';

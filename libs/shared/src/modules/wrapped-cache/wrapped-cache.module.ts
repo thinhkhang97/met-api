@@ -1,12 +1,11 @@
 import { CacheModule } from '@nestjs/cache-manager';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { redisStore } from 'cache-manager-redis-store';
 import { RedisClientOptions } from 'redis';
 
 export class WrappedCacheModule {
-  public static forRedis(envFilePath: string) {
+  public static forRedis() {
     return CacheModule.registerAsync<RedisClientOptions>({
-      imports: [ConfigModule.forRoot({ envFilePath })],
       useFactory: (_configService: ConfigService) => {
         return {
           store: async () => {

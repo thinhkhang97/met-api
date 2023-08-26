@@ -1,11 +1,9 @@
-import { MeetingInfrastructureModule } from '@lib/meeting/infrastructure';
 import { IoredisModule } from '@lib/shared';
+import { WrappedCacheModule } from '@lib/shared/modules/wrapped-cache/wrapped-cache.module';
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { commands } from '../commands';
-import { eventHandlers } from '../event-handlers';
-import { queries } from '../queries';
+import { PlaningMeetingSocketGateway } from '../gateway';
 
 @Module({
   imports: [
@@ -20,8 +18,9 @@ import { queries } from '../queries';
       },
       inject: [ConfigService],
     }),
-    MeetingInfrastructureModule,
+    WrappedCacheModule.forRedis(),
   ],
-  providers: [...commands, ...queries, ...eventHandlers],
+  providers: [PlaningMeetingSocketGateway],
+  exports: [PlaningMeetingSocketGateway],
 })
-export class MeetingApplicationModule {}
+export class MeetingSocketModule {}

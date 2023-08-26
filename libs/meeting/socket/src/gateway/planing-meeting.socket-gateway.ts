@@ -1,6 +1,6 @@
-import { AuthGuard } from '@lib/shared';
+import { IoredisService } from '@lib/shared/modules/ioredis';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, OnModuleInit, UseGuards } from '@nestjs/common';
+import { Inject, OnModuleInit } from '@nestjs/common';
 import {
   MessageBody,
   OnGatewayConnection,
@@ -25,7 +25,15 @@ export class PlaningMeetingSocketGateway
   @WebSocketServer()
   private readonly server!: Server;
 
-  constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {}
+  constructor(
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+    _ioredisService: IoredisService,
+  ) {
+    _ioredisService.subscribe('MEETING');
+    _ioredisService.onMessage((channel, message) => {
+      this.server.emit('member_joined', message);
+    });
+  }
 
   @SubscribeMessage('member_joined')
   public handleMemberJoined(@MessageBody() data: string) {
@@ -41,10 +49,8 @@ export class PlaningMeetingSocketGateway
     });
   }
 
-  @UseGuards(AuthGuard)
   async handleConnection(client: Socket) {
-    const [_, token] = client.handshake.headers.authorization?.split(' ') || [];
-
+    // const [_, token] = client.handshake.headers.authorization?.split(' ') || [];
     const userName = client.handshake.headers['user-name'];
     const user: UserData = {
       name: userName as string,
