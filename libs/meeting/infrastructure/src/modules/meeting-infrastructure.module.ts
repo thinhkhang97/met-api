@@ -2,6 +2,7 @@ import { GROUP_INTERNAL_SERVICE } from '@lib/meeting/infrastructure/constance';
 import { MeetingPrismaService } from '@lib/shared';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CqrsModule } from '@nestjs/cqrs';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
 import { ormMappers } from '../orm-mappers';
@@ -10,6 +11,7 @@ import { services } from '../services';
 
 @Module({
   imports: [
+    CqrsModule,
     ClientsModule.registerAsync([
       {
         name: GROUP_INTERNAL_SERVICE,

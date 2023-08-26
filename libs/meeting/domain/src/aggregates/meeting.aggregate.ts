@@ -1,4 +1,5 @@
 import { MeetingStatus, MemberRole } from '@lib/meeting/domain/constance';
+import { MemberJoinedEvent } from '@lib/meeting/domain/events';
 import { AggregateRoot, CUID, DateVO } from '@lib/shared/ddd';
 
 import { Member } from '../entities';
@@ -74,7 +75,7 @@ export abstract class Meeting<C extends MeetingProps> extends AggregateRoot<C> {
       });
       this._props.members.push(member);
     }
-
+    this.apply(new MemberJoinedEvent({ aggregateId: this.id, member }));
     this.update();
     return member;
   }

@@ -12,6 +12,7 @@ import {
   WhereCondition,
 } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
+import { EventPublisher } from '@nestjs/cqrs';
 import { Prisma } from '@prisma/meeting-client';
 import { omit } from 'lodash';
 
@@ -28,8 +29,13 @@ export class EstimationMeetingRepositoryImpl
   constructor(
     private readonly _estimationMeetingOrmMapper: EstimationMeetingOrmMapper,
     private readonly _meetingPrismaService: MeetingPrismaService,
+    private readonly _evenPublisher: EventPublisher,
   ) {
-    super(_meetingPrismaService.meeting, _estimationMeetingOrmMapper);
+    super(
+      _meetingPrismaService.meeting,
+      _estimationMeetingOrmMapper,
+      _evenPublisher,
+    );
   }
 
   getIncludeRelation():

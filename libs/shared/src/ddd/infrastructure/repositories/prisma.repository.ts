@@ -6,6 +6,7 @@ import {
 import { BaseOrmEntity, BaseOrmMapper } from '@lib/shared/ddd/infrastructure';
 import { PrismaDelegate } from '@lib/shared/ddd/infrastructure/types';
 import { BaseException } from '@lib/shared/exceptions/base.exception';
+import { EventPublisher } from '@nestjs/cqrs';
 
 export type WhereCondition = Record<any, any>;
 
@@ -19,6 +20,7 @@ export abstract class PrismaRepository<
   constructor(
     private readonly _delegate: Delegate,
     private readonly _ormMapper: BaseOrmMapper<Entity, EntityProps, OrmEntity>,
+    private readonly _eventPublisher?: EventPublisher,
   ) {}
 
   public abstract getIncludeRelation():
@@ -34,7 +36,9 @@ export abstract class PrismaRepository<
       ...this.getIncludeRelation(),
       where: this.getWhereCondition(props),
     })) as Array<OrmEntity>;
-    return result.map((r) => this._ormMapper.toEntity(r));
+    return result.map((r) =>
+      this.mergeObjectContext(this._ormMapper.toEntity(r)),
+    );
   }
 
   public async findOne(
@@ -44,7 +48,9 @@ export abstract class PrismaRepository<
       ...this.getIncludeRelation(),
       where: this.getWhereCondition(props),
     })) as OrmEntity;
-    return result ? this._ormMapper.toEntity(result) : null;
+    return result
+      ? this.mergeObjectContext(this._ormMapper.toEntity(result))
+      : null;
   }
 
   public async findOneByIdOrThrow(
@@ -59,7 +65,7 @@ export abstract class PrismaRepository<
     if (!result) {
       throw exception;
     }
-    return this._ormMapper.toEntity(result);
+    return this.mergeObjectContext(this._ormMapper.toEntity(result));
   }
 
   public async upsert(entity: Entity): Promise<Entity> {
@@ -67,6 +73,7 @@ export abstract class PrismaRepository<
     const ormEntity = (await this._delegate.upsert(
       this.preUpsert(entity),
     )) as OrmEntity;
+    entity.commit();
     return this._ormMapper.toEntity(ormEntity);
   }
 
@@ -75,6 +82,7 @@ export abstract class PrismaRepository<
     const ormEntity = (await this._delegate.create(
       this.preCreate(entity),
     )) as OrmEntity;
+    entity.commit();
     return this._ormMapper.toEntity(ormEntity);
   }
 
@@ -97,5 +105,13 @@ export abstract class PrismaRepository<
       where: { id: ormProps.id },
       create: { ...ormProps },
     };
+  }
+
+  private mergeObjectContext(object: Entity) {
+    let entity = object;
+    if (this._eventPublisher) {
+      entity = this._eventPublisher.mergeObjectContext(object);
+    }
+    return entity;
   }
 }
