@@ -1,11 +1,14 @@
-import { GetGroupQuery } from '@lib/group/application/queries';
-import { Group } from '@lib/group/domain';
+import {
+  GetGroupQuery,
+  GetMemberByUserIdQuery,
+} from '@lib/group/application/queries';
+import { Group, Member } from '@lib/group/domain';
 import { Either } from '@lib/shared';
 import { Controller } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { MessagePattern } from '@nestjs/microservices';
 
-import { GetGroupByIdDto } from '../dtos';
+import { GetGroupByIdDto, GetMemberByUserIdDto } from '../dtos';
 
 @Controller('internal')
 export class GroupController {
@@ -13,7 +16,7 @@ export class GroupController {
 
   @MessagePattern({ action: 'get-group-by-id' })
   async getGroupById({ groupId, userId }: GetGroupByIdDto) {
-    const result = await this._queryBus.execute<GetGroupByIdDto, Either<Group>>(
+    const result = await this._queryBus.execute<GetGroupQuery, Either<Group>>(
       new GetGroupQuery({ groupId: groupId, userId }),
     );
     if (result.isErr()) {
@@ -23,6 +26,22 @@ export class GroupController {
     return {
       id: group.id.unpack(),
       name: group.name,
+    };
+  }
+
+  @MessagePattern({ action: 'get-member-by-user-id' })
+  async getMemberById({ userId, groupId }: GetMemberByUserIdDto) {
+    const result = await this._queryBus.execute<
+      GetMemberByUserIdQuery,
+      Either<Member>
+    >(new GetMemberByUserIdQuery({ userId, groupId }));
+    if (result.isErr()) {
+      return null;
+    }
+    const member = result.unwrap().getProps();
+    return {
+      id: member.id.unpack(),
+      name: member.name,
     };
   }
 }

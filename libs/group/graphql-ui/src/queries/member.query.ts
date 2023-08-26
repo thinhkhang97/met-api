@@ -19,10 +19,11 @@ export class MemberQuery {
 
   @Query(() => MemberResultUnion, { name: 'member' })
   public async getMember(
+    @Args({ type: () => ID, name: 'groupId' }) groupId: string,
     @Args({ type: () => ID, name: 'memberId' }) memberId: string,
   ) {
     const result = await this._queryBus.execute<GetMemberQuery, Either<Member>>(
-      new GetMemberQuery({ memberId }),
+      new GetMemberQuery({ groupId, memberId }),
     );
     if (result.isErr()) {
       return new MemberBaseErrorObject(result.unwrapErr().message);

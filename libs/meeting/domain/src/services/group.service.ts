@@ -26,7 +26,11 @@ export abstract class GroupService {
 
   /**
    * Get member information by id
-   * @param memberId
+   * @param groupId
+   * @param userId
    */
-  // public abstract getGroupMember(memberId: CUID): Promise<GroupMember>;
+  public abstract getGroupMember(
+    groupId: CUID,
+    userId: CUID,
+  ): Promise<Nullable<GroupMember>>;
 }

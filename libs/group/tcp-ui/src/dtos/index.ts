@@ -1,1 +1,1 @@
-export * from './get-group-by-id.dto';
+export * from './group-dto';

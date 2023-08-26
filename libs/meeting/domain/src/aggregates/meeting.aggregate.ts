@@ -41,6 +41,10 @@ export interface MeetingProps extends CreateMeetingProps {
  * Everyone in a group has ability to hold a meeting with other member in the group
  */
 export abstract class Meeting<C extends MeetingProps> extends AggregateRoot<C> {
+  public get groupId() {
+    return this._props.groupId;
+  }
+
   /**
    * Remove a member out of the meeting
    * @param member
@@ -68,9 +72,10 @@ export abstract class Meeting<C extends MeetingProps> extends AggregateRoot<C> {
         role: MemberRole.VOTER,
         meetingId: this.id as CUID,
       });
+      this._props.members.push(member);
     }
-    this._props.members.push(member);
 
     this.update();
+    return member;
   }
 }

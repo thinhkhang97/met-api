@@ -1,6 +1,8 @@
-import { CreateEstimationMeetingCommand } from '@lib/meeting/application';
+import {
+  CreateEstimationMeetingCommand,
+  JoinMeetingCommand,
+} from '@lib/meeting/application';
 import { EstimationMeeting } from '@lib/meeting/domain';
-import { EstimationMeetingObject } from '@lib/meeting/graphql-ui/objects';
 import { Either, GraphQLUser, LoggedUser } from '@lib/shared';
 import { CommandBus } from '@nestjs/cqrs';
 import {
@@ -11,6 +13,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 
+import { EstimationMeetingObject, MeetingActionResultObject } from '../objects';
 import { CreateEstimationMeetingResultUnion } from '../unions';
 
 @Resolver()
@@ -43,5 +46,30 @@ export class EstimationMeetingMutation {
       };
     }
     return new EstimationMeetingObject(result.unwrap());
+  }
+
+  @Mutation(() => MeetingActionResultObject)
+  async joinEstimationMeeting(
+    @Args({ type: () => ID, name: 'meetingId' }) meetingId: string,
+    @GraphQLUser() loggedUser: LoggedUser,
+  ) {
+    const result = await this._commandBus.execute<
+      JoinMeetingCommand,
+      Either<void>
+    >(
+      new JoinMeetingCommand({
+        meetingId,
+        userId: loggedUser.id,
+      }),
+    );
+
+    if (result.isErr()) {
+      return new MeetingActionResultObject(
+        'failed',
+        result.unwrapErr().message,
+      );
+    }
+
+    return new MeetingActionResultObject('success');
   }
 }

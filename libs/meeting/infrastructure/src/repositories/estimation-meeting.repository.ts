@@ -13,6 +13,7 @@ import {
 } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/meeting-client';
+import { omit } from 'lodash';
 
 @Injectable()
 export class EstimationMeetingRepositoryImpl
@@ -41,6 +42,37 @@ export class EstimationMeetingRepositoryImpl
     };
   }
 
+  override preUpsert(entity: EstimationMeeting): Prisma.MeetingUpsertArgs {
+    const ormProps = this._estimationMeetingOrmMapper.toOrm(entity);
+    return {
+      where: {
+        id: ormProps.id,
+      },
+      create: {
+        ...ormProps,
+        members: {
+          createMany: {
+            data: (ormProps.members || []).map((member) =>
+              omit(member, 'meetingId'),
+            ),
+          },
+        },
+        taskEstimations: undefined,
+      },
+      update: {
+        ...ormProps,
+        members: {
+          upsert: (ormProps.members || []).map((member) => ({
+            where: { id: member.id },
+            create: omit(member, 'meetingId'),
+            update: omit(member, 'meetingId'),
+          })),
+        },
+        taskEstimations: undefined,
+      },
+    };
+  }
+
   protected getWhereCondition(
     props: QueryParams<EstimationMeetingProps>,
   ): WhereCondition {
@@ -49,24 +81,5 @@ export class EstimationMeetingRepositoryImpl
       whereCondition.id = props.id.value;
     }
     return whereCondition;
-  }
-
-  protected preCreate(entity: EstimationMeeting): Prisma.MeetingCreateArgs {
-    const ormProps = this._estimationMeetingOrmMapper.toOrm(entity);
-    return {
-      data: {
-        ...ormProps,
-        members: {
-          createMany: {
-            data: ormProps.members || [],
-          },
-        },
-        taskEstimations: {
-          createMany: {
-            data: ormProps.taskEstimations || [],
-          },
-        },
-      },
-    };
   }
 }
