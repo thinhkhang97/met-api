@@ -115,6 +115,12 @@
       ],
       "@lib/group/tcp-ui/*": [
         "libs/group/tcp-ui/src/*"
+      ],
+      "@lib/user/tcp-ui": [
+        "libs/user/tcp-ui/src"
+      ],
+      "@lib/user/tcp-ui/*": [
+        "libs/user/tcp-ui/src/*"
       ]
     }
   }

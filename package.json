@@ -122,7 +122,8 @@
       "^@lib/meeting/infrastructure(|/.*)$": "<rootDir>/libs/meeting/infrastructure/src/$1",
       "^@lib/meeting/application(|/.*)$": "<rootDir>/libs/meeting/application/src/$1",
       "^@lib/meeting/graphql-ui(|/.*)$": "<rootDir>/libs/meeting/graphql-ui/src/$1",
-      "^@lib/group/tcp-ui(|/.*)$": "<rootDir>/libs/group/tcp-ui/src/$1"
+      "^@lib/group/tcp-ui(|/.*)$": "<rootDir>/libs/group/tcp-ui/src/$1",
+      "^@lib/user/tcp-ui(|/.*)$": "<rootDir>/libs/user/tcp-ui/src/$1"
     }
   }
 }

@@ -1,1 +1,1 @@
-export * from './planing-meeting.socket-gateway';
+export * from './estimation-meeting.socket-gateway';

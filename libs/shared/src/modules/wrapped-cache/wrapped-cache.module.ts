@@ -14,9 +14,9 @@ export class WrappedCacheModule {
                 host: _configService.getOrThrow('REDIS_HOST'),
                 port: _configService.getOrThrow('REDIS_PORT'),
               },
+              ttl: 3600 * 6,
             });
           },
-          ttl: 3600 * 1000,
           isGlobal: true,
         };
       },

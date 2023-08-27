@@ -207,6 +207,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/group/tcp-ui/tsconfig.lib.json"
       }
+    },
+    "user/tcp-ui": {
+      "type": "library",
+      "root": "libs/user/tcp-ui",
+      "entryFile": "index",
+      "sourceRoot": "libs/user/tcp-ui/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/user/tcp-ui/tsconfig.lib.json"
+      }
     }
   }
 }

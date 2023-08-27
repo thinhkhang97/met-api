@@ -10,11 +10,17 @@ export class BroadcastToMeetingAfterMemberJoinedEventHandler extends BaseEventHa
   }
 
   protected async execute(event: MemberJoinedEvent) {
+    const memberProps = event.member.getProps();
     await this._ioredisService.publish(
       'MEETING',
       JSON.stringify({
-        memberId: event.member.memberId.unpack(),
-        memberName: event.member.memberName,
+        eventName: 'member_joined',
+        payload: {
+          memberId: memberProps.memberId.unpack(),
+          meetingId: memberProps.meetingId.unpack(),
+          name: memberProps.name,
+          role: memberProps.role,
+        },
       }),
     );
   }
