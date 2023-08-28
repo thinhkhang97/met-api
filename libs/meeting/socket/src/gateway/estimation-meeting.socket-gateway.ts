@@ -66,12 +66,12 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
   ) {
     const result = await this._meetingEventHandler.handleMemberJoinMeeting(
       data,
-      client.id,
+      client,
     );
-    if (!result?.emitMessage) {
+    if (!result?.message) {
       return;
     }
-    this.emit(result.emitMessage, result.data);
+    this.server.to(result.room).emit(result.message, result.data);
   }
 
   async authenticate(token: string) {
@@ -80,11 +80,11 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
 
   async onClientDisconnect(client: Socket) {
     const result = await this._meetingEventHandler.handleMemberLeftMeeting(
-      client.id,
+      client,
     );
-    if (!result?.emitMessage) {
+    if (!result?.message) {
       return;
     }
-    this.server.emit(result?.emitMessage, result.data);
+    this.server.to(result.room).emit(result.message, result.data);
   }
 }

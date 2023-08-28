@@ -1,4 +1,5 @@
 export interface EventHandlerResult<Data = unknown> {
-  emitMessage?: string;
-  data: Data;
+  room: string;
+  message: string;
+  data?: Data;
 }

@@ -4,6 +4,7 @@ import {
   OnGatewayDisconnect,
   WebSocketServer,
 } from '@nestjs/websockets';
+import { instrument } from '@socket.io/admin-ui';
 import { Cache } from 'cache-manager';
 import { Server, Socket } from 'socket.io';
 
@@ -35,7 +36,16 @@ export abstract class SocketGateway
   }
 
   async onModuleInit() {
+    this.server.use((socket, next) => {
+      console.log(socket.id, socket.data);
+      next();
+    });
     await this._cacheManager.reset();
+    instrument(this.server, {
+      auth: false,
+      readonly: true,
+      mode: 'development',
+    });
   }
 
   protected emit(message: string, data?: unknown) {

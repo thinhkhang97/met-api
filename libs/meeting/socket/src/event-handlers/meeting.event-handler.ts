@@ -1,6 +1,7 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
+import { Socket } from 'socket.io';
 
 import { EventHandlerResult, Meeting, Member } from '../types';
 
@@ -10,39 +11,40 @@ export class MeetingEventHandler {
 
   public async handleMemberJoinMeeting(
     data: { meetingId: string; memberId: string },
-    clientId: string,
-  ): Promise<EventHandlerResult<Meeting>> {
-    await this._cacheManager.set(`client_${clientId}`, {
+    client: Socket,
+  ): Promise<EventHandlerResult<Member>> {
+    await this._cacheManager.set(`client_${client.id}`, {
       meetingId: data.meetingId,
     });
     let meeting = await this._cacheManager.get<Meeting>(
       `meeting_${data.meetingId}`,
     );
+    const member = {
+      memberId: data.memberId,
+      clientId: client.id,
+    };
     if (!meeting) {
       meeting = {
         id: data.meetingId,
-        members: [
-          {
-            memberId: data.memberId,
-            clientId,
-          },
-        ],
+        members: [member],
       };
     } else {
-      meeting.members?.push({ memberId: data.meetingId, clientId });
+      meeting.members?.push(member);
     }
+    client.join(`meeting_${data.meetingId}`);
     await this._cacheManager.set(`meeting_${data.meetingId}`, meeting);
     return {
-      emitMessage: `meeting:${meeting.id}_member_joined}`,
-      data: meeting,
+      room: `meeting_${meeting.id}`,
+      message: `member_joined`,
+      data: member,
     };
   }
 
   public async handleMemberLeftMeeting(
-    clientId: string,
+    client: Socket,
   ): Promise<EventHandlerResult<Member> | undefined> {
     const clientData = await this._cacheManager.get<{ meetingId?: string }>(
-      `client_${clientId}`,
+      `client_${client.id}`,
     );
     if (!clientData || !clientData.meetingId) {
       return;
@@ -51,15 +53,17 @@ export class MeetingEventHandler {
       `meeting_${clientData.meetingId}`,
     );
     const leavedMemberIndex =
-      meeting?.members.findIndex((member) => member.clientId === clientId) ||
+      meeting?.members.findIndex((member) => member.clientId === client.id) ||
       -1;
     const leftMember = meeting?.members.splice(leavedMemberIndex, 1)[0];
     if (!leftMember) {
       return;
     }
+    client.leave(`meeting_${meeting.id}`);
     await this._cacheManager.set(`meeting_${meeting?.id}`, meeting);
     return {
-      emitMessage: `meeting:${meeting.id}_member_joined}`,
+      room: `meeting_${meeting.id}`,
+      message: `member_left`,
       data: leftMember,
     };
   }
