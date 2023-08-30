@@ -1,7 +1,8 @@
-import { OnModuleInit } from '@nestjs/common';
+import { CacheKey } from '@lib/shared/services';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
+  OnGatewayInit,
   WebSocketServer,
 } from '@nestjs/websockets';
 import { instrument } from '@socket.io/admin-ui';
@@ -9,7 +10,7 @@ import { Cache } from 'cache-manager';
 import { Server, Socket } from 'socket.io';
 
 export abstract class SocketGateway
-  implements OnGatewayConnection, OnGatewayDisconnect, OnModuleInit
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer()
   protected readonly server!: Server;
@@ -18,12 +19,15 @@ export abstract class SocketGateway
 
   async handleConnection(client: Socket) {
     const headers = client.handshake.headers;
+    console.log(headers);
     const [_, token] = headers.authorization?.split(' ') || [];
-    const user = await this.authenticate(token);
+    const user = (await this.authenticate(token)) as { id: string };
+    console.log(user);
     if (!user) {
       client.disconnect();
     } else {
-      await this._cacheManager.set(`${client.id}`, user);
+      await this._cacheManager.set(`${CacheKey.CLIENT}:${client.id}`, user);
+      await this._cacheManager.set(`${CacheKey.USER}:${user.id}`, user);
     }
   }
 
@@ -31,11 +35,19 @@ export abstract class SocketGateway
 
   public abstract onClientDisconnect(client: Socket);
 
-  handleDisconnect(client: Socket) {
+  async handleDisconnect(client: Socket) {
     this.onClientDisconnect(client);
+    const user = (await this._cacheManager.get(
+      `${CacheKey.CLIENT}:${client.id}`,
+    )) as { id: string };
+    if (!user) {
+      return;
+    }
+    this._cacheManager.del(`${CacheKey.USER}:${user.id}`);
+    this._cacheManager.del(`${CacheKey.CLIENT}:${client.id}`);
   }
 
-  async onModuleInit() {
+  async afterInit(server: any) {
     this.server.use((socket, next) => {
       console.log(socket.id, socket.data);
       next();

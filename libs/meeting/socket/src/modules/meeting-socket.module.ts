@@ -4,7 +4,11 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
-import { IDENTITY_INTERNAL_SERVICE } from '../constance';
+import { cacheServices } from '../cache';
+import {
+  IDENTITY_INTERNAL_SERVICE,
+  MEETING_INTERNAL_SERVICE,
+} from '../constance';
 import { eventHandlers } from '../event-handlers';
 import { EstimationMeetingSocketGateway } from '../gateway';
 import { IdentityService } from '../services';
@@ -25,6 +29,27 @@ import { IdentityService } from '../services';
     WrappedCacheModule.forRedis(),
     ClientsModule.registerAsync([
       {
+        name: MEETING_INTERNAL_SERVICE,
+        useFactory: (_configService: ConfigService) => {
+          const user = _configService.getOrThrow('RABBITMQ_USER');
+          const password = _configService.getOrThrow('RABBITMQ_PASSWORD');
+          const host = _configService.getOrThrow('RABBITMQ_HOST');
+          const queueName = _configService.getOrThrow('RABBITMQ_QUEUE_NAME');
+
+          return {
+            transport: Transport.RMQ,
+            options: {
+              urls: [`amqp://${user}:${password}@${host}`],
+              queue: queueName,
+              queueOptions: {
+                durable: false,
+              },
+            },
+          };
+        },
+        inject: [ConfigService],
+      },
+      {
         name: IDENTITY_INTERNAL_SERVICE,
         useFactory: (_configService: ConfigService) => {
           return {
@@ -40,6 +65,7 @@ import { IdentityService } from '../services';
     ]),
   ],
   providers: [
+    ...cacheServices,
     ...eventHandlers,
     IdentityService,
     EstimationMeetingSocketGateway,

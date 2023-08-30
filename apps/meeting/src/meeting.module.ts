@@ -1,4 +1,5 @@
 import { MeetingGraphqlUiModule } from '@lib/meeting/graphql-ui';
+import { MeetingRmqUiModule } from '@lib/meeting/rmq-ui';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
@@ -9,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
       envFilePath: './apps/meeting/src/.env',
     }),
     MeetingGraphqlUiModule,
+    MeetingRmqUiModule,
   ],
 })
 export class MeetingModule {}

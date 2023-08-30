@@ -44,6 +44,8 @@
     "@paralleldrive/cuid2": "^2.2.1",
     "@prisma/client": "^4.14.1",
     "@socket.io/admin-ui": "^0.5.1",
+    "amqp-connection-manager": "^4.1.14",
+    "amqplib": "^0.10.3",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "cache-manager": "^5.2.3",
@@ -124,7 +126,8 @@
       "^@lib/meeting/application(|/.*)$": "<rootDir>/libs/meeting/application/src/$1",
       "^@lib/meeting/graphql-ui(|/.*)$": "<rootDir>/libs/meeting/graphql-ui/src/$1",
       "^@lib/group/tcp-ui(|/.*)$": "<rootDir>/libs/group/tcp-ui/src/$1",
-      "^@lib/user/tcp-ui(|/.*)$": "<rootDir>/libs/user/tcp-ui/src/$1"
+      "^@lib/user/tcp-ui(|/.*)$": "<rootDir>/libs/user/tcp-ui/src/$1",
+      "^@lib/meeting/rmq-ui(|/.*)$": "<rootDir>/libs/meeting/rmq-ui/src/$1"
     }
   }
 }

@@ -121,6 +121,12 @@
       ],
       "@lib/user/tcp-ui/*": [
         "libs/user/tcp-ui/src/*"
+      ],
+      "@lib/meeting/rmq-ui": [
+        "libs/meeting/rmq-ui/src"
+      ],
+      "@lib/meeting/rmq-ui/*": [
+        "libs/meeting/rmq-ui/src/*"
       ]
     }
   }

@@ -35,7 +35,11 @@ export interface MemberProps extends CreateMemberProps {
  * A member in a meeting
  */
 export class Member extends BaseEntity<MemberProps> {
-  get memberName() {
+  get meetingId() {
+    return this._props.meetingId;
+  }
+
+  get name() {
     return this._props.name;
   }
 

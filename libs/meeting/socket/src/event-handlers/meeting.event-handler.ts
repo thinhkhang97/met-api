@@ -1,55 +1,66 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { Cache } from 'cache-manager';
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
-import { EventHandlerResult, Meeting, Member } from '../types';
+import { MeetingCache, UserCache } from '../cache';
+import { EventName, MEETING_INTERNAL_SERVICE, RoomKey } from '../constance';
+import { EventHandlerResult, Member, WMeeting, WSMember } from '../types';
 
 @Injectable()
 export class MeetingEventHandler {
-  constructor(@Inject(CACHE_MANAGER) protected readonly _cacheManager: Cache) {}
+  constructor(
+    @Inject(CACHE_MANAGER) protected readonly _cacheManager: Cache,
+    private readonly _meetingCache: MeetingCache,
+    @Inject(MEETING_INTERNAL_SERVICE)
+    private readonly _meetingInternalService: ClientProxy,
+    private readonly _userCache: UserCache,
+  ) {}
 
-  public async handleMemberJoinMeeting(
-    data: { meetingId: string; memberId: string },
-    client: Socket,
-  ): Promise<EventHandlerResult<Member>> {
-    await this._cacheManager.set(`client_${client.id}`, {
-      meetingId: data.meetingId,
-    });
-    let meeting = await this._cacheManager.get<Meeting>(
-      `meeting_${data.meetingId}`,
-    );
-    const member = {
-      memberId: data.memberId,
-      clientId: client.id,
-    };
-    if (!meeting) {
-      meeting = {
-        id: data.meetingId,
-        members: [member],
-      };
-    } else {
-      meeting.members?.push(member);
+  public async handleMemberJoinMeeting(meetingId: string, member: WSMember) {
+    const user = await this._userCache.findOneByClientId(member.clientId);
+    if (!user) {
+      return;
     }
-    client.join(`meeting_${data.meetingId}`);
-    await this._cacheManager.set(`meeting_${data.meetingId}`, meeting);
-    return {
-      room: `meeting_${meeting.id}`,
-      message: `member_joined`,
-      data: member,
-    };
+    await this._meetingCache.addMemberRequestJoin(meetingId, member);
+  }
+
+  public async handleMemberJoined(
+    meetingId: string,
+    member: Member,
+    server: Server,
+  ) {
+    const requestMember = await this._meetingCache.getMemberRequestById(
+      meetingId,
+      member.memberId,
+    );
+    if (!requestMember) {
+      return;
+    }
+    const client = server.sockets.sockets.get(requestMember.clientId);
+    if (!client) {
+      return;
+    }
+    client.join(`${RoomKey.MEETING}:${meetingId}`);
+    server
+      .to(`${RoomKey.MEETING}:${meetingId}`)
+      .emit(
+        `${RoomKey.MEETING}:${meetingId}:${EventName.MEMBER_JOINED}`,
+        member,
+      );
   }
 
   public async handleMemberLeftMeeting(
     client: Socket,
-  ): Promise<EventHandlerResult<Member> | undefined> {
+  ): Promise<EventHandlerResult<WSMember> | undefined> {
     const clientData = await this._cacheManager.get<{ meetingId?: string }>(
       `client_${client.id}`,
     );
     if (!clientData || !clientData.meetingId) {
       return;
     }
-    const meeting = await this._cacheManager.get<Meeting>(
+    const meeting = await this._cacheManager.get<WMeeting>(
       `meeting_${clientData.meetingId}`,
     );
     const leavedMemberIndex =

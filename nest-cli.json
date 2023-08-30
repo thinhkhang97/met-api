@@ -216,6 +216,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/user/tcp-ui/tsconfig.lib.json"
       }
+    },
+    "meeting/rmq-ui": {
+      "type": "library",
+      "root": "libs/meeting/rmq-ui",
+      "entryFile": "index",
+      "sourceRoot": "libs/meeting/rmq-ui/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/meeting/rmq-ui/tsconfig.lib.json"
+      }
     }
   }
 }

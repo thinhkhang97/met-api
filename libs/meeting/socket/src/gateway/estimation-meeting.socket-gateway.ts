@@ -11,67 +11,70 @@ import {
 import { Cache } from 'cache-manager';
 import { Socket } from 'socket.io';
 
+import { EventName } from '../constance';
 import { MeetingEventHandler } from '../event-handlers';
 import { IdentityService } from '../services';
+import { Member } from '../types';
 
-@WebSocketGateway(80)
+@WebSocketGateway(80, {
+  cors: {
+    origin: '*',
+  },
+})
 export class EstimationMeetingSocketGateway extends SocketGateway {
   constructor(
-    private readonly _identityService: IdentityService,
     @Inject(CACHE_MANAGER) protected readonly _cacheManager: Cache,
+    private readonly _identityService: IdentityService,
     private readonly _ioredisService: IoredisService,
     private readonly _meetingEventHandler: MeetingEventHandler,
   ) {
     super(_cacheManager);
-    // _ioredisService.subscribe('MEETING');
-    // _ioredisService.onMessage((channel, message) => {
-    //   switch (channel) {
-    //     case 'MEETING':
-    //       this.handleMeetingEvent(message);
-    //       break;
-    //     default:
-    //       return;
-    //   }
-    // });
+    this.initEventListener();
   }
 
-  // handleMeetingEvent(message: string) {
-  //   const data = JSON.parse(message);
-  //   switch (data.eventName) {
-  //     case 'member_joined':
-  //       this.handleMemberJoined(data.payload);
-  //       break;
-  //     default:
-  //       return;
-  //   }
-  // }
+  async initEventListener() {
+    await this._ioredisService.subscribe('MEETING');
+    this._ioredisService.onMessage((channel, message) => {
+      switch (channel) {
+        case 'MEETING':
+          this.handleMeetingEvent(message);
+          break;
+        default:
+          return;
+      }
+    });
+  }
 
-  // async handleMemberJoined(member: {
-  //   memberId: string;
-  //   meetingId: string;
-  //   name: string;
-  //   role: number;
-  // }) {
-  //   const meeting = await this._cacheManager.get(`meeting_${member.meetingId}`);
-  //   await this._cacheManager.set(`meeting_${member.meetingId}`, {
-  //     members: [member],
-  //   });
-  //   this.server.emit('member_joined', member);
-  // }
+  async handleMeetingEvent(message: string) {
+    const data = JSON.parse(message) as {
+      eventName: EventName;
+      payload: unknown;
+    };
+    switch (data.eventName) {
+      case 'member_joined':
+        const member = data.payload as Member;
+        await this._meetingEventHandler.handleMemberJoined(
+          member.meetingId,
+          member,
+          this.server,
+        );
+        break;
+      default:
+        return;
+    }
+  }
 
-  @SubscribeMessage('meeting:join')
+  @SubscribeMessage('meeting:request_join')
   public async onMemberJoined(
-    @MessageBody() data: { memberId: string; meetingId: string },
+    @MessageBody() data: { memberId: string; meetingId: string; name: string },
     @ConnectedSocket() client: Socket,
   ) {
-    const result = await this._meetingEventHandler.handleMemberJoinMeeting(
-      data,
-      client,
-    );
-    if (!result?.message) {
-      return;
-    }
-    this.server.to(result.room).emit(result.message, result.data);
+    await this._meetingEventHandler.handleMemberJoinMeeting(data.meetingId, {
+      meetingId: data.meetingId,
+      memberId: data.memberId,
+      name: data.name,
+      clientId: client.id,
+    });
   }
 
   async authenticate(token: string) {

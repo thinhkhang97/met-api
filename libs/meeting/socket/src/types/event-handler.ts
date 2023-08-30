@@ -1,4 +1,4 @@
-export interface EventHandlerResult<Data = unknown> {
+export interface EventHandlerResult<Data = any> {
   room: string;
   message: string;
   data?: Data;
