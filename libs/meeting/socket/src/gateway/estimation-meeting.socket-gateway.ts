@@ -1,3 +1,4 @@
+import { MeetingChannel, MeetingEventName } from '@lib/meeting/application';
 import { SocketGateway } from '@lib/shared';
 import { IoredisService } from '@lib/shared/modules/ioredis';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -11,7 +12,7 @@ import {
 import { Cache } from 'cache-manager';
 import { Socket } from 'socket.io';
 
-import { EventName } from '../constance';
+import { MeetingMessageName } from '../constance';
 import { MeetingEventHandler } from '../event-handlers';
 import { IdentityService } from '../services';
 import { Member } from '../types';
@@ -33,10 +34,10 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
   }
 
   async initEventListener() {
-    await this._ioredisService.subscribe('MEETING');
+    await this._ioredisService.subscribe(MeetingChannel.ESTIMATION_MEETING);
     this._ioredisService.onMessage((channel, message) => {
       switch (channel) {
-        case 'MEETING':
+        case MeetingChannel.ESTIMATION_MEETING:
           this.handleMeetingEvent(message);
           break;
         default:
@@ -47,18 +48,18 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
 
   async handleMeetingEvent(message: string) {
     const data = JSON.parse(message) as {
-      eventName: EventName;
+      eventName: MeetingEventName;
       payload: unknown;
     };
     switch (data.eventName) {
-      case 'member_joined': {
+      case MeetingEventName.MEMBER_JOINED: {
         await this._meetingEventHandler.handleMemberJoined(
           data.payload as Member,
           this.server,
         );
         break;
       }
-      case 'member_left': {
+      case MeetingEventName.MEMBER_LEFT: {
         this._meetingEventHandler.handleMemberLeftMeeting(
           data.payload as Member,
           this.server,
@@ -70,7 +71,7 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
     }
   }
 
-  @SubscribeMessage('meeting:request_join')
+  @SubscribeMessage(MeetingMessageName.REQUEST_JOINED)
   public async onMemberJoined(
     @MessageBody() data: { memberId: string; meetingId: string; name: string },
     @ConnectedSocket() client: Socket,

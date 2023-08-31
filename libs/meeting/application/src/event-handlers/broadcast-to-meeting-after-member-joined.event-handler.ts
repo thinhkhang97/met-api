@@ -1,3 +1,4 @@
+import { MeetingChannel, MeetingEventName } from '@lib/meeting/application';
 import { MemberJoinedEvent } from '@lib/meeting/domain';
 import { BaseEventHandler } from '@lib/shared';
 import { IoredisService } from '@lib/shared/modules/ioredis';
@@ -12,9 +13,9 @@ export class BroadcastToMeetingAfterMemberJoinedEventHandler extends BaseEventHa
   protected async execute(event: MemberJoinedEvent) {
     const memberProps = event.member.getProps();
     await this._ioredisService.publish(
-      'MEETING',
+      MeetingChannel.ESTIMATION_MEETING,
       JSON.stringify({
-        eventName: 'member_joined',
+        eventName: MeetingEventName.MEMBER_JOINED,
         payload: {
           memberId: memberProps.memberId.unpack(),
           meetingId: memberProps.meetingId.unpack(),

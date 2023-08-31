@@ -3,7 +3,11 @@ import { ClientProxy } from '@nestjs/microservices';
 import { Server, Socket } from 'socket.io';
 
 import { MeetingCache, UserCache } from '../cache';
-import { EventName, MEETING_INTERNAL_SERVICE, RoomKey } from '../constance';
+import {
+  MEETING_INTERNAL_SERVICE,
+  MeetingMessageName,
+  RoomKey,
+} from '../constance';
 import { CachedMember, Member } from '../types';
 
 @Injectable()
@@ -46,7 +50,7 @@ export class MeetingEventHandler {
     );
     server
       .to(`${RoomKey.MEETING}:${meetingId}`)
-      .emit(EventName.MEMBER_JOINED, member);
+      .emit(MeetingMessageName.MEMBER_JOINED, member);
   }
 
   public async handleMemberLeaveMeeting(client: Socket) {
@@ -55,7 +59,7 @@ export class MeetingEventHandler {
       return;
     }
     this._meetingInternalService.emit(
-      { action: 'member_leave' },
+      { action: 'member-leave' },
       {
         memberId: member.memberId,
         meetingId: member.meetingId,
@@ -67,6 +71,6 @@ export class MeetingEventHandler {
   public handleMemberLeftMeeting(member: Member, server: Server) {
     server
       .to(`${RoomKey.MEETING}:${member.meetingId}`)
-      .emit(EventName.MEMBER_LEFT, member);
+      .emit(MeetingMessageName.MEMBER_LEFT, member);
   }
 }

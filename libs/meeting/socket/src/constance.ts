@@ -11,7 +11,8 @@ export enum RoomKey {
   MEETING = 'meeting',
 }
 
-export enum EventName {
-  MEMBER_JOINED = 'member_joined',
-  MEMBER_LEFT = 'member_left',
+export enum MeetingMessageName {
+  REQUEST_JOINED = 'meeting:request_join',
+  MEMBER_JOINED = 'meeting:member_joined',
+  MEMBER_LEFT = 'meeting:member_left',
 }
