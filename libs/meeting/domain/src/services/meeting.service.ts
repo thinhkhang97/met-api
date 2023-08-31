@@ -26,4 +26,11 @@ export abstract class MeetingService<
    * @param userId
    */
   public abstract addMember(meetingId: CUID, userId: CUID): Promise<Member>;
+
+  /**
+   * Remove a member out of the meeting
+   * @param meetingId
+   * @param memberId
+   */
+  public abstract removeMember(meetingId: CUID, memberId: CUID): Promise<void>;
 }

@@ -31,24 +31,18 @@ import { IdentityService } from '../services';
       {
         name: MEETING_INTERNAL_SERVICE,
         useFactory: (_configService: ConfigService) => {
-          const user = _configService.getOrThrow('RABBITMQ_USER');
-          const password = _configService.getOrThrow('RABBITMQ_PASSWORD');
-          const host = _configService.getOrThrow('RABBITMQ_HOST');
-          const queueName = _configService.getOrThrow('RABBITMQ_QUEUE_NAME');
-
           return {
-            transport: Transport.RMQ,
+            transport: Transport.TCP,
             options: {
-              urls: [`amqp://${user}:${password}@${host}`],
-              queue: queueName,
-              queueOptions: {
-                durable: false,
-              },
+              host: _configService.getOrThrow('MEETING_MS_HOST'),
+              port: _configService.getOrThrow('MEETING_MS_PORT'),
             },
           };
         },
         inject: [ConfigService],
       },
+    ]),
+    ClientsModule.registerAsync([
       {
         name: IDENTITY_INTERNAL_SERVICE,
         useFactory: (_configService: ConfigService) => {

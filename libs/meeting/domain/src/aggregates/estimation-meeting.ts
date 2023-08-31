@@ -6,6 +6,7 @@ import {
   TaskEstimationNotFoundException,
 } from '../exceptions';
 import { OnlyVoterCanEstimateRule } from '../rules';
+import { MemberWatchedList } from '../watched-list';
 import { CreateMeetingProps, Meeting, MeetingProps } from './meeting.aggregate';
 import { TaskEstimation } from './task-estimation.aggregate';
 
@@ -31,7 +32,7 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
     return new EstimationMeeting({
       ...props,
       taskEstimations: [],
-      members: [],
+      members: new MemberWatchedList(),
       status: MeetingStatus.ACTIVE,
     });
   }
@@ -90,7 +91,7 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
     if (!taskEstimation) {
       throw new TaskEstimationNotFoundException();
     }
-    const member = this._props.members.find((_member) =>
+    const member = this._props.members.currentItems.find((_member) =>
       _member.id.equals(meetingMemberId),
     );
     if (!member) {

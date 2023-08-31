@@ -24,11 +24,11 @@ export enum MemberStatus {
   /**
    * Member left the meeting or added by someone but not present at the time
    */
-  OFFLINE,
+  LEFT,
   /**
    * Member still in the meeting
    */
-  ONLINE,
+  ACTIVE,
 }
 
 export enum MeetingStatus {

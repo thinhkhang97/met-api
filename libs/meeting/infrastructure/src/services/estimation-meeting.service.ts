@@ -53,4 +53,14 @@ export class EstimationMeetingServiceImpl implements EstimationMeetingService {
     await this._estimationMeetingRepository.upsert(meeting);
     return member;
   }
+
+  async removeMember(meetingId: CUID, memberId: CUID) {
+    const meeting = await this._estimationMeetingRepository.findOneByIdOrThrow(
+      meetingId,
+      new MeetingNotFoundException(),
+    );
+
+    meeting.removeMember(memberId);
+    await this._estimationMeetingRepository.upsert(meeting);
+  }
 }

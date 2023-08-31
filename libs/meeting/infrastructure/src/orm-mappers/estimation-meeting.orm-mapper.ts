@@ -1,4 +1,8 @@
-import { EstimationMeeting, EstimationMeetingProps } from '@lib/meeting/domain';
+import {
+  EstimationMeeting,
+  EstimationMeetingProps,
+  MemberWatchedList,
+} from '@lib/meeting/domain';
 import { EstimationMeetingOrmEntity } from '@lib/meeting/infrastructure/orm-entities';
 import { BaseOrmEntity, BaseOrmMapper, CUID, DateVO } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
@@ -28,11 +32,13 @@ export class EstimationMeetingOrmMapper extends BaseOrmMapper<
       status: ormEntity.status,
       from: new DateVO(ormEntity.from),
       to: new DateVO(ormEntity.to),
-      members: ormEntity.members
-        ? ormEntity.members.map((member) =>
-            this._memberOrmMapper.toEntity(member),
-          )
-        : [],
+      members: new MemberWatchedList(
+        ormEntity.members
+          ? ormEntity.members.map((member) =>
+              this._memberOrmMapper.toEntity(member),
+            )
+          : [],
+      ),
       taskEstimations: ormEntity.taskEstimations
         ? ormEntity.taskEstimations.map((taskEstimation) =>
             this._taskEstimationOrmMapper.toEntity(taskEstimation),
@@ -51,7 +57,7 @@ export class EstimationMeetingOrmMapper extends BaseOrmMapper<
       status: props.status,
       from: props.from.unpack(),
       to: props.to.unpack(),
-      members: props.members.map((member) =>
+      members: props.members.updatedItems.map((member) =>
         this._memberOrmMapper.toOrm(member),
       ),
       taskEstimations: props.taskEstimations.map((taskEstimation) =>

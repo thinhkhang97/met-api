@@ -7,11 +7,6 @@ export interface Member {
   name?: string;
 }
 
-export interface WSMember extends Member {
+export interface CachedMember extends Member {
   clientId: string;
-}
-
-export interface WMeeting {
-  id: string;
-  members: WSMember[];
 }

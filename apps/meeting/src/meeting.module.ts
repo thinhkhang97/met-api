@@ -1,5 +1,6 @@
 import { MeetingGraphqlUiModule } from '@lib/meeting/graphql-ui';
 import { MeetingRmqUiModule } from '@lib/meeting/rmq-ui';
+import { MeetingTcpUiModule } from '@lib/meeting/tcp-ui';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
@@ -11,6 +12,7 @@ import { ConfigModule } from '@nestjs/config';
     }),
     MeetingGraphqlUiModule,
     MeetingRmqUiModule,
+    MeetingTcpUiModule,
   ],
 })
 export class MeetingModule {}

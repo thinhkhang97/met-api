@@ -1,8 +1,9 @@
-import { MeetingStatus, MemberRole } from '@lib/meeting/domain/constance';
-import { MemberJoinedEvent } from '@lib/meeting/domain/events';
 import { AggregateRoot, CUID, DateVO } from '@lib/shared/ddd';
 
+import { MeetingStatus, MemberRole, MemberStatus } from '../constance';
 import { Member } from '../entities';
+import { MemberJoinedEvent, MemberLeftEvent } from '../events';
+import { MemberWatchedList } from '../watched-list';
 
 export interface CreateMeetingProps {
   /**
@@ -30,7 +31,7 @@ export interface MeetingProps extends CreateMeetingProps {
   /**
    * Member who create the meeting
    */
-  members: Member[];
+  members: MemberWatchedList;
 
   /**
    * Meeting status, active or ended
@@ -48,12 +49,18 @@ export abstract class Meeting<C extends MeetingProps> extends AggregateRoot<C> {
 
   /**
    * Remove a member out of the meeting
-   * @param member
+   * @param memberId
    */
-  public removeMember(member: Member) {
-    this._props.members = this._props.members.filter(
-      (_member) => !member.equals(_member),
+  public removeMember(memberId: CUID) {
+    const member = this._props.members.currentItems.find((_member) =>
+      _member.memberId.equals(memberId),
     );
+    if (!member) {
+      return;
+    }
+    member.updateStatus(MemberStatus.LEFT);
+    this._props.members.update(member);
+    this.apply(new MemberLeftEvent({ aggregateId: this.id, member }));
     this.update();
   }
 
@@ -63,7 +70,7 @@ export abstract class Meeting<C extends MeetingProps> extends AggregateRoot<C> {
    * @param name
    */
   public addMember(memberId: CUID, name: string) {
-    let member = this._props.members.find((_member) =>
+    let member = this._props.members.currentItems.find((_member) =>
       _member.memberId.equals(memberId),
     );
     if (!member) {
@@ -73,7 +80,7 @@ export abstract class Meeting<C extends MeetingProps> extends AggregateRoot<C> {
         role: MemberRole.VOTER,
         meetingId: this.id as CUID,
       });
-      this._props.members.push(member);
+      this._props.members.add(member);
     }
     this.apply(new MemberJoinedEvent({ aggregateId: this.id, member }));
     this.update();

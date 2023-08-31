@@ -19,10 +19,12 @@ export abstract class SocketGateway
 
   async handleConnection(client: Socket) {
     const headers = client.handshake.headers;
-    console.log(headers);
-    const [_, token] = headers.authorization?.split(' ') || [];
+    const token = headers.authorization?.split(' ')[1];
+    if (!token) {
+      client.disconnect();
+      return;
+    }
     const user = (await this.authenticate(token)) as { id: string };
-    console.log(user);
     if (!user) {
       client.disconnect();
     } else {
@@ -47,9 +49,8 @@ export abstract class SocketGateway
     this._cacheManager.del(`${CacheKey.CLIENT}:${client.id}`);
   }
 
-  async afterInit(server: any) {
+  async afterInit() {
     this.server.use((socket, next) => {
-      console.log(socket.id, socket.data);
       next();
     });
     await this._cacheManager.reset();

@@ -22,6 +22,11 @@ export interface CreateMemberProps {
    * Meeting id
    */
   meetingId: CUID;
+
+  /**
+   * Status
+   */
+  status?: MemberStatus;
 }
 
 export interface MemberProps extends CreateMemberProps {
@@ -52,7 +57,14 @@ export class Member extends BaseEntity<MemberProps> {
   }
 
   public static create(props: CreateMemberProps) {
-    return new Member({ ...props, status: MemberStatus.OFFLINE });
+    return new Member({
+      ...props,
+      status: props.status ?? MemberStatus.ACTIVE,
+    });
+  }
+
+  public updateStatus(status: MemberStatus) {
+    this._props.status = status;
   }
 
   validate() {

@@ -51,14 +51,20 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
       payload: unknown;
     };
     switch (data.eventName) {
-      case 'member_joined':
-        const member = data.payload as Member;
+      case 'member_joined': {
         await this._meetingEventHandler.handleMemberJoined(
-          member.meetingId,
-          member,
+          data.payload as Member,
           this.server,
         );
         break;
+      }
+      case 'member_left': {
+        this._meetingEventHandler.handleMemberLeftMeeting(
+          data.payload as Member,
+          this.server,
+        );
+        break;
+      }
       default:
         return;
     }
@@ -82,12 +88,6 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
   }
 
   async onClientDisconnect(client: Socket) {
-    const result = await this._meetingEventHandler.handleMemberLeftMeeting(
-      client,
-    );
-    if (!result?.message) {
-      return;
-    }
-    this.server.to(result.room).emit(result.message, result.data);
+    return this._meetingEventHandler.handleMemberLeaveMeeting(client);
   }
 }
