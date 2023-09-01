@@ -65,6 +65,7 @@ export class Member extends BaseEntity<MemberProps> {
 
   public updateStatus(status: MemberStatus) {
     this._props.status = status;
+    this.update();
   }
 
   validate() {

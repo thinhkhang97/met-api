@@ -80,8 +80,10 @@ export abstract class Meeting<C extends MeetingProps> extends AggregateRoot<C> {
         role: MemberRole.VOTER,
         meetingId: this.id as CUID,
       });
-      this._props.members.add(member);
+    } else {
+      member.updateStatus(MemberStatus.ACTIVE);
     }
+    this._props.members.add(member);
     this.apply(new MemberJoinedEvent({ aggregateId: this.id, member }));
     this.update();
     return member;
