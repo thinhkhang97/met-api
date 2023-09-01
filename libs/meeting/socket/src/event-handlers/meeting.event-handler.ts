@@ -39,21 +39,22 @@ export class MeetingEventHandler {
     if (!requestMember) {
       return;
     }
-    const client = server.sockets.sockets.get(requestMember.clientId);
+    const client = server.of('/').sockets.get(requestMember.clientId);
     if (!client) {
       return;
     }
     await this._meetingCache.addMemberToMeeting(
-      client,
+      client.id,
       meetingId,
       requestMember,
     );
+    await client.join(`${RoomKey.MEETING}:${meetingId}`);
     server
       .to(`${RoomKey.MEETING}:${meetingId}`)
       .emit(MeetingMessageName.MEMBER_JOINED, member);
   }
 
-  public async handleMemberLeaveMeeting(client: Socket) {
+  public async handleMemberLeaveMeeting(client: Socket, server: Server) {
     const member = await this._meetingCache.getMemberByClientId(client.id);
     if (!member) {
       return;
@@ -65,10 +66,7 @@ export class MeetingEventHandler {
         meetingId: member.meetingId,
       },
     );
-    client.leave(`${RoomKey.MEETING}:${member.meetingId}`);
-  }
-
-  public handleMemberLeftMeeting(member: Member, server: Server) {
+    await client.leave(`${RoomKey.MEETING}:${member.meetingId}`);
     server
       .to(`${RoomKey.MEETING}:${member.meetingId}`)
       .emit(MeetingMessageName.MEMBER_LEFT, member);

@@ -2,9 +2,8 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { remove } from 'lodash';
-import { Socket } from 'socket.io';
 
-import { MeetingCacheKey, RoomKey } from '../constance';
+import { MeetingCacheKey } from '../constance';
 import { CachedMember, Member } from '../types';
 
 @Injectable()
@@ -17,12 +16,11 @@ export class MeetingCache {
     );
   }
 
-  async addMemberToMeeting(client: Socket, meetingId: string, member: Member) {
+  async addMemberToMeeting(clientId, meetingId: string, member: Member) {
     await this._cacheManager.set(
-      `${MeetingCacheKey.CLIENT_MEMBER}:${client.id}`,
+      `${MeetingCacheKey.CLIENT_MEMBER}:${clientId}`,
       member,
     );
-    client.join(`${RoomKey.MEETING}:${meetingId}`);
   }
 
   async addMemberRequestJoin(meetingId: string, member: CachedMember) {

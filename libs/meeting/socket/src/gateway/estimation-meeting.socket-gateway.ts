@@ -1,5 +1,5 @@
 import { MeetingChannel, MeetingEventName } from '@lib/meeting/application';
-import { SocketGateway } from '@lib/shared';
+import { Logger, SocketGateway } from '@lib/shared';
 import { IoredisService } from '@lib/shared/modules/ioredis';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject } from '@nestjs/common';
@@ -23,6 +23,8 @@ import { Member } from '../types';
   },
 })
 export class EstimationMeetingSocketGateway extends SocketGateway {
+  private readonly _logger = new Logger();
+
   constructor(
     @Inject(CACHE_MANAGER) protected readonly _cacheManager: Cache,
     private readonly _identityService: IdentityService,
@@ -36,6 +38,9 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
   async initEventListener() {
     await this._ioredisService.subscribe(MeetingChannel.ESTIMATION_MEETING);
     this._ioredisService.onMessage((channel, message) => {
+      this._logger.verbose(
+        `Handle message from channel ${channel}: ${message}`,
+      );
       switch (channel) {
         case MeetingChannel.ESTIMATION_MEETING:
           this.handleMeetingEvent(message);
@@ -60,10 +65,6 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
         break;
       }
       case MeetingEventName.MEMBER_LEFT: {
-        this._meetingEventHandler.handleMemberLeftMeeting(
-          data.payload as Member,
-          this.server,
-        );
         break;
       }
       default:
@@ -72,7 +73,7 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
   }
 
   @SubscribeMessage(MeetingMessageName.REQUEST_JOINED)
-  public async onMemberJoined(
+  public async onMemberRequestJoin(
     @MessageBody() data: { memberId: string; meetingId: string; name: string },
     @ConnectedSocket() client: Socket,
   ) {
@@ -82,7 +83,7 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
       name: data.name,
       clientId: client.id,
     });
-    client.emit(MeetingMessageName.RECEIVED_REQUEST);
+    this.server.to(client.id).emit(MeetingMessageName.RECEIVED_REQUEST);
   }
 
   async authenticate(token: string) {
@@ -90,6 +91,9 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
   }
 
   async onClientDisconnect(client: Socket) {
-    return this._meetingEventHandler.handleMemberLeaveMeeting(client);
+    return this._meetingEventHandler.handleMemberLeaveMeeting(
+      client,
+      this.server,
+    );
   }
 }

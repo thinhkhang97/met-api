@@ -30,6 +30,7 @@ export abstract class SocketGateway
     } else {
       await this._cacheManager.set(`${CacheKey.CLIENT}:${client.id}`, user);
       await this._cacheManager.set(`${CacheKey.USER}:${user.id}`, user);
+      client.emit('connected');
     }
   }
 
@@ -45,8 +46,8 @@ export abstract class SocketGateway
     if (!user) {
       return;
     }
-    this._cacheManager.del(`${CacheKey.USER}:${user.id}`);
-    this._cacheManager.del(`${CacheKey.CLIENT}:${client.id}`);
+    await this._cacheManager.del(`${CacheKey.USER}:${user.id}`);
+    await this._cacheManager.del(`${CacheKey.CLIENT}:${client.id}`);
   }
 
   async afterInit() {
