@@ -12,7 +12,7 @@ import { EstimationMeetingResultUnion } from '../unions';
 export class EstimationMeetingQuery {
   constructor(private readonly _queryBus: QueryBus) {}
 
-  @Query(() => EstimationMeetingResultUnion, { name: 'meeting' })
+  @Query(() => EstimationMeetingResultUnion, { name: 'estimationMeeting' })
   public async getMeetingById(
     @Args({ type: () => ID, name: 'meetingId' }) meetingId: string,
   ) {
@@ -28,7 +28,7 @@ export class EstimationMeetingQuery {
     return new EstimationMeetingObject(result.unwrap());
   }
 
-  @Query(() => [EstimationMeetingObject], { name: 'meetings' })
+  @Query(() => [EstimationMeetingObject], { name: 'estimationMeetings' })
   public async getMeetings(
     @Args({ type: () => ID, name: 'groupId' }) groupId: string,
   ) {

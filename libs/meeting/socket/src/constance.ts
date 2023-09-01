@@ -13,6 +13,7 @@ export enum RoomKey {
 
 export enum MeetingMessageName {
   REQUEST_JOINED = 'meeting:request_join',
+  RECEIVED_REQUEST = 'meeting:received_request',
   MEMBER_JOINED = 'meeting:member_joined',
   MEMBER_LEFT = 'meeting:member_left',
 }

@@ -82,6 +82,7 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
       name: data.name,
       clientId: client.id,
     });
+    client.emit(MeetingMessageName.RECEIVED_REQUEST);
   }
 
   async authenticate(token: string) {
