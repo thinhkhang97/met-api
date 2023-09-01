@@ -1,5 +1,5 @@
 import { Member } from '@lib/meeting/domain';
-import { MemberRole } from '@lib/meeting/domain/constance';
+import { MemberRole, MemberStatus } from '@lib/meeting/domain/constance';
 import { BaseObject } from '@lib/shared';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
@@ -14,6 +14,9 @@ export class MemberObject extends BaseObject {
   @Field(() => MemberRole)
   public readonly role: MemberRole;
 
+  @Field(() => MemberStatus)
+  public readonly status: MemberStatus;
+
   @Field(() => ID)
   public readonly meetingId: string;
 
@@ -24,5 +27,6 @@ export class MemberObject extends BaseObject {
     this.role = props.role;
     this.name = props.name;
     this.meetingId = props.meetingId.unpack();
+    this.status = props.status;
   }
 }
