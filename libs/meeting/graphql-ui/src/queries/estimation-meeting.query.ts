@@ -1,4 +1,5 @@
 import { GetEstimationMeetingQuery } from '@lib/meeting/application';
+import { GetEstimationMeetingsQuery } from '@lib/meeting/application/queries/get-estimation-meetings/get-estimation-meetings.query';
 import { EstimationMeeting } from '@lib/meeting/domain';
 import { EstimationMeetingObject } from '@lib/meeting/graphql-ui/objects';
 import { Either } from '@lib/shared';
@@ -11,7 +12,7 @@ import { EstimationMeetingResultUnion } from '../unions';
 export class EstimationMeetingQuery {
   constructor(private readonly _queryBus: QueryBus) {}
 
-  @Query(() => EstimationMeetingResultUnion)
+  @Query(() => EstimationMeetingResultUnion, { name: 'meeting' })
   public async getMeetingById(
     @Args({ type: () => ID, name: 'meetingId' }) meetingId: string,
   ) {
@@ -25,5 +26,21 @@ export class EstimationMeetingQuery {
       };
     }
     return new EstimationMeetingObject(result.unwrap());
+  }
+
+  @Query(() => [EstimationMeetingObject], { name: 'meetings' })
+  public async getMeetings(
+    @Args({ type: () => ID, name: 'groupId' }) groupId: string,
+  ) {
+    const result = await this._queryBus.execute<
+      GetEstimationMeetingsQuery,
+      Either<EstimationMeeting[]>
+    >(new GetEstimationMeetingsQuery({ groupId }));
+    if (result.isErr()) {
+      return [];
+    }
+    return result
+      .unwrap()
+      .map((meeting) => new EstimationMeetingObject(meeting));
   }
 }

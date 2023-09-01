@@ -30,7 +30,9 @@ export abstract class MeetingObject extends BaseObject {
     this.groupId = props.groupId.unpack();
     this.title = props.title;
     this.status = props.status;
-    this.members = props.members.map((member) => new MemberObject(member));
+    this.members = props.members.currentItems.map(
+      (member) => new MemberObject(member),
+    );
     this.from = props.from.unpack();
     this.to = props.to.unpack();
   }
