@@ -12,6 +12,7 @@ import {
 } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/meeting-client';
+import { omit } from 'lodash';
 
 @Injectable()
 export class TaskEstimationRepositoryImpl
@@ -60,18 +61,22 @@ export class TaskEstimationRepositoryImpl
         ...ormProps,
         memberEstimations: {
           createMany: {
-            data: ormProps.memberEstimations,
+            data: (ormProps.memberEstimations || []).map((memberEstimation) =>
+              omit(memberEstimation, 'taskEstimationId'),
+            ),
           },
         },
       },
       update: {
         ...ormProps,
         memberEstimations: {
-          upsert: ormProps.memberEstimations.map((memberEstimation) => ({
-            where: { id: memberEstimation.id },
-            create: { ...memberEstimation },
-            update: { ...memberEstimation },
-          })),
+          upsert: (ormProps.memberEstimations || []).map(
+            (memberEstimation) => ({
+              where: { id: memberEstimation.id },
+              create: { ...omit(memberEstimation, 'taskEstimationId') },
+              update: { ...omit(memberEstimation, 'taskEstimationId') },
+            }),
+          ),
         },
       },
     };

@@ -34,7 +34,7 @@ export class EstimationMeetingServiceImpl implements EstimationMeetingService {
       from,
       to,
     });
-    return await this._estimationMeetingRepository.create(estimationMeeting);
+    return await this._estimationMeetingRepository.upsert(estimationMeeting);
   }
 
   async addMember(meetingId: CUID, userId: CUID) {

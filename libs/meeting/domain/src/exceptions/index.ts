@@ -1,3 +1,4 @@
+export * from './estimation-task-invalid.exception';
 export * from './group-not-found.exception';
 export * from './meeting-member-not-found.exception';
 export * from './meeting-not-found.exception';

@@ -44,6 +44,7 @@ export class EstimationMeetingRepositoryImpl
     return {
       include: {
         members: true,
+        taskEstimations: true,
       },
     };
   }
@@ -74,7 +75,13 @@ export class EstimationMeetingRepositoryImpl
             update: omit(member, 'meetingId'),
           })),
         },
-        taskEstimations: undefined,
+        taskEstimations: {
+          upsert: (ormProps.taskEstimations || []).map((member) => ({
+            where: { id: member.id },
+            create: omit(member, ['meetingId', 'memberEstimations']),
+            update: omit(member, ['meetingId', 'memberEstimations']),
+          })),
+        },
       },
     };
   }

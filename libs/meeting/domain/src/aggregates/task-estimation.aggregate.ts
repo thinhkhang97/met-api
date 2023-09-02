@@ -1,3 +1,4 @@
+import { EstimationTaskTitle } from '@lib/meeting/domain/value-objects';
 import { AggregateRoot, CUID, Nullable } from '@lib/shared';
 
 import { TaskEstimationStatus } from '../constance';
@@ -12,12 +13,19 @@ interface CreateTaskEstimationProps {
   /**
    * Title of task
    */
-  title: string;
+  title: EstimationTaskTitle;
 
   /**
    * The description for the task
    */
   description: Nullable<string>;
+}
+
+export interface TaskEstimationProps extends CreateTaskEstimationProps {
+  /**
+   * Task was removed or still in the meeting
+   */
+  status: TaskEstimationStatus;
 
   /**
    * The members attended to the estimation
@@ -28,10 +36,6 @@ interface CreateTaskEstimationProps {
    * Final estimation for the task
    */
   averageEstimation: Nullable<number>;
-}
-
-export interface TaskEstimationProps extends CreateTaskEstimationProps {
-  status: TaskEstimationStatus;
 }
 
 export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
@@ -47,7 +51,19 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
     return new TaskEstimation({
       ...props,
       status: TaskEstimationStatus.ACTIVE,
+      averageEstimation: null,
+      memberEstimations: [],
     });
+  }
+
+  public updateTitle(title: EstimationTaskTitle) {
+    this._props.title = title;
+    this.update();
+  }
+
+  public updateDescription(description: string) {
+    this._props.description = description;
+    this.update();
   }
 
   /**

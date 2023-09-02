@@ -47,14 +47,16 @@ export abstract class Meeting<C extends MeetingProps> extends AggregateRoot<C> {
     return this._props.groupId;
   }
 
+  public get members() {
+    return this._props.members;
+  }
+
   /**
    * Remove a member out of the meeting
    * @param memberId
    */
   public removeMember(memberId: CUID) {
-    const member = this._props.members.currentItems.find((_member) =>
-      _member.memberId.equals(memberId),
-    );
+    const member = this._props.members.findOneByMemberId(memberId);
     if (!member) {
       return;
     }
@@ -70,9 +72,7 @@ export abstract class Meeting<C extends MeetingProps> extends AggregateRoot<C> {
    * @param name
    */
   public addMember(memberId: CUID, name: string) {
-    let member = this._props.members.currentItems.find((_member) =>
-      _member.memberId.equals(memberId),
-    );
+    let member = this._props.members.findOneByMemberId(memberId);
     if (!member) {
       member = Member.create({
         name,

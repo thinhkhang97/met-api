@@ -2,6 +2,7 @@ import {
   EstimationMeeting,
   EstimationMeetingProps,
   MemberWatchedList,
+  TaskEstimationWatchedList,
 } from '@lib/meeting/domain';
 import { EstimationMeetingOrmEntity } from '@lib/meeting/infrastructure/orm-entities';
 import { BaseOrmEntity, BaseOrmMapper, CUID, DateVO } from '@lib/shared';
@@ -39,11 +40,13 @@ export class EstimationMeetingOrmMapper extends BaseOrmMapper<
             )
           : [],
       ),
-      taskEstimations: ormEntity.taskEstimations
-        ? ormEntity.taskEstimations.map((taskEstimation) =>
-            this._taskEstimationOrmMapper.toEntity(taskEstimation),
-          )
-        : [],
+      taskEstimations: new TaskEstimationWatchedList(
+        ormEntity.taskEstimations
+          ? ormEntity.taskEstimations.map((taskEstimation) =>
+              this._taskEstimationOrmMapper.toEntity(taskEstimation),
+            )
+          : [],
+      ),
     };
   }
 
@@ -60,8 +63,8 @@ export class EstimationMeetingOrmMapper extends BaseOrmMapper<
       members: props.members.updatedItems.map((member) =>
         this._memberOrmMapper.toOrm(member),
       ),
-      taskEstimations: props.taskEstimations.map((taskEstimation) =>
-        this._taskEstimationOrmMapper.toOrm(taskEstimation),
+      taskEstimations: props.taskEstimations.updatedItems.map(
+        (taskEstimation) => this._taskEstimationOrmMapper.toOrm(taskEstimation),
       ),
     };
   }

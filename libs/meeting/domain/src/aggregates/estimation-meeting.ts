@@ -1,3 +1,4 @@
+import { EstimationTaskTitle } from '@lib/meeting/domain/value-objects';
 import { CUID, Nullable, RuleValidator } from '@lib/shared';
 
 import { MeetingStatus, TaskEstimationStatus } from '../constance';
@@ -5,8 +6,11 @@ import {
   MeetingMemberNotFoundException,
   TaskEstimationNotFoundException,
 } from '../exceptions';
-import { OnlyVoterCanEstimateRule } from '../rules';
-import { MemberWatchedList } from '../watched-list';
+import {
+  OnlyMeetingMemberCanAddTaskRule,
+  OnlyVoterCanEstimateRule,
+} from '../rules';
+import { MemberWatchedList, TaskEstimationWatchedList } from '../watched-list';
 import { CreateMeetingProps, Meeting, MeetingProps } from './meeting.aggregate';
 import { TaskEstimation } from './task-estimation.aggregate';
 
@@ -16,7 +20,7 @@ export interface EstimationMeetingProps extends MeetingProps {
   /**
    * Tasks need to be considered and estimated by the members in the meeting
    */
-  taskEstimations: TaskEstimation[];
+  taskEstimations: TaskEstimationWatchedList;
 }
 
 /**
@@ -31,7 +35,7 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
   public static create(props: CreateEstimationMeetingProps) {
     return new EstimationMeeting({
       ...props,
-      taskEstimations: [],
+      taskEstimations: new TaskEstimationWatchedList(),
       members: new MemberWatchedList(),
       status: MeetingStatus.ACTIVE,
     });
@@ -45,18 +49,20 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
    */
   public addTaskEstimation(
     memberId: CUID,
-    title: string,
+    title: EstimationTaskTitle,
     description: Nullable<string>,
   ) {
+    RuleValidator.validate(
+      new OnlyMeetingMemberCanAddTaskRule(this._props.members, memberId),
+    );
     const taskEstimation = TaskEstimation.create({
       meetingId: this.id as CUID,
       title,
       description,
-      averageEstimation: null,
-      memberEstimations: [],
     });
-    this._props.taskEstimations.push(taskEstimation);
+    this._props.taskEstimations.add(taskEstimation);
     this.update();
+    return taskEstimation;
   }
 
   /**
@@ -64,13 +70,13 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
    * @param taskEstimationId
    */
   public removeTaskEstimation(taskEstimationId: CUID) {
-    const taskEstimation = this._props.taskEstimations.find((task) =>
-      task.id.equals(taskEstimationId),
-    );
+    const taskEstimation =
+      this._props.taskEstimations.findOneById(taskEstimationId);
     if (!taskEstimation) {
       throw new TaskEstimationNotFoundException();
     }
     taskEstimation.updateStatus(TaskEstimationStatus.REMOVED);
+    this._props.taskEstimations.update(taskEstimation);
     this.update();
   }
 
@@ -85,46 +91,18 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
     taskEstimationId: CUID,
     estimationValue: Nullable<number>,
   ) {
-    const taskEstimation = this._props.taskEstimations.find((task) =>
-      task.id.equals(taskEstimationId),
-    );
+    const taskEstimation =
+      this._props.taskEstimations.findOneById(taskEstimationId);
     if (!taskEstimation) {
       throw new TaskEstimationNotFoundException();
     }
-    const member = this._props.members.currentItems.find((_member) =>
-      _member.id.equals(meetingMemberId),
-    );
+    const member = this._props.members.findOneById(meetingMemberId);
     if (!member) {
       throw new MeetingMemberNotFoundException();
     }
     RuleValidator.validate(new OnlyVoterCanEstimateRule(member));
     taskEstimation.updateMemberEstimation(meetingMemberId, estimationValue);
     this.update();
-  }
-
-  /**
-   * Get task estimation by id
-   * @param taskEstimationId
-   */
-  public getTaskEstimation(taskEstimationId: CUID) {
-    const taskEstimation = this._props.taskEstimations.find(
-      (task) =>
-        task.id.equals(taskEstimationId) &&
-        task.status === TaskEstimationStatus.ACTIVE,
-    );
-    if (!taskEstimation) {
-      throw new TaskEstimationNotFoundException();
-    }
-    return taskEstimation;
-  }
-
-  /**
-   * Get all active task estimations
-   */
-  public getActiveTaskEstimations() {
-    return this._props.taskEstimations.filter(
-      (task) => task.status === TaskEstimationStatus.ACTIVE,
-    );
   }
 
   validate() {

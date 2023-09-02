@@ -1,6 +1,6 @@
-import { BaseException } from '@lib/shared';
+import { BaseEntity, BaseException, ID } from '@lib/shared';
 
-export abstract class WatchedList<T> {
+export abstract class WatchedList<T extends BaseEntity<any>> {
   constructor(items?: T[]) {
     this._currentItems = items ?? [];
     this._updatedItems = [];
@@ -29,6 +29,10 @@ export abstract class WatchedList<T> {
     return this._currentItems.find((currentItem) =>
       this.compare(currentItem, item),
     );
+  }
+
+  public findOneById(id: ID) {
+    return this._currentItems.find((currentItem) => currentItem.id.equals(id));
   }
 
   public update(item: T, notFoundError?: BaseException) {

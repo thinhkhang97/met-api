@@ -1,4 +1,5 @@
 import { TaskEstimation, TaskEstimationProps } from '@lib/meeting/domain';
+import { EstimationTaskTitle } from '@lib/meeting/domain/value-objects';
 import { BaseOrmEntity, BaseOrmMapper, CUID } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
 
@@ -22,13 +23,15 @@ export class TaskEstimationOrmMapper extends BaseOrmMapper<
   ): TaskEstimationProps {
     return {
       meetingId: new CUID(ormEntity.meetingId),
-      title: ormEntity.title,
+      title: EstimationTaskTitle.create(ormEntity.title),
       description: ormEntity.description,
       status: ormEntity.status,
       averageEstimation: ormEntity.averageEstimation,
-      memberEstimations: ormEntity.memberEstimations.map((memberEstimation) =>
-        this._memberEstimationOrmMapper.toEntity(memberEstimation),
-      ),
+      memberEstimations: ormEntity.memberEstimations
+        ? ormEntity.memberEstimations.map((memberEstimation) =>
+            this._memberEstimationOrmMapper.toEntity(memberEstimation),
+          )
+        : [],
     };
   }
 
@@ -37,7 +40,7 @@ export class TaskEstimationOrmMapper extends BaseOrmMapper<
   ): Omit<TaskEstimationOrmEntity, keyof BaseOrmEntity> {
     const props = entity.getProps();
     return {
-      title: props.title,
+      title: props.title.unpack(),
       description: props.description,
       status: props.status,
       meetingId: props.meetingId.unpack(),

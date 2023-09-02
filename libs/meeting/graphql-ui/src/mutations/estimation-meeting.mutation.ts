@@ -1,8 +1,9 @@
 import {
+  AddEstimationTaskCommand,
   CreateEstimationMeetingCommand,
   JoinMeetingCommand,
 } from '@lib/meeting/application';
-import { EstimationMeeting } from '@lib/meeting/domain';
+import { EstimationMeeting, TaskEstimation } from '@lib/meeting/domain';
 import { Either, GraphQLUser, LoggedUser } from '@lib/shared';
 import { CommandBus } from '@nestjs/cqrs';
 import {
@@ -13,8 +14,16 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 
-import { EstimationMeetingObject, MeetingActionResultObject } from '../objects';
-import { CreateEstimationMeetingResultUnion } from '../unions';
+import { AddEstimationTaskArg } from '../args';
+import {
+  EstimationMeetingObject,
+  MeetingActionResultObject,
+  TaskEstimationObject,
+} from '../objects';
+import {
+  AddEstimationTaskResult,
+  CreateEstimationMeetingResultUnion,
+} from '../unions';
 
 @Resolver()
 export class EstimationMeetingMutation {
@@ -71,5 +80,19 @@ export class EstimationMeetingMutation {
     }
 
     return new MeetingActionResultObject('success');
+  }
+
+  @Mutation(() => AddEstimationTaskResult)
+  async addEstimationTask(@Args() input: AddEstimationTaskArg) {
+    const result = await this._commandBus.execute<
+      AddEstimationTaskCommand,
+      Either<TaskEstimation>
+    >(new AddEstimationTaskCommand(input));
+    if (result.isErr()) {
+      return {
+        errorMessage: result.unwrapErr().message,
+      };
+    }
+    return new TaskEstimationObject(result.unwrap());
   }
 }

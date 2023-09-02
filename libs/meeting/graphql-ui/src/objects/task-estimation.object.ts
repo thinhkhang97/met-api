@@ -24,7 +24,7 @@ export class TaskEstimationObject extends BaseObject {
     super(entity);
     const props = entity.getProps();
     this.meetingId = props.meetingId.unpack();
-    this.title = props.title;
+    this.title = props.title.unpack();
     this.description = props.description;
     this.memberEstimation = props.memberEstimations.map(
       (memberEstimation) => new MemberEstimationObject(memberEstimation),
