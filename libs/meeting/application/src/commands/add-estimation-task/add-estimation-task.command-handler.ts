@@ -19,6 +19,11 @@ export class AddEstimationTaskCommandHandler extends BaseCommandHandler<
     super();
   }
 
+  /**
+   * TODO: We should move this logic to service layer and don't just input memberId
+   *  We should use userId then call group service to get memberId instead
+   * @param command
+   */
   async handle(command: AddEstimationTaskCommand): Promise<TaskEstimation> {
     const meetingId = new CUID(command.meetingId);
     const memberId = new CUID(command.memberId);

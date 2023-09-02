@@ -14,6 +14,7 @@ import {
 import {
   OnlyMeetingMemberCanAddTaskRule,
   OnlyVoterCanEstimateRule,
+  TaskToUpdateMustBeActiveRule,
 } from '../rules';
 import { MemberWatchedList, TaskEstimationWatchedList } from '../watched-list';
 import { CreateMeetingProps, Meeting, MeetingProps } from './meeting.aggregate';
@@ -94,6 +95,7 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
     if (!taskEstimation) {
       throw new TaskEstimationNotFoundException();
     }
+    RuleValidator.validate(new TaskToUpdateMustBeActiveRule(taskEstimation));
     taskEstimation.updateTitle(title);
     taskEstimation.updateDescription(description);
     this._props.taskEstimations.update(taskEstimation);
