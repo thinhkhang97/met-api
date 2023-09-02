@@ -65,6 +65,23 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
     return taskEstimation;
   }
 
+  public updateTaskEstimation(
+    taskEstimationId: CUID,
+    title: EstimationTaskTitle,
+    description: Nullable<string>,
+  ) {
+    const taskEstimation =
+      this._props.taskEstimations.findOneById(taskEstimationId);
+    if (!taskEstimation) {
+      throw new TaskEstimationNotFoundException();
+    }
+    taskEstimation.updateTitle(title);
+    taskEstimation.updateDescription(description);
+    this._props.taskEstimations.update(taskEstimation);
+    this.update();
+    return taskEstimation;
+  }
+
   /**
    * Remove a task, every member can do it
    * @param taskEstimationId

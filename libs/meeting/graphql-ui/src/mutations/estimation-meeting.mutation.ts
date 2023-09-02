@@ -2,6 +2,7 @@ import {
   AddEstimationTaskCommand,
   CreateEstimationMeetingCommand,
   JoinMeetingCommand,
+  UpdateEstimationTaskCommand,
 } from '@lib/meeting/application';
 import { EstimationMeeting, TaskEstimation } from '@lib/meeting/domain';
 import { Either, GraphQLUser, LoggedUser } from '@lib/shared';
@@ -14,7 +15,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 
-import { AddEstimationTaskArg } from '../args';
+import { AddEstimationTaskArg, UpdateEstimationTaskArg } from '../args';
 import {
   EstimationMeetingObject,
   MeetingActionResultObject,
@@ -23,6 +24,7 @@ import {
 import {
   AddEstimationTaskResult,
   CreateEstimationMeetingResultUnion,
+  UpdateEstimationTaskResult,
 } from '../unions';
 
 @Resolver()
@@ -88,6 +90,20 @@ export class EstimationMeetingMutation {
       AddEstimationTaskCommand,
       Either<TaskEstimation>
     >(new AddEstimationTaskCommand(input));
+    if (result.isErr()) {
+      return {
+        errorMessage: result.unwrapErr().message,
+      };
+    }
+    return new TaskEstimationObject(result.unwrap());
+  }
+
+  @Mutation(() => UpdateEstimationTaskResult)
+  async updateEstimationTask(@Args() input: UpdateEstimationTaskArg) {
+    const result = await this._commandBus.execute<
+      UpdateEstimationTaskCommand,
+      Either<TaskEstimation>
+    >(new UpdateEstimationTaskCommand(input));
     if (result.isErr()) {
       return {
         errorMessage: result.unwrapErr().message,

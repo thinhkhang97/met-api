@@ -61,7 +61,7 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
     this.update();
   }
 
-  public updateDescription(description: string) {
+  public updateDescription(description: Nullable<string>) {
     this._props.description = description;
     this.update();
   }
