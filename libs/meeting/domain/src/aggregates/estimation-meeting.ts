@@ -1,4 +1,9 @@
-import { EstimationTaskTitle } from '@lib/meeting/domain/value-objects';
+import {
+  TaskEstimationAddedEvent,
+  TaskEstimationRemovedEvent,
+  TaskEstimationUpdatedEvent,
+} from '@lib/meeting/domain/events';
+import { TaskTitle } from '@lib/meeting/domain/value-objects';
 import { CUID, Nullable, RuleValidator } from '@lib/shared';
 
 import { MeetingStatus, TaskEstimationStatus } from '../constance';
@@ -49,7 +54,7 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
    */
   public addTaskEstimation(
     memberId: CUID,
-    title: EstimationTaskTitle,
+    title: TaskTitle,
     description: Nullable<string>,
   ) {
     RuleValidator.validate(
@@ -61,6 +66,14 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
       description,
     });
     this._props.taskEstimations.add(taskEstimation);
+    this.apply(
+      new TaskEstimationAddedEvent({
+        aggregateId: this.id,
+        taskEstimationId: taskEstimation.id as CUID,
+        title,
+        description,
+      }),
+    );
     this.update();
     return taskEstimation;
   }
@@ -73,7 +86,7 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
    */
   public updateTaskEstimation(
     taskEstimationId: CUID,
-    title: EstimationTaskTitle,
+    title: TaskTitle,
     description: Nullable<string>,
   ) {
     const taskEstimation =
@@ -84,6 +97,14 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
     taskEstimation.updateTitle(title);
     taskEstimation.updateDescription(description);
     this._props.taskEstimations.update(taskEstimation);
+    this.apply(
+      new TaskEstimationUpdatedEvent({
+        aggregateId: this.id,
+        taskEstimationId: taskEstimation.id as CUID,
+        title,
+        description,
+      }),
+    );
     this.update();
     return taskEstimation;
   }
@@ -100,6 +121,12 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
     }
     taskEstimation.updateStatus(TaskEstimationStatus.REMOVED);
     this._props.taskEstimations.update(taskEstimation);
+    this.apply(
+      new TaskEstimationRemovedEvent({
+        aggregateId: this.id,
+        taskEstimationId: taskEstimation.id as CUID,
+      }),
+    );
     this.update();
   }
 

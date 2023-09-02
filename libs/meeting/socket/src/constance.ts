@@ -16,4 +16,7 @@ export enum MeetingMessageName {
   RECEIVED_REQUEST = 'meeting:received_request',
   MEMBER_JOINED = 'meeting:member_joined',
   MEMBER_LEFT = 'meeting:member_left',
+  ESTIMATION_TASK_ADDED = 'meeting:estimation_task_added',
+  ESTIMATION_TASK_UPDATED = 'meeting:estimation_task_updated',
+  ESTIMATION_TASK_REMOVED = 'meeting:estimation_task_removed',
 }

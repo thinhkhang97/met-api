@@ -1,4 +1,4 @@
-import { EstimationTaskTitle } from '@lib/meeting/domain/value-objects';
+import { TaskTitle } from '@lib/meeting/domain/value-objects';
 import { AggregateRoot, CUID, Nullable } from '@lib/shared';
 
 import { TaskEstimationStatus } from '../constance';
@@ -13,7 +13,7 @@ interface CreateTaskEstimationProps {
   /**
    * Title of task
    */
-  title: EstimationTaskTitle;
+  title: TaskTitle;
 
   /**
    * The description for the task
@@ -56,7 +56,7 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
     });
   }
 
-  public updateTitle(title: EstimationTaskTitle) {
+  public updateTitle(title: TaskTitle) {
     this._props.title = title;
     this.update();
   }

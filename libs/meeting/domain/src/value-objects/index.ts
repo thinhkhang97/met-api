@@ -1,1 +1,1 @@
-export * from './estimation-task.title';
+export * from './task-title';

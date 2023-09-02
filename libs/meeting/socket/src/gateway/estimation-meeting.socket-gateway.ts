@@ -12,10 +12,10 @@ import {
 import { Cache } from 'cache-manager';
 import { Socket } from 'socket.io';
 
-import { MeetingMessageName } from '../constance';
+import { MeetingMessageName, RoomKey } from '../constance';
 import { MeetingEventHandler } from '../event-handlers';
 import { IdentityService } from '../services';
-import { Member } from '../types';
+import { Member, TaskEstimation } from '../types';
 
 @WebSocketGateway(80, {
   cors: {
@@ -64,7 +64,28 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
         );
         break;
       }
-      case MeetingEventName.MEMBER_LEFT: {
+      case MeetingEventName.ESTIMATION_TASK_ADDED: {
+        const taskEstimation = data.payload as TaskEstimation;
+        this.server
+          .to(`${RoomKey.MEETING}:${taskEstimation.meetingId}`)
+          .emit(MeetingMessageName.ESTIMATION_TASK_ADDED, taskEstimation);
+        break;
+      }
+      case MeetingEventName.ESTIMATION_TASK_UPDATED: {
+        const taskEstimation = data.payload as TaskEstimation;
+        this.server
+          .to(`${RoomKey.MEETING}:${taskEstimation.meetingId}`)
+          .emit(MeetingMessageName.ESTIMATION_TASK_UPDATED, taskEstimation);
+        break;
+      }
+      case MeetingEventName.ESTIMATION_TASK_REMOVED: {
+        const taskEstimation = data.payload as {
+          meetingId: string;
+          taskEstimationId: string;
+        };
+        this.server
+          .to(`${RoomKey.MEETING}:${taskEstimation.meetingId}`)
+          .emit(MeetingMessageName.ESTIMATION_TASK_REMOVED, taskEstimation);
         break;
       }
       default:

@@ -4,7 +4,7 @@ import {
   MeetingNotFoundException,
   TaskEstimation,
 } from '@lib/meeting/domain';
-import { EstimationTaskTitle } from '@lib/meeting/domain/value-objects';
+import { TaskTitle } from '@lib/meeting/domain/value-objects';
 import { BaseCommandHandler, CUID } from '@lib/shared';
 import { CommandHandler } from '@nestjs/cqrs';
 
@@ -22,7 +22,7 @@ export class UpdateEstimationTaskCommandHandler extends BaseCommandHandler<
   async handle(command: UpdateEstimationTaskCommand): Promise<TaskEstimation> {
     const meetingId = new CUID(command.meetingId);
     const taskEstimationId = new CUID(command.taskEstimationId);
-    const title = EstimationTaskTitle.create(command.title);
+    const title = TaskTitle.create(command.title);
     const meeting = await this._estimationMeetingRepository.findOneByIdOrThrow(
       meetingId,
       new MeetingNotFoundException(),
