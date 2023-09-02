@@ -65,6 +65,12 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
     return taskEstimation;
   }
 
+  /**
+   * Update title and description of task
+   * @param taskEstimationId
+   * @param title
+   * @param description
+   */
   public updateTaskEstimation(
     taskEstimationId: CUID,
     title: EstimationTaskTitle,

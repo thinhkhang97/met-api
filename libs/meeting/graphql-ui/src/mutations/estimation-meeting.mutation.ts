@@ -2,6 +2,7 @@ import {
   AddEstimationTaskCommand,
   CreateEstimationMeetingCommand,
   JoinMeetingCommand,
+  RemoveEstimationTaskCommand,
   UpdateEstimationTaskCommand,
 } from '@lib/meeting/application';
 import { EstimationMeeting, TaskEstimation } from '@lib/meeting/domain';
@@ -110,5 +111,24 @@ export class EstimationMeetingMutation {
       };
     }
     return new TaskEstimationObject(result.unwrap());
+  }
+
+  @Mutation(() => MeetingActionResultObject)
+  async removeEstimationTask(
+    @Args({ type: () => ID, name: 'meetingId' }) meetingId: string,
+    @Args({ type: () => ID, name: 'taskEstimationId' })
+    taskEstimationId: string,
+  ) {
+    const result = await this._commandBus.execute<
+      RemoveEstimationTaskCommand,
+      Either<void>
+    >(new RemoveEstimationTaskCommand({ meetingId, taskEstimationId }));
+    if (result.isErr()) {
+      return new MeetingActionResultObject(
+        'failed',
+        result.unwrapErr().message,
+      );
+    }
+    return new MeetingActionResultObject('success');
   }
 }
