@@ -13,6 +13,7 @@ import {
 } from '../exceptions';
 import {
   OnlyMeetingMemberCanAddTaskRule,
+  OnlyModifyDataInActiveMeetingRule,
   OnlyVoterCanEstimateRule,
   TaskToUpdateMustBeActiveRule,
 } from '../rules';
@@ -34,6 +35,10 @@ export interface EstimationMeetingProps extends MeetingProps {
  * giving the points, hours for each of them
  */
 export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
+  public get taskEstimations() {
+    return this._props.taskEstimations;
+  }
+
   /**
    * Create an estimation meeting
    * @param props Properties to create an estimation meeting
@@ -60,6 +65,7 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
   ) {
     RuleValidator.validate(
       new OnlyMeetingMemberCanAddTaskRule(this._props.members, memberId),
+      new OnlyModifyDataInActiveMeetingRule(this._props.status),
     );
     const taskEstimation = TaskEstimation.create({
       meetingId: this.id as CUID,
@@ -90,6 +96,9 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
     title: TaskTitle,
     description: Nullable<string>,
   ) {
+    RuleValidator.validate(
+      new OnlyModifyDataInActiveMeetingRule(this._props.status),
+    );
     const taskEstimation =
       this._props.taskEstimations.findOneById(taskEstimationId);
     if (!taskEstimation) {
@@ -116,6 +125,9 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
    * @param taskEstimationId
    */
   public removeTaskEstimation(taskEstimationId: CUID) {
+    RuleValidator.validate(
+      new OnlyModifyDataInActiveMeetingRule(this._props.status),
+    );
     const taskEstimation =
       this._props.taskEstimations.findOneById(taskEstimationId);
     if (!taskEstimation) {

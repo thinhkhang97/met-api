@@ -26,7 +26,7 @@ export class TaskEstimationObject extends BaseObject {
     this.meetingId = props.meetingId.unpack();
     this.title = props.title.unpack();
     this.description = props.description;
-    this.memberEstimation = props.memberEstimations.map(
+    this.memberEstimation = props.memberEstimations.currentItems.map(
       (memberEstimation) => new MemberEstimationObject(memberEstimation),
     );
     this.averageEstimation = props.averageEstimation;

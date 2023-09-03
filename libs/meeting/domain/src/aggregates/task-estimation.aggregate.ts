@@ -3,6 +3,7 @@ import { AggregateRoot, CUID, Nullable } from '@lib/shared';
 
 import { TaskEstimationStatus } from '../constance';
 import { MemberEstimation } from '../entities';
+import { MemberEstimationWatchedList } from '../watched-list';
 
 interface CreateTaskEstimationProps {
   /**
@@ -30,7 +31,7 @@ export interface TaskEstimationProps extends CreateTaskEstimationProps {
   /**
    * The members attended to the estimation
    */
-  memberEstimations: MemberEstimation[];
+  memberEstimations: MemberEstimationWatchedList;
 
   /**
    * Final estimation for the task
@@ -52,7 +53,7 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
       ...props,
       status: TaskEstimationStatus.ACTIVE,
       averageEstimation: null,
-      memberEstimations: [],
+      memberEstimations: new MemberEstimationWatchedList(),
     });
   }
 
@@ -75,20 +76,19 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
     meetingMemberId: CUID,
     value: Nullable<number>,
   ) {
-    let memberEstimation = this.memberEstimations.find((memberEstimation) =>
-      memberEstimation.meetingMemberId.equals(meetingMemberId),
-    );
+    let memberEstimation =
+      this.memberEstimations.findOneByMeetingMemberId(meetingMemberId);
     if (!memberEstimation) {
       memberEstimation = MemberEstimation.create({
         meetingMemberId,
         estimation: value,
         taskEstimationId: this.id as CUID,
       });
-      this._props.memberEstimations.push(memberEstimation);
+      this._props.memberEstimations.add(memberEstimation);
     } else {
       memberEstimation.updateEstimation(value);
+      this._props.memberEstimations.update(memberEstimation);
     }
-    this.updateFinalEstimation();
     this.update();
   }
 
@@ -110,10 +110,8 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
    * @private
    */
   private updateFinalEstimation() {
-    let sum = 0;
-    this.memberEstimations.forEach(
-      (memberEstimation) => (sum += memberEstimation.estimation || 0),
-    );
-    this._props.averageEstimation = sum / this.memberEstimations.length;
+    this._props.averageEstimation =
+      this.memberEstimations.sumVoterValue /
+      this.memberEstimations.numberOfValue;
   }
 }

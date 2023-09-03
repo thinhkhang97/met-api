@@ -6,8 +6,11 @@ import {
   GroupService,
   MeetingMemberNotFoundException,
   MeetingNotFoundException,
+  TaskEstimationNotFoundException,
+  TaskEstimationRepository,
 } from '@lib/meeting/domain';
-import { CUID, DateVO } from '@lib/shared';
+import { OnlyVoterCanEstimateRule } from '@lib/meeting/domain/rules';
+import { CUID, DateVO, Nullable, RuleValidator } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -15,6 +18,7 @@ export class EstimationMeetingServiceImpl implements EstimationMeetingService {
   constructor(
     private readonly _groupService: GroupService,
     private readonly _estimationMeetingRepository: EstimationMeetingRepository,
+    private readonly _taskEstimationRepository: TaskEstimationRepository,
   ) {}
 
   async create(
@@ -62,5 +66,32 @@ export class EstimationMeetingServiceImpl implements EstimationMeetingService {
 
     meeting.removeMember(memberId);
     await this._estimationMeetingRepository.upsert(meeting);
+  }
+
+  async updateMemberEstimation(
+    meetingId: CUID,
+    meetingMemberId: CUID,
+    taskEstimationId: CUID,
+    estimationValue: Nullable<number>,
+  ) {
+    const meeting = await this._estimationMeetingRepository.findOneByIdOrThrow(
+      meetingId,
+      new MeetingNotFoundException(),
+    );
+    const taskEstimation =
+      await this._taskEstimationRepository.findOneByIdOrThrow(
+        taskEstimationId,
+        new TaskEstimationNotFoundException(),
+      );
+    if (!taskEstimation) {
+      throw new TaskEstimationNotFoundException();
+    }
+    const member = meeting.members.findOneById(meetingMemberId);
+    if (!member) {
+      throw new MeetingMemberNotFoundException();
+    }
+    RuleValidator.validate(new OnlyVoterCanEstimateRule(member));
+    taskEstimation.updateMemberEstimation(meetingMemberId, estimationValue);
+    await this._taskEstimationRepository.upsert(taskEstimation);
   }
 }
