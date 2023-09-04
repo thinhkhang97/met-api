@@ -11,6 +11,7 @@ import {
   QueryParams,
 } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
+import { EventPublisher } from '@nestjs/cqrs';
 import { Prisma } from '@prisma/meeting-client';
 import { omit } from 'lodash';
 
@@ -27,8 +28,13 @@ export class TaskEstimationRepositoryImpl
   constructor(
     private readonly _taskEstimationOrmMapper: TaskEstimationOrmMapper,
     private readonly _meetingPrismaService: MeetingPrismaService,
+    private readonly _evenPublisher: EventPublisher,
   ) {
-    super(_meetingPrismaService.taskEstimation, _taskEstimationOrmMapper);
+    super(
+      _meetingPrismaService.taskEstimation,
+      _taskEstimationOrmMapper,
+      _evenPublisher,
+    );
   }
 
   getIncludeRelation():

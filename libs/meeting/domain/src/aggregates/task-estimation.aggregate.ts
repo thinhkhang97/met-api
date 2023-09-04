@@ -1,3 +1,4 @@
+import { MemberUpdatedTaskEstimationEvent } from '@lib/meeting/domain/events';
 import { TaskTitle } from '@lib/meeting/domain/value-objects';
 import { AggregateRoot, CUID, Nullable } from '@lib/shared';
 
@@ -89,6 +90,12 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
       memberEstimation.updateEstimation(value);
       this._props.memberEstimations.update(memberEstimation);
     }
+    this.apply(
+      new MemberUpdatedTaskEstimationEvent({
+        aggregateId: this.id,
+        meetingMemberId,
+      }),
+    );
     this.update();
   }
 
@@ -107,11 +114,16 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
 
   /**
    * Update final average estimation for the task
-   * @private
    */
-  private updateFinalEstimation() {
-    this._props.averageEstimation =
-      this.memberEstimations.sumVoterValue /
-      this.memberEstimations.numberOfValue;
+  public updateFinalEstimation() {
+    const numberOfValue = this.memberEstimations.numberOfValue;
+    if (numberOfValue < 1) {
+      this._props.averageEstimation = null;
+    } else {
+      this._props.averageEstimation =
+        this.memberEstimations.sumVoterValue /
+        this.memberEstimations.numberOfValue;
+    }
+    this.update();
   }
 }

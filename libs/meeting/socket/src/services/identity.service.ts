@@ -24,7 +24,6 @@ export class IdentityService {
       );
       return await firstValueFrom(result);
     } catch (e) {
-      console.log(e);
       return null;
     }
   }

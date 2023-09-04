@@ -29,21 +29,6 @@ import { IdentityService } from '../services';
     WrappedCacheModule.forRedis(),
     ClientsModule.registerAsync([
       {
-        name: MEETING_INTERNAL_SERVICE,
-        useFactory: (_configService: ConfigService) => {
-          return {
-            transport: Transport.TCP,
-            options: {
-              host: _configService.getOrThrow('MEETING_MS_HOST'),
-              port: _configService.getOrThrow('MEETING_MS_PORT'),
-            },
-          };
-        },
-        inject: [ConfigService],
-      },
-    ]),
-    ClientsModule.registerAsync([
-      {
         name: IDENTITY_INTERNAL_SERVICE,
         useFactory: (_configService: ConfigService) => {
           return {
@@ -51,6 +36,19 @@ import { IdentityService } from '../services';
             options: {
               host: _configService.getOrThrow('IDENTITY_MS_HOST'),
               port: _configService.getOrThrow('IDENTITY_MS_PORT'),
+            },
+          };
+        },
+        inject: [ConfigService],
+      },
+      {
+        name: MEETING_INTERNAL_SERVICE,
+        useFactory: (_configService: ConfigService) => {
+          return {
+            transport: Transport.TCP,
+            options: {
+              host: _configService.getOrThrow('MEETING_MS_HOST'),
+              port: _configService.getOrThrow('MEETING_MS_PORT'),
             },
           };
         },

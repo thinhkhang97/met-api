@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
 import { MeetingRmqController } from '../controllers';
-import { MeetingService } from '../services';
+import { TaskEstimationService } from '../services';
 
 @Module({
   imports: [CqrsModule],
   controllers: [MeetingRmqController],
-  providers: [MeetingService],
+  providers: [TaskEstimationService],
 })
 export class MeetingRmqUiModule {}

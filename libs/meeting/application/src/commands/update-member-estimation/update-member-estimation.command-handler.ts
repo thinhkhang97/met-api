@@ -19,7 +19,7 @@ export class UpdateMemberEstimationCommandHandler extends BaseCommandHandler<
     const meetingId = new CUID(command.meetingId);
     const memberMeetingId = new CUID(command.meetingMemberId);
     const taskEstimationId = new CUID(command.taskEstimationId);
-    return await this._estimationMeetingService.updateMemberEstimation(
+    await this._estimationMeetingService.updateMemberEstimation(
       meetingId,
       memberMeetingId,
       taskEstimationId,
