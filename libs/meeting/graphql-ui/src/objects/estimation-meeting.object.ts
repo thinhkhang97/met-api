@@ -12,7 +12,7 @@ export class EstimationMeetingObject extends MeetingObject {
   constructor(entity: EstimationMeeting) {
     super(entity);
     const props = entity.getProps();
-    this.taskEstimations = props.taskEstimations.currentItems.map(
+    this.taskEstimations = props.taskEstimations.currentActiveTasks.map(
       (task) => new TaskEstimationObject(task),
     );
   }
