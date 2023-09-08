@@ -1,4 +1,3 @@
-import { Nullable } from '@lib/shared';
 import { User } from '@lib/user/domain';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
@@ -7,8 +6,8 @@ export class UserObject {
   @Field(() => ID)
   public readonly id: string;
 
-  @Field(() => String, { nullable: true })
-  public readonly name: Nullable<string>;
+  @Field(() => String)
+  public readonly name: string;
 
   @Field(() => String)
   public readonly email: string;
@@ -16,7 +15,7 @@ export class UserObject {
   constructor(userEntity: User) {
     const props = userEntity.getProps();
     this.id = props.id.unpack();
-    this.name = props.name ? props.name.unpack() : null;
+    this.name = props.name.unpack();
     this.email = props.email.unpack();
   }
 }

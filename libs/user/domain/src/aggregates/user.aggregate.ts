@@ -3,14 +3,14 @@ import { Username } from '@lib/user/domain/value-objects';
 import { Password } from '@lib/user/domain/value-objects/password';
 
 export enum UserStatus {
-  NEW,
-  VERIFIED,
-  IN_ACTIVE,
+  NEW = 'NEW',
+  VERIFIED = 'VERIFIED',
+  IN_ACTIVE = 'IN_ACTIVE',
 }
 
 export type CreateUserProps = {
   email: Email;
-  name: Nullable<Username>;
+  name: Username;
   password: Password;
 };
 
@@ -32,10 +32,11 @@ export class User extends AggregateRoot<UserProps> {
   }
 
   public static create(email: Email, password: Password) {
+    const name = new Username(email.getFirstPath());
     return new User({
       email,
       password,
-      name: null,
+      name,
       status: UserStatus.NEW,
     });
   }
