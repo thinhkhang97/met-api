@@ -2,7 +2,7 @@ import { CUID, Email } from '@lib/shared';
 
 export interface User {
   id: CUID;
-  name?: string;
+  name: string;
   email: string;
   status: number;
 }

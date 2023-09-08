@@ -16,11 +16,6 @@ export class AddMemberCommandHandler extends BaseCommandHandler<
     const userId = new CUID(command.userId);
     const groupId = new CUID(command.groupId);
     const email = new Email(command.email);
-    return await this._groupService.addMember(
-      command.name,
-      groupId,
-      userId,
-      email,
-    );
+    return await this._groupService.addMember(groupId, userId, email);
   }
 }

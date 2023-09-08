@@ -5,6 +5,8 @@ CREATE TABLE "group" (
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "version" INTEGER NOT NULL DEFAULT 0,
     "name" TEXT NOT NULL,
+    "description" TEXT,
+    "logoUrl" TEXT,
 
     CONSTRAINT "group_pkey" PRIMARY KEY ("id")
 );
@@ -32,6 +34,7 @@ CREATE TABLE "member" (
     "userId" TEXT NOT NULL,
     "groupId" TEXT NOT NULL,
     "roleId" TEXT NOT NULL,
+    "status" TEXT NOT NULL,
 
     CONSTRAINT "member_pkey" PRIMARY KEY ("id")
 );

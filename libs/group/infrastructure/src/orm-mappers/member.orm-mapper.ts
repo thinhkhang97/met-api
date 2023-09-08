@@ -1,4 +1,5 @@
 import { Member, MemberProps } from '@lib/group/domain';
+import { MemberStatus } from '@lib/group/domain/constant';
 import { BaseOrmMapper, CUID } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
 
@@ -23,7 +24,7 @@ export class MemberOrmMapper extends BaseOrmMapper<
       roleId: new CUID(ormEntity.roleId),
       avatar: ormEntity.avatar,
       role: ormEntity.role ? this._roleMapper.toEntity(ormEntity.role) : null,
-      status: ormEntity.status,
+      status: ormEntity.status as MemberStatus,
     };
   }
 

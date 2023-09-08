@@ -1,4 +1,4 @@
-import { AggregateRoot, CUID, RuleValidator } from '@lib/shared';
+import { AggregateRoot, CUID, Nullable, RuleValidator } from '@lib/shared';
 
 import { Member, Role } from '../entities';
 import {
@@ -15,12 +15,15 @@ type CreateGroupProps = {
   userId: CUID;
   ownerName: string;
   name: string;
+  description: Nullable<string>;
 };
 
 export type GroupProps = {
   name: string;
   roles: Role[];
   members: Member[];
+  description: Nullable<string>;
+  logoUrl: Nullable<string>;
 };
 
 /**
@@ -52,7 +55,13 @@ export class Group extends AggregateRoot<GroupProps> {
       role: ownerRole,
     });
     return new Group(
-      { name: props.name.toLowerCase(), roles, members: [owner] },
+      {
+        name: props.name.toLowerCase(),
+        roles,
+        members: [owner],
+        description: props.description,
+        logoUrl: null,
+      },
       groupId,
     );
   }

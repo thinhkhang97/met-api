@@ -1,29 +1,27 @@
 import { Group } from '@lib/group/domain/aggregates';
 import { Member } from '@lib/group/domain/entities';
-import { CUID, Email } from '@lib/shared';
+import { CUID, Email, Nullable } from '@lib/shared';
 
 export abstract class GroupService {
   /**
    * Create a new group and assign the user to be the group owner
    * @param name Group name
-   * @param ownerName The owner name
    * @param userId
+   * @param description
    */
   abstract createGroup(
-    name: string,
-    ownerName: string,
     userId: CUID,
+    name: string,
+    description: Nullable<string>,
   ): Promise<Group>;
 
   /**
    * Add a new member into the group
-   * @param name Name of the new member in group
    * @param groupId
    * @param userId
    * @param email User email
    */
   abstract addMember(
-    name: string,
     groupId: CUID,
     userId: CUID,
     email: Email,

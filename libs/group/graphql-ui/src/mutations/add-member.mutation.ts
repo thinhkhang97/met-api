@@ -24,7 +24,6 @@ export class AddMemberMutation {
       Either<Member>
     >(
       new AddMemberCommand({
-        name,
         groupId,
         userId: loggedUser.id,
         email,

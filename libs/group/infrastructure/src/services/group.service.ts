@@ -23,9 +23,9 @@ export class GroupServiceImpl extends GroupService {
   }
 
   async createGroup(
-    name: string,
-    ownerName: string,
     userId: CUID,
+    name: string,
+    description: Nullable<string>,
   ): Promise<Group> {
     const existedGroup = await this._groupRepository.findOne({
       name: name.toLowerCase(),
@@ -33,21 +33,18 @@ export class GroupServiceImpl extends GroupService {
     if (existedGroup) {
       throw new GroupExistedException();
     }
+    const user = await this._identityService.getUserById(userId);
     const group = Group.create({
       userId,
       name,
-      ownerName,
+      ownerName: user.name,
+      description,
     });
     await this._groupRepository.upsert(group);
     return group;
   }
 
-  async addMember(
-    name: string,
-    groupId: CUID,
-    userId: CUID,
-    email: Email,
-  ): Promise<Member> {
+  async addMember(groupId: CUID, userId: CUID, email: Email): Promise<Member> {
     const group = await this._groupRepository.findOneByIdOrThrow(
       groupId,
       new GroupNotFoundException(),
@@ -60,9 +57,13 @@ export class GroupServiceImpl extends GroupService {
 
     let newMember = await this.getMemberByUserId(newMemberUserInfo.id, groupId);
     if (!newMember) {
-      newMember = group.addNewMember(name, newMemberUserInfo.id, member);
+      newMember = group.addNewMember(
+        newMemberUserInfo.name,
+        newMemberUserInfo.id,
+        member,
+      );
     } else {
-      newMember.updateName(name);
+      newMember.updateName(newMemberUserInfo.name);
       group.reactivateMember(newMember, member);
     }
     await this._groupRepository.upsert(group);
