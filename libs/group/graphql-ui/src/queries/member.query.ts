@@ -7,7 +7,7 @@ import {
   MemberBaseErrorObject,
   MemberObject,
 } from '@lib/group/graphql-ui/objects';
-import { Either, GraphQLUser, LoggedUser } from '@lib/shared';
+import { Either, GraphQLUser, LoggedInUser } from '@lib/shared';
 import { QueryBus } from '@nestjs/cqrs';
 import { Args, ID, Query, Resolver } from '@nestjs/graphql';
 
@@ -34,7 +34,7 @@ export class MemberQuery {
   @Query(() => [MemberObject], { name: 'members' })
   public async getMembers(
     @Args({ type: () => ID, name: 'groupId' }) groupId: string,
-    @GraphQLUser() loggedUser: LoggedUser,
+    @GraphQLUser() loggedUser: LoggedInUser,
   ) {
     const result = await this._queryBus.execute<
       GetMembersQuery,

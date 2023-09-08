@@ -2,7 +2,7 @@ import { GetGroupQuery, GetGroupsQuery } from '@lib/group/application/queries';
 import { Group } from '@lib/group/domain';
 import { GroupObject } from '@lib/group/graphql-ui/objects';
 import { GroupResult } from '@lib/group/graphql-ui/union';
-import { Either, GraphQLUser, LoggedUser } from '@lib/shared';
+import { Either, GraphQLUser, LoggedInUser } from '@lib/shared';
 import { QueryBus } from '@nestjs/cqrs';
 import { Args, ID, Query, Resolver } from '@nestjs/graphql';
 
@@ -18,7 +18,7 @@ export class GroupQuery {
   @Query(() => GroupResult, { name: 'group' })
   public async getGroup(
     @Args({ type: () => ID, name: 'groupId' }) groupId: string,
-    @GraphQLUser() loggedUser: LoggedUser,
+    @GraphQLUser() loggedUser: LoggedInUser,
   ) {
     const result = await this._queryBus.execute<GetGroupQuery, Either<Group>>(
       new GetGroupQuery({ groupId, userId: loggedUser.id }),
@@ -32,7 +32,7 @@ export class GroupQuery {
   }
 
   @Query(() => [GroupObject], { name: 'groups' })
-  public async getGroups(@GraphQLUser() loggedUser: LoggedUser) {
+  public async getGroups(@GraphQLUser() loggedUser: LoggedInUser) {
     const result = await this._queryBus.execute<
       GetGroupsQuery,
       Either<Group[]>

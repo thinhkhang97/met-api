@@ -1,7 +1,7 @@
 import { AddMemberCommand } from '@lib/group/application';
 import { Member } from '@lib/group/domain';
 import { MemberObject } from '@lib/group/graphql-ui/objects';
-import { Either, GraphQLUser, LoggedUser } from '@lib/shared';
+import { Either, GraphQLUser, LoggedInUser } from '@lib/shared';
 import { CommandBus } from '@nestjs/cqrs';
 import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
 
@@ -17,7 +17,7 @@ export class AddMemberMutation {
     email: string,
     @Args({ type: () => String, name: 'nameInGroup' }) name: string,
     @Args({ type: () => ID, name: 'groupId' }) groupId: string,
-    @GraphQLUser() loggedUser: LoggedUser,
+    @GraphQLUser() loggedUser: LoggedInUser,
   ) {
     const result = await this._commandBus.execute<
       AddMemberCommand,

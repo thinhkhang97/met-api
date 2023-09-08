@@ -40,6 +40,11 @@ export class User extends AggregateRoot<UserProps> {
     });
   }
 
+  public updateName(name: Username) {
+    this._props.name = name;
+    this.update();
+  }
+
   validate() {
     return;
   }

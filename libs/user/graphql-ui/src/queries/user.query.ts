@@ -1,4 +1,4 @@
-import { Either, GraphQLUser, LoggedUser, Public } from '@lib/shared';
+import { Either, GraphQLUser, LoggedInUser, Public } from '@lib/shared';
 import { GetUserQuery } from '@lib/user/application/queries';
 import { User } from '@lib/user/domain';
 import { UserObject } from '@lib/user/graphql-ui/objects/user.object';
@@ -18,7 +18,7 @@ export class UserQuery {
   }
 
   @Query(() => UserResult, { name: 'user' })
-  public async getUserByIdQuery(@GraphQLUser() loggedUser: LoggedUser) {
+  public async getUserByIdQuery(@GraphQLUser() loggedUser: LoggedInUser) {
     const result = await this._queryBus.execute<GetUserQuery, Either<User>>(
       new GetUserQuery({ userId: loggedUser.id }),
     );

@@ -6,7 +6,7 @@ import {
   UpdateEstimationTaskCommand,
 } from '@lib/meeting/application';
 import { EstimationMeeting, TaskEstimation } from '@lib/meeting/domain';
-import { Either, GraphQLUser, LoggedUser } from '@lib/shared';
+import { Either, GraphQLUser, LoggedInUser } from '@lib/shared';
 import { CommandBus } from '@nestjs/cqrs';
 import {
   Args,
@@ -38,7 +38,7 @@ export class EstimationMeetingMutation {
     @Args({ type: () => String, name: 'title' }) title: string,
     @Args({ type: () => GraphQLISODateTime, name: 'from' }) from: Date,
     @Args({ type: () => GraphQLISODateTime, name: 'to' }) to: Date,
-    @GraphQLUser() loggedUser: LoggedUser,
+    @GraphQLUser() loggedUser: LoggedInUser,
   ) {
     const result = await this._commandBus.execute<
       CreateEstimationMeetingCommand,
@@ -63,7 +63,7 @@ export class EstimationMeetingMutation {
   @Mutation(() => MeetingActionResultObject)
   async joinEstimationMeeting(
     @Args({ type: () => ID, name: 'meetingId' }) meetingId: string,
-    @GraphQLUser() loggedUser: LoggedUser,
+    @GraphQLUser() loggedUser: LoggedInUser,
   ) {
     const result = await this._commandBus.execute<
       JoinMeetingCommand,

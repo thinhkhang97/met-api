@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { NextFunction, Request, Response } from 'express';
 
-export interface LoggedUser {
+export interface LoggedInUser {
   id: string;
   email: string;
 }
