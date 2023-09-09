@@ -93,6 +93,10 @@ export class EstimationMeetingRepositoryImpl
     if (props.id) {
       whereCondition.id = props.id.value;
     }
+
+    if (props.groupId) {
+      whereCondition.groupId = props.groupId.value;
+    }
     return whereCondition;
   }
 }
