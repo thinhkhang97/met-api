@@ -6,6 +6,7 @@ import {
   GroupService,
   IdentityService,
   Member,
+  MemberExistedException,
   MemberNotFoundException,
   MemberRepository,
 } from '@lib/group/domain';
@@ -63,6 +64,9 @@ export class GroupServiceImpl extends GroupService {
         member,
       );
     } else {
+      if (newMember.isActive()) {
+        throw new MemberExistedException();
+      }
       newMember.updateName(newMemberUserInfo.name);
       group.reactivateMember(newMember, member);
     }

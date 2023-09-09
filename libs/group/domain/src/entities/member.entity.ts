@@ -37,6 +37,10 @@ export class Member extends BaseEntity<MemberProps> {
     });
   }
 
+  public isActive() {
+    return this._props.status === MemberStatus.ACTIVE;
+  }
+
   public updateName(name: string) {
     this._props.name = name;
     this.update();
