@@ -4,9 +4,6 @@ import { ArgsType, Field, ID } from '@nestjs/graphql';
 @ArgsType()
 export class AddEstimationTaskArg {
   @Field(() => ID)
-  public readonly memberId!: string;
-
-  @Field(() => ID)
   public readonly meetingId!: string;
 
   @Field(() => String)

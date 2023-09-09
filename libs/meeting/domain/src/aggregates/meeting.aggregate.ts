@@ -1,3 +1,4 @@
+import { Nullable } from '@lib/shared';
 import { AggregateRoot, CUID, DateVO } from '@lib/shared/ddd';
 
 import { MeetingStatus, MemberRole, MemberStatus } from '../constance';
@@ -15,6 +16,11 @@ export interface CreateMeetingProps {
    * Meeting title
    */
   title: string;
+
+  /**
+   * Meeting description
+   */
+  description: Nullable<string>;
 
   /**
    * Start the meeting

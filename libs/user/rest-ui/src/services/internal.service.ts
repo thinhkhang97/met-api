@@ -46,6 +46,7 @@ export class InternalService {
       id: user.id.unpack(),
       email: user.email.unpack(),
       status: user.status,
+      name: user.name.unpack(),
     };
   }
 }

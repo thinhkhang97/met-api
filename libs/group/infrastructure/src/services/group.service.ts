@@ -28,7 +28,7 @@ export class GroupServiceImpl extends GroupService {
     description: Nullable<string>,
   ): Promise<Group> {
     const existedGroup = await this._groupRepository.findOne({
-      name: name.toLowerCase(),
+      name,
     });
     if (existedGroup) {
       throw new GroupExistedException();

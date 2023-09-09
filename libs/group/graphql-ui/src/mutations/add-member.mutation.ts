@@ -15,7 +15,6 @@ export class AddMemberMutation {
   async addMember(
     @Args({ type: () => String, name: 'email' })
     email: string,
-    @Args({ type: () => String, name: 'nameInGroup' }) name: string,
     @Args({ type: () => ID, name: 'groupId' }) groupId: string,
     @GraphQLUser() loggedUser: LoggedInUser,
   ) {

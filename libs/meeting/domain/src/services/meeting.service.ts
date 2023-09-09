@@ -1,5 +1,5 @@
 import { Meeting, MeetingProps, Member } from '@lib/meeting/domain';
-import { CUID, DateVO } from '@lib/shared';
+import { CUID, DateVO, Nullable } from '@lib/shared';
 
 export abstract class MeetingService<
   MeetingEntity extends Meeting<MeetingProps>,
@@ -9,6 +9,7 @@ export abstract class MeetingService<
    * @param groupId
    * @param userId
    * @param title
+   * @param description
    * @param from
    * @param to
    */
@@ -16,6 +17,7 @@ export abstract class MeetingService<
     groupId: CUID,
     userId: CUID,
     title: string,
+    description: Nullable<string>,
     from: DateVO,
     to: DateVO,
   ): Promise<MeetingEntity>;

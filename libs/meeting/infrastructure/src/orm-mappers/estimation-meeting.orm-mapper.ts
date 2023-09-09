@@ -4,6 +4,7 @@ import {
   MemberWatchedList,
   TaskEstimationWatchedList,
 } from '@lib/meeting/domain';
+import { MeetingStatus } from '@lib/meeting/domain/constance';
 import { EstimationMeetingOrmEntity } from '@lib/meeting/infrastructure/orm-entities';
 import { BaseOrmEntity, BaseOrmMapper, CUID, DateVO } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
@@ -30,7 +31,8 @@ export class EstimationMeetingOrmMapper extends BaseOrmMapper<
     return {
       groupId: new CUID(ormEntity.groupId),
       title: ormEntity.title,
-      status: ormEntity.status,
+      description: ormEntity.description,
+      status: ormEntity.status as MeetingStatus,
       from: new DateVO(ormEntity.from),
       to: new DateVO(ormEntity.to),
       members: new MemberWatchedList(
@@ -57,6 +59,7 @@ export class EstimationMeetingOrmMapper extends BaseOrmMapper<
     return {
       groupId: props.groupId.unpack(),
       title: props.title,
+      description: props.description,
       status: props.status,
       from: props.from.unpack(),
       to: props.to.unpack(),

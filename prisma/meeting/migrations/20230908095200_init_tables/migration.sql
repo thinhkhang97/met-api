@@ -5,10 +5,11 @@ CREATE TABLE "meeting" (
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "version" INTEGER NOT NULL DEFAULT 0,
     "title" TEXT NOT NULL,
+    "description" TEXT,
     "from" TIMESTAMP(3) NOT NULL,
     "to" TIMESTAMP(3) NOT NULL,
     "groupId" TEXT NOT NULL,
-    "status" SMALLINT NOT NULL DEFAULT 1,
+    "status" TEXT NOT NULL,
 
     CONSTRAINT "meeting_pkey" PRIMARY KEY ("id")
 );
@@ -21,9 +22,9 @@ CREATE TABLE "member" (
     "version" INTEGER NOT NULL DEFAULT 0,
     "memberId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "role" SMALLINT NOT NULL DEFAULT 1,
+    "role" TEXT NOT NULL,
     "meetingId" TEXT NOT NULL,
-    "status" SMALLINT NOT NULL DEFAULT 0,
+    "status" TEXT NOT NULL,
 
     CONSTRAINT "member_pkey" PRIMARY KEY ("id")
 );
@@ -38,7 +39,7 @@ CREATE TABLE "task_estimation" (
     "description" TEXT,
     "meetingId" TEXT NOT NULL,
     "averageEstimation" DOUBLE PRECISION,
-    "status" SMALLINT NOT NULL DEFAULT 1,
+    "status" TEXT NOT NULL,
 
     CONSTRAINT "task_estimation_pkey" PRIMARY KEY ("id")
 );

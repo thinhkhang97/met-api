@@ -29,6 +29,7 @@ export class IdentityServiceImpl implements IdentityService {
       id: new CUID(data.id),
       email: data.email,
       status: data.status,
+      name: data.name,
     };
   }
 
@@ -44,6 +45,7 @@ export class IdentityServiceImpl implements IdentityService {
       id: new CUID(data.id),
       email: data.email,
       status: data.status,
+      name: data.name,
     };
   }
 }

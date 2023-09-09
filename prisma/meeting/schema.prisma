@@ -15,10 +15,11 @@ model Meeting {
   version   Int      @default(0)
 
   title           String
+  description     String?
   from            DateTime
   to              DateTime
   groupId         String
-  status          Int              @default(1) @db.SmallInt
+  status          String
   members         Member[]
   taskEstimations TaskEstimation[]
 
@@ -33,9 +34,9 @@ model Member {
 
   memberId  String
   name      String
-  role      Int    @default(1) @db.SmallInt
+  role      String
   meetingId String
-  status    Int    @default(0) @db.SmallInt
+  status    String
 
   meeting Meeting @relation(references: [id], fields: [meetingId])
 
@@ -53,7 +54,7 @@ model TaskEstimation {
   description       String?
   meetingId         String
   averageEstimation Float?
-  status            Int     @default(1) @db.SmallInt
+  status            String
 
   meeting           Meeting            @relation(references: [id], fields: [meetingId])
   memberEstimations MemberEstimation[]

@@ -1,4 +1,5 @@
 import { Member, MemberProps } from '@lib/meeting/domain';
+import { MemberRole, MemberStatus } from '@lib/meeting/domain/constance';
 import { BaseOrmEntity, BaseOrmMapper, CUID } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
 
@@ -16,11 +17,11 @@ export class MemberOrmMapper extends BaseOrmMapper<
 
   protected toEntityProps(ormEntity: MemberOrmEntity): MemberProps {
     return {
-      role: ormEntity.role,
+      role: ormEntity.role as MemberRole,
       memberId: new CUID(ormEntity.memberId),
       name: ormEntity.name,
       meetingId: new CUID(ormEntity.meetingId),
-      status: ormEntity.status,
+      status: ormEntity.status as MemberStatus,
     };
   }
 

@@ -25,6 +25,7 @@ export class CreateEstimationMeetingCommandHandler extends BaseCommandHandler<
       new CUID(command.groupId),
       new CUID(command.userId),
       command.title,
+      command.description,
       new DateVO(command.from),
       new DateVO(command.to),
     );

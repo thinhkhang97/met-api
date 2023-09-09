@@ -4,6 +4,7 @@ export interface GetUserResponse {
   id: string;
   email: string;
   status: number;
+  name: string;
 }
 
 export class GetUserRequest extends BaseRequest {

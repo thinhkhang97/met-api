@@ -56,7 +56,7 @@ export class Group extends AggregateRoot<GroupProps> {
     });
     return new Group(
       {
-        name: props.name.toLowerCase(),
+        name: props.name,
         roles,
         members: [owner],
         description: props.description,

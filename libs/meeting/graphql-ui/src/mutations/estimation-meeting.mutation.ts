@@ -36,6 +36,8 @@ export class EstimationMeetingMutation {
   async createEstimationMeeting(
     @Args({ type: () => ID, name: 'groupId' }) groupId: string,
     @Args({ type: () => String, name: 'title' }) title: string,
+    @Args({ type: () => String, name: 'description', nullable: true })
+    description: string,
     @Args({ type: () => GraphQLISODateTime, name: 'from' }) from: Date,
     @Args({ type: () => GraphQLISODateTime, name: 'to' }) to: Date,
     @GraphQLUser() loggedUser: LoggedInUser,
@@ -47,6 +49,7 @@ export class EstimationMeetingMutation {
       new CreateEstimationMeetingCommand({
         groupId,
         title,
+        description,
         userId: loggedUser.id,
         from,
         to,
@@ -86,11 +89,14 @@ export class EstimationMeetingMutation {
   }
 
   @Mutation(() => AddEstimationTaskResult)
-  async addEstimationTask(@Args() input: AddEstimationTaskArg) {
+  async addEstimationTask(
+    @Args() input: AddEstimationTaskArg,
+    @GraphQLUser() loggedInUser: LoggedInUser,
+  ) {
     const result = await this._commandBus.execute<
       AddEstimationTaskCommand,
       Either<TaskEstimation>
-    >(new AddEstimationTaskCommand(input));
+    >(new AddEstimationTaskCommand({ ...input, userId: loggedInUser.id }));
     if (result.isErr()) {
       return {
         errorMessage: result.unwrapErr().message,
