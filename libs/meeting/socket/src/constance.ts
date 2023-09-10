@@ -4,6 +4,7 @@ export const MEETING_INTERNAL_SERVICE = 'MEETING_INTERNAL_SERVICE';
 export enum MeetingCacheKey {
   MEMBER_REQUEST_JOIN = 'member_request_join',
   CLIENT_MEMBER = 'client_member',
+  MEETING_ESTIMATE_TASK = 'estimate_task',
   MEETING_MEMBERS = 'meeting_members',
 }
 
@@ -19,4 +20,6 @@ export enum MeetingMessageName {
   ESTIMATION_TASK_ADDED = 'meeting:estimation_task_added',
   ESTIMATION_TASK_UPDATED = 'meeting:estimation_task_updated',
   ESTIMATION_TASK_REMOVED = 'meeting:estimation_task_removed',
+  ESTIMATION_TASK_STARTED = 'meeting:estimation_task_started',
+  ESTIMATION_TASK_SHOW_ALL = 'meeting:estimation_task_show_all',
 }

@@ -107,6 +107,28 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
     this.server.to(client.id).emit(MeetingMessageName.RECEIVED_REQUEST);
   }
 
+  @SubscribeMessage(MeetingMessageName.ESTIMATION_TASK_STARTED)
+  public async onEstimationTaskStarted(
+    @MessageBody() data: { meetingId: string; taskId: string },
+  ) {
+    await this._meetingEventHandler.handleEstimationTaskStarted(
+      data.meetingId,
+      data.taskId,
+      this.server,
+    );
+  }
+
+  @SubscribeMessage(MeetingMessageName.ESTIMATION_TASK_SHOW_ALL)
+  public async onEstimationTaskShowAll(
+    @MessageBody() data: { meetingId: string; taskId: string },
+  ) {
+    await this._meetingEventHandler.handleShowTaskEstimation(
+      data.meetingId,
+      data.taskId,
+      this.server,
+    );
+  }
+
   async authenticate(token: string) {
     return await this._identityService.authenticate(token);
   }
