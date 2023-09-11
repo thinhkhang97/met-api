@@ -7,6 +7,14 @@ export enum TaskEstimationStatus {
    * The task still in the estimation meeting
    */
   ACTIVE = 'ACTIVE',
+  /**
+   * The estimation session is still ongoing
+   */
+  IN_ESTIMATING = 'IN_ESTIMATING',
+  /**
+   * The estimation session is over
+   */
+  ESTIMATED = 'ESTIMATED',
 }
 
 export enum MemberRole {
@@ -40,4 +48,19 @@ export enum MeetingStatus {
    * The meeting is happening
    */
   ACTIVE = 'ACTIVE',
+}
+
+export enum EstimationMeetingStatus {
+  /**
+   * All the member left the meeting
+   */
+  ENDED = 'ENDED',
+  /**
+   * Everyone is discussing a task
+   */
+  ACTIVE = 'ACTIVE',
+  /**
+   * The estimation session is still ongoing
+   */
+  IN_ESTIMATING = 'IN_ESTIMATING',
 }

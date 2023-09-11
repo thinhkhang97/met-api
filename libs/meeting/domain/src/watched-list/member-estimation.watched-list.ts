@@ -16,6 +16,16 @@ export class MemberEstimationWatchedList extends WatchedList<MemberEstimation> {
     ).length;
   }
 
+  /**
+   * Reset all member estimations to start task estimation session
+   */
+  public resetEstimation() {
+    this._updatedItems = this.currentItems.map((memberEstimation) => {
+      memberEstimation.resetEstimation();
+      return memberEstimation;
+    });
+  }
+
   public findOneByMeetingMemberId(meetingMemberId: CUID) {
     return this.currentItems.find((member) =>
       member.meetingMemberId.equals(meetingMemberId),

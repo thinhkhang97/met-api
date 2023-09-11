@@ -18,4 +18,14 @@ export abstract class EstimationMeetingService extends MeetingService<Estimation
     taskEstimationId: CUID,
     estimationValue: Nullable<number>,
   ): Promise<void>;
+
+  public abstract startEstimateTask(
+    meetingId: CUID,
+    taskEstimationId: CUID,
+  ): Promise<void>;
+
+  public abstract finishEstimateTask(
+    meetingId: CUID,
+    taskEstimationId: CUID,
+  ): Promise<void>;
 }

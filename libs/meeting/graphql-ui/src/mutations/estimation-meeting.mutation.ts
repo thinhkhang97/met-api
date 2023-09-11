@@ -1,8 +1,10 @@
 import {
   AddEstimationTaskCommand,
   CreateEstimationMeetingCommand,
+  FinishEstimateTaskCommand,
   JoinMeetingCommand,
   RemoveEstimationTaskCommand,
+  StartEstimateTaskCommand,
   UpdateEstimationTaskCommand,
 } from '@lib/meeting/application';
 import { EstimationMeeting, TaskEstimation } from '@lib/meeting/domain';
@@ -129,6 +131,44 @@ export class EstimationMeetingMutation {
       RemoveEstimationTaskCommand,
       Either<void>
     >(new RemoveEstimationTaskCommand({ meetingId, taskEstimationId }));
+    if (result.isErr()) {
+      return new MeetingActionResultObject(
+        'failed',
+        result.unwrapErr().message,
+      );
+    }
+    return new MeetingActionResultObject('success');
+  }
+
+  @Mutation(() => MeetingActionResultObject)
+  async startEstimateTask(
+    @Args({ type: () => ID, name: 'meetingId' }) meetingId: string,
+    @Args({ type: () => ID, name: 'taskEstimationId' })
+    taskEstimationId: string,
+  ) {
+    const result = await this._commandBus.execute<
+      StartEstimateTaskCommand,
+      Either<void>
+    >(new StartEstimateTaskCommand({ meetingId, taskEstimationId }));
+    if (result.isErr()) {
+      return new MeetingActionResultObject(
+        'failed',
+        result.unwrapErr().message,
+      );
+    }
+    return new MeetingActionResultObject('success');
+  }
+
+  @Mutation(() => MeetingActionResultObject)
+  async finishEstimateTask(
+    @Args({ type: () => ID, name: 'meetingId' }) meetingId: string,
+    @Args({ type: () => ID, name: 'taskEstimationId' })
+    taskEstimationId: string,
+  ) {
+    const result = await this._commandBus.execute<
+      FinishEstimateTaskCommand,
+      Either<void>
+    >(new FinishEstimateTaskCommand({ meetingId, taskEstimationId }));
     if (result.isErr()) {
       return new MeetingActionResultObject(
         'failed',

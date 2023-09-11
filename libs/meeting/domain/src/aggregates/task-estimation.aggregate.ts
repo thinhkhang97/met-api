@@ -1,6 +1,7 @@
 import { MemberUpdatedTaskEstimationEvent } from '@lib/meeting/domain/events';
+import { OnlyInEstimatingTaskCanBeEstimatedRule } from '@lib/meeting/domain/rules';
 import { TaskTitle } from '@lib/meeting/domain/value-objects';
-import { AggregateRoot, CUID, Nullable } from '@lib/shared';
+import { AggregateRoot, CUID, Nullable, RuleValidator } from '@lib/shared';
 
 import { TaskEstimationStatus } from '../constance';
 import { MemberEstimation } from '../entities';
@@ -77,6 +78,9 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
     meetingMemberId: CUID,
     value: Nullable<number>,
   ) {
+    RuleValidator.validate(
+      new OnlyInEstimatingTaskCanBeEstimatedRule(this.status),
+    );
     let memberEstimation =
       this.memberEstimations.findOneByMeetingMemberId(meetingMemberId);
     if (!memberEstimation) {
@@ -87,7 +91,6 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
       });
       this._props.memberEstimations.add(memberEstimation);
     } else {
-      memberEstimation.updateEstimation(value);
       this._props.memberEstimations.update(memberEstimation);
     }
     this.apply(
@@ -109,6 +112,24 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
    */
   public updateStatus(status: TaskEstimationStatus) {
     this._props.status = status;
+    this.update();
+  }
+
+  /**
+   * Start giving estimation for a task
+   */
+  public startEstimating() {
+    this._props.status = TaskEstimationStatus.IN_ESTIMATING;
+    this._props.memberEstimations.resetEstimation();
+    this.update();
+  }
+
+  /**
+   * Finish giving estimation for a task
+   */
+  public finishEstimating() {
+    this._props.status = TaskEstimationStatus.ESTIMATED;
+    this.updateFinalEstimation();
     this.update();
   }
 

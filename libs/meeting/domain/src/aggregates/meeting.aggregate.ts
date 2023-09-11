@@ -1,7 +1,7 @@
 import { Nullable } from '@lib/shared';
 import { AggregateRoot, CUID, DateVO } from '@lib/shared/ddd';
 
-import { MeetingStatus, MemberRole, MemberStatus } from '../constance';
+import { MemberRole, MemberStatus } from '../constance';
 import { Member } from '../entities';
 import { MemberJoinedEvent, MemberLeftEvent } from '../events';
 import { MemberWatchedList } from '../watched-list';
@@ -42,7 +42,7 @@ export interface MeetingProps extends CreateMeetingProps {
   /**
    * Meeting status, active or ended
    */
-  status: MeetingStatus;
+  status: string;
 }
 
 /**

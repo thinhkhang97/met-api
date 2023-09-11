@@ -88,6 +88,26 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
           .emit(MeetingMessageName.ESTIMATION_TASK_REMOVED, taskEstimation);
         break;
       }
+      case MeetingEventName.ESTIMATION_TASK_STARTED: {
+        const taskEstimation = data.payload as {
+          meetingId: string;
+          taskEstimationId: string;
+        };
+        this.server
+          .to(`${RoomKey.MEETING}:${taskEstimation.meetingId}`)
+          .emit(MeetingMessageName.ESTIMATION_TASK_STARTED, taskEstimation);
+        break;
+      }
+      case MeetingEventName.ESTIMATION_TASK_FINISHED: {
+        const taskEstimation = data.payload as {
+          meetingId: string;
+          taskEstimationId: string;
+        };
+        this.server
+          .to(`${RoomKey.MEETING}:${taskEstimation.meetingId}`)
+          .emit(MeetingMessageName.ESTIMATION_TASK_FINISHED, taskEstimation);
+        break;
+      }
       default:
         return;
     }
@@ -105,28 +125,6 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
       clientId: client.id,
     });
     this.server.to(client.id).emit(MeetingMessageName.RECEIVED_REQUEST);
-  }
-
-  @SubscribeMessage(MeetingMessageName.ESTIMATION_TASK_STARTED)
-  public async onEstimationTaskStarted(
-    @MessageBody() data: { meetingId: string; taskId: string },
-  ) {
-    await this._meetingEventHandler.handleEstimationTaskStarted(
-      data.meetingId,
-      data.taskId,
-      this.server,
-    );
-  }
-
-  @SubscribeMessage(MeetingMessageName.ESTIMATION_TASK_SHOW_ALL)
-  public async onEstimationTaskShowAll(
-    @MessageBody() data: { meetingId: string; taskId: string },
-  ) {
-    await this._meetingEventHandler.handleShowTaskEstimation(
-      data.meetingId,
-      data.taskId,
-      this.server,
-    );
   }
 
   async authenticate(token: string) {

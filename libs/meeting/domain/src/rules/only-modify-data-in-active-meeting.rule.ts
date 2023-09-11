@@ -2,7 +2,7 @@ import { MeetingStatus } from '@lib/meeting/domain/constance';
 import { BaseRule } from '@lib/shared';
 
 export class OnlyModifyDataInActiveMeetingRule extends BaseRule {
-  constructor(private readonly _meetingStatus: MeetingStatus) {
+  constructor(private readonly _meetingStatus: string) {
     super();
   }
 
@@ -11,6 +11,6 @@ export class OnlyModifyDataInActiveMeetingRule extends BaseRule {
   }
 
   isFailed(): boolean {
-    return this._meetingStatus !== MeetingStatus.ACTIVE;
+    return this._meetingStatus === MeetingStatus.ENDED;
   }
 }

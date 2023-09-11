@@ -124,4 +124,30 @@ export class EstimationMeetingServiceImpl implements EstimationMeetingService {
     await this._estimationMeetingRepository.upsert(meeting);
     return taskEstimation;
   }
+
+  async finishEstimateTask(
+    meetingId: CUID,
+    taskEstimationId: CUID,
+  ): Promise<void> {
+    const meeting = await this._estimationMeetingRepository.findOneByIdOrThrow(
+      meetingId,
+      new MeetingNotFoundException(),
+    );
+    const taskEstimation = meeting.finishEstimateTask(taskEstimationId);
+    await this._estimationMeetingRepository.upsert(meeting);
+    await this._taskEstimationRepository.upsert(taskEstimation);
+  }
+
+  async startEstimateTask(
+    meetingId: CUID,
+    taskEstimationId: CUID,
+  ): Promise<void> {
+    const meeting = await this._estimationMeetingRepository.findOneByIdOrThrow(
+      meetingId,
+      new MeetingNotFoundException(),
+    );
+    const taskEstimation = meeting.startEstimateTask(taskEstimationId);
+    await this._estimationMeetingRepository.upsert(meeting);
+    await this._taskEstimationRepository.upsert(taskEstimation);
+  }
 }

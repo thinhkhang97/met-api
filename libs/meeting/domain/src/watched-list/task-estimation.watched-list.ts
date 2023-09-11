@@ -9,6 +9,12 @@ export class TaskEstimationWatchedList extends WatchedList<TaskEstimation> {
     );
   }
 
+  get currentInEstimatingTask() {
+    return this.currentItems.find(
+      (item) => item.status === TaskEstimationStatus.IN_ESTIMATING,
+    );
+  }
+
   compare(item1: TaskEstimation, item2: TaskEstimation): boolean {
     return item1.equals(item2);
   }

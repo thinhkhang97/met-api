@@ -49,27 +49,4 @@ export class MeetingCache {
     );
     return requestMember;
   }
-
-  async changeMeetingEstimateTask(
-    meetingId: string,
-    taskId: string,
-  ): Promise<void> {
-    await this._cacheManager.set(
-      `${MeetingCacheKey.MEETING_ESTIMATE_TASK}:${meetingId}`,
-      taskId,
-      5,
-    );
-  }
-
-  async getMeetingEstimateTask(meetingId: string) {
-    return await this._cacheManager.get<string>(
-      `${MeetingCacheKey.MEETING_ESTIMATE_TASK}:${meetingId}`,
-    );
-  }
-
-  async removeMeetingEstimateTask(meetingId: string) {
-    await this._cacheManager.del(
-      `${MeetingCacheKey.MEETING_ESTIMATE_TASK}:${meetingId}`,
-    );
-  }
 }

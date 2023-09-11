@@ -54,27 +54,6 @@ export class MeetingEventHandler {
       .emit(MeetingMessageName.MEMBER_JOINED, member);
   }
 
-  public async handleEstimationTaskStarted(
-    meetingId: string,
-    taskId: string,
-    server: Server,
-  ): Promise<void> {
-    await this._meetingCache.changeMeetingEstimateTask(meetingId, taskId);
-    server
-      .to(`${RoomKey.MEETING}:${meetingId}`)
-      .emit(MeetingMessageName.ESTIMATION_TASK_STARTED, { taskId });
-  }
-
-  public async handleShowTaskEstimation(
-    meetingId: string,
-    taskId: string,
-    server: Server,
-  ): Promise<void> {
-    server
-      .to(`${RoomKey.MEETING}:${meetingId}`)
-      .emit(MeetingMessageName.ESTIMATION_TASK_SHOW_ALL, { taskId });
-  }
-
   public async handleMemberLeaveMeeting(client: Socket, server: Server) {
     const member = await this._meetingCache.getMemberByClientId(client.id);
     if (!member) {

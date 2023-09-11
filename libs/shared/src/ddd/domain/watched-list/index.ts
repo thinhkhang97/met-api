@@ -6,13 +6,13 @@ export abstract class WatchedList<T extends BaseEntity<any>> {
     this._updatedItems = [];
   }
 
-  private _currentItems: T[];
+  protected _currentItems: T[];
 
   public get currentItems() {
     return this._currentItems;
   }
 
-  private _updatedItems: T[];
+  protected _updatedItems: T[];
 
   public get updatedItems() {
     return this._updatedItems;

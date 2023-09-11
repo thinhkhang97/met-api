@@ -36,6 +36,13 @@ export class MemberEstimation extends BaseEntity<MemberEstimationProps> {
   }
 
   /**
+   * Reset member estimation for the task
+   */
+  public resetEstimation() {
+    this._props.estimation = null;
+  }
+
+  /**
    * Update estimation value of the member for a task
    * @param value
    */

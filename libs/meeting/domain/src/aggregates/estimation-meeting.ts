@@ -1,20 +1,19 @@
 import {
   TaskEstimationAddedEvent,
+  TaskEstimationFinishedEvent,
   TaskEstimationRemovedEvent,
+  TaskEstimationStartedEvent,
   TaskEstimationUpdatedEvent,
 } from '@lib/meeting/domain/events';
 import { TaskTitle } from '@lib/meeting/domain/value-objects';
 import { CUID, Nullable, RuleValidator } from '@lib/shared';
 
-import { MeetingStatus, TaskEstimationStatus } from '../constance';
+import { EstimationMeetingStatus, TaskEstimationStatus } from '../constance';
+import { TaskEstimationNotFoundException } from '../exceptions';
 import {
-  MeetingMemberNotFoundException,
-  TaskEstimationNotFoundException,
-} from '../exceptions';
-import {
+  OneEstimationTaskAtTheTimeRule,
   OnlyMeetingMemberCanAddTaskRule,
   OnlyModifyDataInActiveMeetingRule,
-  OnlyVoterCanEstimateRule,
   TaskToUpdateMustBeActiveRule,
 } from '../rules';
 import { MemberWatchedList, TaskEstimationWatchedList } from '../watched-list';
@@ -28,6 +27,11 @@ export interface EstimationMeetingProps extends MeetingProps {
    * Tasks need to be considered and estimated by the members in the meeting
    */
   taskEstimations: TaskEstimationWatchedList;
+
+  /**
+   * Meeting status, active or ended
+   */
+  status: EstimationMeetingStatus;
 }
 
 /**
@@ -48,7 +52,7 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
       ...props,
       taskEstimations: new TaskEstimationWatchedList(),
       members: new MemberWatchedList(),
-      status: MeetingStatus.ACTIVE,
+      status: EstimationMeetingStatus.ACTIVE,
     });
   }
 
@@ -145,28 +149,55 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
   }
 
   /**
-   * Add the estimation value of a member for a task, watcher members can't update value
-   * @param meetingMemberId
+   * Start estimating a task
    * @param taskEstimationId
-   * @param estimationValue
    */
-  public updateMemberEstimation(
-    meetingMemberId: CUID,
-    taskEstimationId: CUID,
-    estimationValue: Nullable<number>,
-  ) {
+  public startEstimateTask(taskEstimationId: CUID) {
+    RuleValidator.validate(
+      new OnlyModifyDataInActiveMeetingRule(this._props.status),
+      new OneEstimationTaskAtTheTimeRule(this._props.taskEstimations),
+    );
     const taskEstimation =
       this._props.taskEstimations.findOneById(taskEstimationId);
     if (!taskEstimation) {
       throw new TaskEstimationNotFoundException();
     }
-    const member = this._props.members.findOneById(meetingMemberId);
-    if (!member) {
-      throw new MeetingMemberNotFoundException();
-    }
-    RuleValidator.validate(new OnlyVoterCanEstimateRule(member));
-    taskEstimation.updateMemberEstimation(meetingMemberId, estimationValue);
+    taskEstimation.startEstimating();
+    this._props.status = EstimationMeetingStatus.IN_ESTIMATING;
+    this.apply(
+      new TaskEstimationStartedEvent({
+        aggregateId: this.id,
+        taskEstimationId,
+      }),
+    );
     this.update();
+    return taskEstimation;
+  }
+
+  /**
+   * Finish estimating a task
+   * @param taskEstimationId
+   */
+  public finishEstimateTask(taskEstimationId: CUID) {
+    RuleValidator.validate(
+      new OnlyModifyDataInActiveMeetingRule(this._props.status),
+      new OneEstimationTaskAtTheTimeRule(this._props.taskEstimations),
+    );
+    const taskEstimation =
+      this._props.taskEstimations.findOneById(taskEstimationId);
+    if (!taskEstimation) {
+      throw new TaskEstimationNotFoundException();
+    }
+    taskEstimation.finishEstimating();
+    this._props.status = EstimationMeetingStatus.ACTIVE;
+    this.apply(
+      new TaskEstimationFinishedEvent({
+        aggregateId: this.id,
+        taskEstimationId,
+      }),
+    );
+    this.update();
+    return taskEstimation;
   }
 
   validate() {

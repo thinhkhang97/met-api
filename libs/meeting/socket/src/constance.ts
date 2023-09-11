@@ -21,5 +21,5 @@ export enum MeetingMessageName {
   ESTIMATION_TASK_UPDATED = 'meeting:estimation_task_updated',
   ESTIMATION_TASK_REMOVED = 'meeting:estimation_task_removed',
   ESTIMATION_TASK_STARTED = 'meeting:estimation_task_started',
-  ESTIMATION_TASK_SHOW_ALL = 'meeting:estimation_task_show_all',
+  ESTIMATION_TASK_FINISHED = 'meeting:estimation_task_finished',
 }
