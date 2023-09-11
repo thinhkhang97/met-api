@@ -32,7 +32,7 @@ export class MeetingEventHandler {
 
   public async handleMemberJoined(member: Member, server: Server) {
     const { meetingId, memberId } = member;
-    const requestMember = await this._meetingCache.getMemberRequestById(
+    const requestMember = await this._meetingCache.getMemberRequestJoin(
       meetingId,
       memberId,
     );
@@ -70,5 +70,6 @@ export class MeetingEventHandler {
     server
       .to(`${RoomKey.MEETING}:${member.meetingId}`)
       .emit(MeetingMessageName.MEMBER_LEFT, member);
+    this._meetingCache.removeMemberByClientId(client.id);
   }
 }

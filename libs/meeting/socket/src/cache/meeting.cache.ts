@@ -1,7 +1,6 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import { remove } from 'lodash';
 
 import { MeetingCacheKey } from '../constance';
 import { CachedMember, Member } from '../types';
@@ -16,6 +15,12 @@ export class MeetingCache {
     );
   }
 
+  async removeMemberByClientId(clientId: string) {
+    return await this._cacheManager.del(
+      `${MeetingCacheKey.CLIENT_MEMBER}:${clientId}`,
+    );
+  }
+
   async addMemberToMeeting(clientId, meetingId: string, member: Member) {
     await this._cacheManager.set(
       `${MeetingCacheKey.CLIENT_MEMBER}:${clientId}`,
@@ -24,29 +29,15 @@ export class MeetingCache {
   }
 
   async addMemberRequestJoin(meetingId: string, member: CachedMember) {
-    const requestJoin = (await this.getMemberRequestJoin(meetingId)) || [];
     await this._cacheManager.set(
-      `${MeetingCacheKey.MEMBER_REQUEST_JOIN}:${meetingId}`,
-      [...requestJoin, member],
+      `${MeetingCacheKey.MEMBER_REQUEST_JOIN}:${meetingId}:${member.memberId}`,
+      member,
     );
   }
 
-  async getMemberRequestJoin(meetingId: string) {
-    return await this._cacheManager.get<CachedMember[]>(
-      `${MeetingCacheKey.MEMBER_REQUEST_JOIN}:${meetingId}`,
+  async getMemberRequestJoin(meetingId: string, memberId: string) {
+    return await this._cacheManager.get<CachedMember>(
+      `${MeetingCacheKey.MEMBER_REQUEST_JOIN}:${meetingId}:${memberId}`,
     );
-  }
-
-  async getMemberRequestById(meetingId: string, memberId: string) {
-    const requestMembers = (await this.getMemberRequestJoin(meetingId)) || [];
-    const requestMember = remove(
-      requestMembers,
-      (_member) => _member.memberId === memberId,
-    )[0];
-    await this._cacheManager.set(
-      `${MeetingCacheKey.MEMBER_REQUEST_JOIN}:${meetingId}`,
-      requestMembers,
-    );
-    return requestMember;
   }
 }

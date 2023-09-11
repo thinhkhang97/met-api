@@ -36,7 +36,7 @@ export abstract class SocketGateway
 
   public abstract authenticate(token: string): Promise<unknown>;
 
-  public abstract onClientDisconnect(client: Socket);
+  public abstract onClientDisconnect(client: Socket): Promise<void>;
 
   async handleDisconnect(client: Socket) {
     this.onClientDisconnect(client);

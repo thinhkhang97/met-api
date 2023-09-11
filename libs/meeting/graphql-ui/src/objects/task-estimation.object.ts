@@ -1,4 +1,5 @@
 import { TaskEstimation } from '@lib/meeting/domain';
+import { TaskEstimationStatus } from '@lib/meeting/domain/constance';
 import { MemberEstimationObject } from '@lib/meeting/graphql-ui/objects/member-estimation.object';
 import { BaseObject, Nullable } from '@lib/shared';
 import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
@@ -14,6 +15,9 @@ export class TaskEstimationObject extends BaseObject {
   @Field(() => String, { nullable: true })
   public readonly description: Nullable<string>;
 
+  @Field(() => TaskEstimationStatus)
+  public readonly status: TaskEstimationStatus;
+
   @Field(() => [MemberEstimationObject])
   public readonly memberEstimation: MemberEstimationObject[];
 
@@ -26,6 +30,7 @@ export class TaskEstimationObject extends BaseObject {
     this.meetingId = props.meetingId.unpack();
     this.title = props.title.unpack();
     this.description = props.description;
+    this.status = props.status;
     this.memberEstimation = props.memberEstimations.currentItems.map(
       (memberEstimation) => new MemberEstimationObject(memberEstimation),
     );
