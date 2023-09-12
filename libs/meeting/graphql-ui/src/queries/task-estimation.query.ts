@@ -1,4 +1,7 @@
-import { GetTaskEstimationQuery } from '@lib/meeting/application';
+import {
+  GetTaskEstimationQuery,
+  GetTaskEstimationsQuery,
+} from '@lib/meeting/application';
 import { TaskEstimation } from '@lib/meeting/domain';
 import { Either } from '@lib/shared';
 import { QueryBus } from '@nestjs/cqrs';
@@ -26,5 +29,24 @@ export class TaskEstimationQuery {
       };
     }
     return new TaskEstimationObject(result.unwrap());
+  }
+
+  @Query(() => [TaskEstimationObject], { name: 'taskEstimations' })
+  public async getTaskEstimations(
+    @Args({ type: () => ID, name: 'meetingId' })
+    meetingId: string,
+  ) {
+    const result = await this._queryBus.execute<
+      GetTaskEstimationsQuery,
+      Either<TaskEstimation[]>
+    >(new GetTaskEstimationsQuery({ meetingId }));
+    if (result.isErr()) {
+      return {
+        errorMessage: result.unwrapErr().message,
+      };
+    }
+    return result
+      .unwrap()
+      .map((taskEstimation) => new TaskEstimationObject(taskEstimation));
   }
 }

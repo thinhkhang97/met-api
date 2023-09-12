@@ -133,9 +133,17 @@ export class EstimationMeetingServiceImpl implements EstimationMeetingService {
       meetingId,
       new MeetingNotFoundException(),
     );
-    const taskEstimation = meeting.finishEstimateTask(taskEstimationId);
-    await this._estimationMeetingRepository.upsert(meeting);
+    const taskEstimation = await this._taskEstimationRepository.findOne({
+      id: taskEstimationId,
+      meetingId: meetingId,
+    });
+    if (!taskEstimation) {
+      throw new TaskEstimationNotFoundException();
+    }
+    taskEstimation.finishEstimating();
+    meeting.finishEstimateTask(taskEstimationId);
     await this._taskEstimationRepository.upsert(taskEstimation);
+    await this._estimationMeetingRepository.upsert(meeting);
   }
 
   async startEstimateTask(
@@ -146,8 +154,16 @@ export class EstimationMeetingServiceImpl implements EstimationMeetingService {
       meetingId,
       new MeetingNotFoundException(),
     );
-    const taskEstimation = meeting.startEstimateTask(taskEstimationId);
-    await this._estimationMeetingRepository.upsert(meeting);
+    const taskEstimation = await this._taskEstimationRepository.findOne({
+      id: taskEstimationId,
+      meetingId: meetingId,
+    });
+    if (!taskEstimation) {
+      throw new TaskEstimationNotFoundException();
+    }
+    taskEstimation.startEstimating();
+    meeting.startEstimateTask(taskEstimationId);
     await this._taskEstimationRepository.upsert(taskEstimation);
+    await this._estimationMeetingRepository.upsert(meeting);
   }
 }

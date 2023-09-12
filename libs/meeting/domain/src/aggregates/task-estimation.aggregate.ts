@@ -91,6 +91,7 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
       });
       this._props.memberEstimations.add(memberEstimation);
     } else {
+      memberEstimation.updateEstimation(value);
       this._props.memberEstimations.update(memberEstimation);
     }
     this.apply(
@@ -121,6 +122,7 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
   public startEstimating() {
     this._props.status = TaskEstimationStatus.IN_ESTIMATING;
     this._props.memberEstimations.resetEstimation();
+    this._props.averageEstimation = null;
     this.update();
   }
 

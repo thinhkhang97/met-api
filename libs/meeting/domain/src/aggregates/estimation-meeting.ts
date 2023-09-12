@@ -162,7 +162,6 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
     if (!taskEstimation) {
       throw new TaskEstimationNotFoundException();
     }
-    taskEstimation.startEstimating();
     this._props.status = EstimationMeetingStatus.IN_ESTIMATING;
     this.apply(
       new TaskEstimationStartedEvent({
@@ -171,7 +170,6 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
       }),
     );
     this.update();
-    return taskEstimation;
   }
 
   /**
@@ -181,14 +179,12 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
   public finishEstimateTask(taskEstimationId: CUID) {
     RuleValidator.validate(
       new OnlyModifyDataInActiveMeetingRule(this._props.status),
-      new OneEstimationTaskAtTheTimeRule(this._props.taskEstimations),
     );
     const taskEstimation =
       this._props.taskEstimations.findOneById(taskEstimationId);
     if (!taskEstimation) {
       throw new TaskEstimationNotFoundException();
     }
-    taskEstimation.finishEstimating();
     this._props.status = EstimationMeetingStatus.ACTIVE;
     this.apply(
       new TaskEstimationFinishedEvent({
@@ -197,7 +193,6 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
       }),
     );
     this.update();
-    return taskEstimation;
   }
 
   validate() {
