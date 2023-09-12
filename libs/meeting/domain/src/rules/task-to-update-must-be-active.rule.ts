@@ -12,6 +12,6 @@ export class TaskToUpdateMustBeActiveRule extends BaseRule {
   }
 
   isFailed(): boolean {
-    return this._task.status !== TaskEstimationStatus.ACTIVE;
+    return this._task.status === TaskEstimationStatus.REMOVED;
   }
 }
