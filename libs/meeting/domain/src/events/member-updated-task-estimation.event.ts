@@ -6,9 +6,11 @@ import { BaseEvent, CUID, EventProps } from '@lib/shared';
  */
 export class MemberUpdatedTaskEstimationEvent extends BaseEvent {
   public meetingMemberId: CUID;
+  public meetingId: CUID;
 
   constructor(props: EventProps<MemberUpdatedTaskEstimationEvent>) {
     super(props);
     this.meetingMemberId = props.meetingMemberId;
+    this.meetingId = props.meetingId;
   }
 }

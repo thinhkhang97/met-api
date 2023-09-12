@@ -97,6 +97,7 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
     this.apply(
       new MemberUpdatedTaskEstimationEvent({
         aggregateId: this.id,
+        meetingId: this._props.meetingId,
         meetingMemberId,
       }),
     );

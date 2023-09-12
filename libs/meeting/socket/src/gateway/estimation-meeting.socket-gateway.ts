@@ -108,6 +108,20 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
           .emit(MeetingMessageName.ESTIMATION_TASK_FINISHED, taskEstimation);
         break;
       }
+      case MeetingEventName.MEMBER_UPDATED_TASK_ESTIMATION: {
+        const taskEstimation = data.payload as {
+          meetingId: string;
+          taskEstimationId: string;
+          estimatedMemberIds: string[];
+        };
+        this.server
+          .to(`${RoomKey.MEETING}:${taskEstimation.meetingId}`)
+          .emit(
+            MeetingMessageName.MEMBER_UPDATE_ESTIMATION_VALUE,
+            taskEstimation,
+          );
+        break;
+      }
       default:
         return;
     }

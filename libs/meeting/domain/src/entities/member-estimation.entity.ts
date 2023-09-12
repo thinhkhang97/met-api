@@ -39,7 +39,7 @@ export class MemberEstimation extends BaseEntity<MemberEstimationProps> {
    * Reset member estimation for the task
    */
   public resetEstimation() {
-    this._props.estimation = 0;
+    this._props.estimation = null;
   }
 
   /**

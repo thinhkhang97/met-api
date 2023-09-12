@@ -16,6 +16,12 @@ export class MemberEstimationWatchedList extends WatchedList<MemberEstimation> {
     ).length;
   }
 
+  public get estimatedMembers() {
+    return this.currentItems.filter(
+      (memberEstimation) => memberEstimation.estimation !== null,
+    );
+  }
+
   /**
    * Reset all member estimations to start task estimation session
    */
