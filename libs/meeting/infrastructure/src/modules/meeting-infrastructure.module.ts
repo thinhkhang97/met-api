@@ -1,5 +1,5 @@
 import { GROUP_INTERNAL_SERVICE } from '@lib/meeting/infrastructure/constance';
-import { MeetingPrismaService } from '@lib/shared';
+import { MeetingPrismaService } from '@lib/shared/services/prisma/meeting-prisma.service';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';

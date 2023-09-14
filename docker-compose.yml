@@ -1,16 +1,15 @@
 services:
-  db:
-    image: postgres:14.2
-    ports:
-      - '5432:5432'
-    volumes:
-      - 'lunch-together-postgres:/var/modules/lunch-together/postgresql'
-    environment:
-      - POSTGRES_USER=test
-      - POSTGRES_PASSWORD=test
+  # db:
+  #   image: postgres:14.2
+  #   ports:
+  #     - '5432:5432'
+  #   volumes:
+  #     - 'lunch-together-postgres:/var/modules/lunch-together/postgresql'
+  #   environment:
+  #     - POSTGRES_USER=test
+  #     - POSTGRES_PASSWORD=test
   cache:
     image: redis:alpine
-    container_name: met-redis
     ports:
       - "6379:6379"
     volumes:
@@ -27,6 +26,52 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=admin
+  identity-service:
+    build:
+      context: .
+      dockerfile: ./apps/identity/dockerfile
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./apps/identity/src/.env.prod
+    depends_on:
+      - cache
+      - rabbitmq
+  group-service:
+    build:
+      context: .
+      dockerfile: ./apps/group/dockerfile
+    ports:
+      - "3002:3002"
+      - "3012:3012"
+    env_file:
+      - ./apps/group/src/.env.prod
+    depends_on:
+      - cache
+      - rabbitmq
+  meeting-service:
+    build:
+      context: .
+      dockerfile: ./apps/meeting/dockerfile
+    ports:
+      - "3003:3003"
+    env_file:
+      - ./apps/meeting/src/.env.prod
+    depends_on:
+      - cache
+      - rabbitmq
+  graphql-gateway-service:
+    build:
+      context: .
+      dockerfile: ./apps/graphql-gateway/dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./apps/graphql-gateway/src/.env.prod
+    depends_on:
+      - identity-service
+      - group-service
+      - meeting-service
 volumes:
   lunch-together-postgres:
   met-redis:

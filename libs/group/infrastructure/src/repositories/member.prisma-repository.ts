@@ -1,5 +1,6 @@
 import { Member, MemberProps } from '@lib/group/domain';
-import { GroupPrismaService, PrismaRepository, QueryParams } from '@lib/shared';
+import { PrismaRepository, QueryParams } from '@lib/shared';
+import { GroupPrismaService } from '@lib/shared/services/prisma/group-prisma.service';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/group-client';
 import { omit } from 'lodash';

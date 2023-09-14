@@ -1,4 +1,5 @@
-import { GroupPrismaService, IdentityHttpService } from '@lib/shared';
+import { IdentityHttpService } from '@lib/shared';
+import { GroupPrismaService } from '@lib/shared/services/prisma/group-prisma.service';
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 
