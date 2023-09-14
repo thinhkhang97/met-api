@@ -1,26 +1,21 @@
 import { AddMemberCommand } from '@lib/group/application/commands/add-member/add-member.command';
-import { GroupService } from '@lib/group/domain';
-import { BaseCommandHandler, CUID } from '@lib/shared';
+import { GroupService, Member } from '@lib/group/domain';
+import { BaseCommandHandler, CUID, Email } from '@lib/shared';
 import { CommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(AddMemberCommand)
 export class AddMemberCommandHandler extends BaseCommandHandler<
   AddMemberCommand,
-  void
+  Member
 > {
   constructor(private readonly _groupService: GroupService) {
     super();
   }
 
-  async handle(command: AddMemberCommand): Promise<void> {
+  async handle(command: AddMemberCommand): Promise<Member> {
     const userId = new CUID(command.userId);
     const groupId = new CUID(command.groupId);
-    const newMemberUserId = new CUID(command.newMemberUserId);
-    await this._groupService.addMember(
-      command.name,
-      groupId,
-      userId,
-      newMemberUserId,
-    );
+    const email = new Email(command.email);
+    return await this._groupService.addMember(groupId, userId, email);
   }
 }

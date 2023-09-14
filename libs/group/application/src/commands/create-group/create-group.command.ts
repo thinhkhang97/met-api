@@ -1,14 +1,14 @@
-import { BaseCommand, CommandProps } from '@lib/shared';
+import { BaseCommand, CommandProps, Nullable } from '@lib/shared';
 
 export class CreateGroupCommand extends BaseCommand {
   public readonly userId: string;
-  public readonly ownerName: string;
   public readonly groupName: string;
+  public readonly description: Nullable<string>;
 
   constructor(props: CommandProps<CreateGroupCommand>) {
     super();
     this.userId = props.userId;
-    this.ownerName = props.ownerName;
     this.groupName = props.groupName;
+    this.description = props.description;
   }
 }

@@ -18,10 +18,11 @@ export class GetMemberQueryHandler extends BaseQueryHandler<
 
   protected async handle(query: GetMemberQuery): Promise<Member> {
     const memberId = new CUID(query.memberId);
-    const member = await this._memberRepository.findOneByIdOrThrow(
-      memberId,
-      new MemberNotFoundException(),
-    );
+    const groupId = new CUID(query.groupId);
+    const member = await this._memberRepository.findOne({
+      id: memberId,
+      groupId,
+    });
     if (!member) {
       throw new MemberNotFoundException();
     }

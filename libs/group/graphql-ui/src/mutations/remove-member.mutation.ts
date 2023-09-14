@@ -1,5 +1,5 @@
 import { RemoveMemberCommand } from '@lib/group/application';
-import { Either, GraphQLUser, LoggedUser } from '@lib/shared';
+import { Either, GraphQLUser, LoggedInUser } from '@lib/shared';
 import { CommandBus } from '@nestjs/cqrs';
 import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
 
@@ -13,7 +13,7 @@ export class RemoveMemberMutation {
   public async removeMember(
     @Args({ type: () => ID, name: 'groupId' }) groupId: string,
     @Args({ type: () => ID, name: 'memberId' }) memberId: string,
-    @GraphQLUser() user: LoggedUser,
+    @GraphQLUser() user: LoggedInUser,
   ) {
     const result = await this._commandBus.execute<
       RemoveMemberCommand,

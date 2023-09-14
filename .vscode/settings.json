@@ -4,6 +4,7 @@
     "identity",
     "graphql-gateway",
     "group",
-    "shared"
+    "shared",
+    "meeting"
   ]
 }

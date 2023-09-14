@@ -1,6 +1,7 @@
 import { BaseCommandHandler, Email } from '@lib/shared';
 import { UserNotFoundException, UserRepository } from '@lib/user/domain';
 import { Password } from '@lib/user/domain/value-objects/password';
+import { ConfigService } from '@nestjs/config';
 import { CommandHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 
@@ -16,6 +17,7 @@ export class LoginCommandHandler extends BaseCommandHandler<
 > {
   constructor(
     private readonly _userRepository: UserRepository,
+    private readonly _configService: ConfigService,
     private readonly _jwtService: JwtService,
   ) {
     super();
@@ -39,9 +41,11 @@ export class LoginCommandHandler extends BaseCommandHandler<
     };
     return {
       accessToken: await this._jwtService.signAsync(payload, {
+        secret: this._configService.getOrThrow<string>('JWT_SECRET'),
         expiresIn: '7d',
       }),
       refreshToken: await this._jwtService.signAsync(payload, {
+        secret: this._configService.getOrThrow<string>('JWT_SECRET'),
         expiresIn: '30d',
       }),
     };

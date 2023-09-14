@@ -6,10 +6,11 @@ import {
   GroupService,
   IdentityService,
   Member,
+  MemberExistedException,
   MemberNotFoundException,
   MemberRepository,
 } from '@lib/group/domain';
-import { CUID, Nullable } from '@lib/shared';
+import { CUID, Email, Nullable } from '@lib/shared';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -23,31 +24,28 @@ export class GroupServiceImpl extends GroupService {
   }
 
   async createGroup(
-    name: string,
-    ownerName: string,
     userId: CUID,
+    name: string,
+    description: Nullable<string>,
   ): Promise<Group> {
     const existedGroup = await this._groupRepository.findOne({
-      name: name.toLowerCase(),
+      name,
     });
     if (existedGroup) {
       throw new GroupExistedException();
     }
+    const user = await this._identityService.getUserById(userId);
     const group = Group.create({
       userId,
       name,
-      ownerName,
+      ownerName: user.name,
+      description,
     });
-    await this._groupRepository.save(group);
+    await this._groupRepository.upsert(group);
     return group;
   }
 
-  async addMember(
-    name: string,
-    groupId: CUID,
-    userId: CUID,
-    newMemberUserId: CUID,
-  ): Promise<Group> {
+  async addMember(groupId: CUID, userId: CUID, email: Email): Promise<Member> {
     const group = await this._groupRepository.findOneByIdOrThrow(
       groupId,
       new GroupNotFoundException(),
@@ -56,19 +54,24 @@ export class GroupServiceImpl extends GroupService {
     if (!member) {
       throw new MemberNotFoundException();
     }
-    const newMemberUserInfo = await this._identityService.getUserById(
-      newMemberUserId,
-    );
+    const newMemberUserInfo = await this._identityService.getUserByEmail(email);
 
-    const existMember = await this.getMemberByUserId(newMemberUserId, groupId);
-    if (!existMember) {
-      group.addNewMember(name, newMemberUserInfo.id, member);
+    let newMember = await this.getMemberByUserId(newMemberUserInfo.id, groupId);
+    if (!newMember) {
+      newMember = group.addNewMember(
+        newMemberUserInfo.name,
+        newMemberUserInfo.id,
+        member,
+      );
     } else {
-      existMember.updateName(name);
-      group.reactivateMember(existMember, member);
+      if (newMember.isActive()) {
+        throw new MemberExistedException();
+      }
+      newMember.updateName(newMemberUserInfo.name);
+      group.reactivateMember(newMember, member);
     }
-    await this._groupRepository.save(group);
-    return group;
+    await this._groupRepository.upsert(group);
+    return newMember;
   }
 
   public async removeMember(
@@ -94,7 +97,7 @@ export class GroupServiceImpl extends GroupService {
     }
 
     group.removeMember(member, byMember);
-    await this._groupRepository.save(group);
+    await this._groupRepository.upsert(group);
   }
 
   private async getMemberByUserId(

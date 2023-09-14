@@ -17,10 +17,10 @@ model User {
   updatedAt DateTime @default(now())
   version   Int      @default(0)
 
-  name     String?
-  email    String  @unique
+  name     String
+  email    String @unique
   password String
-  status   Int     @default(0) @db.SmallInt // 0: New, 1: Verified, 2: Inactive
+  status   String
 
   @@map("user")
 }

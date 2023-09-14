@@ -14,17 +14,17 @@ export enum MemberStatus {
   /**
    * The member was removed out of the group by the owner
    */
-  REMOVED,
+  REMOVED = 'REMOVED',
   /**
    * The member is already in the group
    */
-  ACTIVE,
+  ACTIVE = 'ACTIVE',
   /**
    * The member walked out on the group
    */
-  LEAVED,
+  LEAVED = 'LEAVED',
   /**
    * The member is banned, he might not be added anymore
    */
-  BANNED,
+  BANNED = 'BANNED',
 }

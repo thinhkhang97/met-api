@@ -1,7 +1,7 @@
 import { CreateGroupCommand } from '@lib/group/application';
 import { Group } from '@lib/group/domain';
 import { CreateGroupResult } from '@lib/group/graphql-ui/union';
-import { Either, GraphQLUser, LoggedUser } from '@lib/shared';
+import { Either, GraphQLUser, LoggedInUser, Nullable } from '@lib/shared';
 import { CommandBus } from '@nestjs/cqrs';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
@@ -14,17 +14,18 @@ export class CreateGroupMutation {
   @Mutation(() => CreateGroupResult)
   public async createGroup(
     @Args({ type: () => String, name: 'groupName' }) groupName: string,
-    @Args({ type: () => String, name: 'nameInGroup' }) nameInGroup: string,
-    @GraphQLUser() user: LoggedUser,
+    @Args({ type: () => String, name: 'description', nullable: true })
+    description: Nullable<string>,
+    @GraphQLUser() user: LoggedInUser,
   ) {
     const result = await this._commandBus.execute<
       CreateGroupCommand,
       Either<Group>
     >(
       new CreateGroupCommand({
-        groupName: groupName,
-        ownerName: nameInGroup,
         userId: user.id,
+        groupName: groupName,
+        description,
       }),
     );
     if (result.isErr()) {

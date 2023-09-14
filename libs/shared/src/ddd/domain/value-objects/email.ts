@@ -9,6 +9,11 @@ export class Email extends ValueObject<string> {
     super({ value });
   }
 
+  getFirstPath() {
+    const parts = this.value.split('@');
+    return parts[0];
+  }
+
   protected validate(props: ValueObjectProps<string>): void {
     if (!Email.EMAIL_PATTERN.test(props.value)) {
       throw new InvalidValueFormatException('Invalid email format');

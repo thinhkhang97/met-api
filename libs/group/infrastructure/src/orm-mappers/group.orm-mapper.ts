@@ -22,6 +22,8 @@ export class GroupOrmMapper extends BaseOrmMapper<
   protected toEntityProps(ormEntity: GroupOrmEntity): GroupProps {
     return {
       name: ormEntity.name,
+      description: ormEntity.description,
+      logoUrl: ormEntity.logoUrl,
       roles: ormEntity.roles.map((role) => this._roleMapper.toEntity(role)),
       members: (ormEntity.members || []).map((member) =>
         this._memberMapper.toEntity(member),
@@ -33,6 +35,8 @@ export class GroupOrmMapper extends BaseOrmMapper<
     const props = entity.getProps();
     return {
       name: props.name,
+      description: props.description,
+      logoUrl: props.logoUrl,
       roles: props.roles.map((role) => this._roleMapper.toOrm(role)),
       members: props.members.map((member) => this._memberMapper.toOrm(member)),
     };

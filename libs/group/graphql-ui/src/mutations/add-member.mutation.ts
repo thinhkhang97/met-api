@@ -1,30 +1,31 @@
 import { AddMemberCommand } from '@lib/group/application';
-import { GroupBaseResultObject } from '@lib/group/graphql-ui/objects';
-import { Either, GraphQLUser, LoggedUser } from '@lib/shared';
+import { Member } from '@lib/group/domain';
+import { MemberObject } from '@lib/group/graphql-ui/objects';
+import { Either, GraphQLUser, LoggedInUser } from '@lib/shared';
 import { CommandBus } from '@nestjs/cqrs';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
+
+import { AddMemberResultUnion } from '../union';
 
 @Resolver()
 export class AddMemberMutation {
   constructor(private readonly _commandBus: CommandBus) {}
 
-  @Mutation(() => GroupBaseResultObject)
+  @Mutation(() => AddMemberResultUnion)
   async addMember(
-    @Args({ type: () => String, name: 'nameInGroup' }) name: string,
-    @Args({ type: () => String, name: 'groupId' }) groupId: string,
-    @Args({ type: () => String, name: 'newMemberUserId' })
-    newMemberUserId: string,
-    @GraphQLUser() loggedUser: LoggedUser,
+    @Args({ type: () => String, name: 'email' })
+    email: string,
+    @Args({ type: () => ID, name: 'groupId' }) groupId: string,
+    @GraphQLUser() loggedUser: LoggedInUser,
   ) {
     const result = await this._commandBus.execute<
       AddMemberCommand,
-      Either<void>
+      Either<Member>
     >(
       new AddMemberCommand({
-        name,
         groupId,
         userId: loggedUser.id,
-        newMemberUserId,
+        email,
       }),
     );
     if (result.isErr()) {
@@ -33,8 +34,6 @@ export class AddMemberMutation {
         errorMessage: result.unwrapErr().message,
       };
     }
-    return {
-      status: 'success',
-    };
+    return new MemberObject(result.unwrap());
   }
 }

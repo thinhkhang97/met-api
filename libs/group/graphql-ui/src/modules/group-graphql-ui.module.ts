@@ -5,6 +5,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 
 import { mutations } from '../mutations';
 import { queries } from '../queries';
+import { resolveFields } from '../resolve-fields';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { queries } from '../queries';
     WrappedGraphqlModule.forSubgraph(),
     GroupApplicationModule,
   ],
-  providers: [...queries, ...mutations],
+  providers: [...queries, ...mutations, ...resolveFields],
 })
 export class GroupGraphqlUIModule {}

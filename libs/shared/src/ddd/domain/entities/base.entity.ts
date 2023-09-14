@@ -1,4 +1,5 @@
 import { CUID, DateVO, ID } from '@lib/shared';
+import { AggregateRoot } from '@nestjs/cqrs';
 
 export interface BaseEntityProps {
   id: ID;
@@ -13,11 +14,12 @@ export interface CreateEntityProps {
   version?: number;
 }
 
-export abstract class BaseEntity<T> {
+export abstract class BaseEntity<T> extends AggregateRoot {
   protected readonly _id: ID;
   protected _props: T & BaseEntityProps;
 
   constructor(props: T & CreateEntityProps, id?: ID) {
+    super();
     const now = DateVO.now();
     const generatedId = id ? id : CUID.generate();
     this._id = generatedId;

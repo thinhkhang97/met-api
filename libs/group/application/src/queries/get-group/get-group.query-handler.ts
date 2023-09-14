@@ -17,9 +17,14 @@ export class GetGroupQueryHandler extends BaseQueryHandler<
   }
 
   protected async handle(query: GetGroupQuery): Promise<Group> {
-    return await this._groupRepository.findOneByIdOrThrow(
+    const group = await this._groupRepository.findOneByUserId(
+      new CUID(query.userId),
       new CUID(query.groupId),
-      new GroupNotFoundException(),
     );
+
+    if (!group) {
+      throw new GroupNotFoundException();
+    }
+    return group;
   }
 }

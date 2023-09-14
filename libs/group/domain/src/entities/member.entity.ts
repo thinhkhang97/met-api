@@ -8,12 +8,17 @@ type CreateMemberProps = {
   groupId: CUID;
   avatar: Nullable<string>;
   name: string;
-  roleId: CUID;
+  role: Role;
 };
 
-export interface MemberProps extends CreateMemberProps {
-  role: Nullable<Role>;
+export interface MemberProps {
+  userId: CUID;
+  groupId: CUID;
+  avatar: Nullable<string>;
+  name: string;
+  roleId: CUID;
   status: MemberStatus;
+  role: Nullable<Role>;
 }
 
 /**
@@ -25,7 +30,15 @@ export class Member extends BaseEntity<MemberProps> {
    * @param props Properties to create a member
    */
   public static create(props: CreateMemberProps) {
-    return new Member({ ...props, role: null, status: MemberStatus.ACTIVE });
+    return new Member({
+      ...props,
+      roleId: props.role.id as CUID,
+      status: MemberStatus.ACTIVE,
+    });
+  }
+
+  public isActive() {
+    return this._props.status === MemberStatus.ACTIVE;
   }
 
   public updateName(name: string) {

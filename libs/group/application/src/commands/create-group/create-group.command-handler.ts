@@ -16,9 +16,9 @@ export class CreateGroupCommandHandler extends BaseCommandHandler<
   async handle(command: CreateGroupCommand): Promise<Group> {
     const userId = new CUID(command.userId);
     return await this._groupService.createGroup(
-      command.groupName,
-      command.ownerName,
       userId,
+      command.groupName,
+      command.description,
     );
   }
 }

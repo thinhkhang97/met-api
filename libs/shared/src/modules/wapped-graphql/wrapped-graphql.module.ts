@@ -27,6 +27,10 @@ export class WrappedGraphqlModule {
                 name: 'group',
                 url: _configService.getOrThrow<string>('GROUP_SUBGRAPH'),
               },
+              {
+                name: 'meeting',
+                url: _configService.getOrThrow<string>('MEETING_SUBGRAPH'),
+              },
             ],
           }),
           subscription: false,

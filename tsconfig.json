@@ -79,6 +79,60 @@
       ],
       "@lib/user/rest-ui/*": [
         "libs/user/rest-ui/src/*"
+      ],
+      "@lib/meeting/domain": [
+        "libs/meeting/domain/src"
+      ],
+      "@lib/meeting/domain/*": [
+        "libs/meeting/domain/src/*"
+      ],
+      "@lib/meeting/socket": [
+        "libs/meeting/socket/src"
+      ],
+      "@lib/meeting/socket/*": [
+        "libs/meeting/socket/src/*"
+      ],
+      "@lib/meeting/infrastructure": [
+        "libs/meeting/infrastructure/src"
+      ],
+      "@lib/meeting/infrastructure/*": [
+        "libs/meeting/infrastructure/src/*"
+      ],
+      "@lib/meeting/application": [
+        "libs/meeting/application/src"
+      ],
+      "@lib/meeting/application/*": [
+        "libs/meeting/application/src/*"
+      ],
+      "@lib/meeting/graphql-ui": [
+        "libs/meeting/graphql-ui/src"
+      ],
+      "@lib/meeting/graphql-ui/*": [
+        "libs/meeting/graphql-ui/src/*"
+      ],
+      "@lib/group/tcp-ui": [
+        "libs/group/tcp-ui/src"
+      ],
+      "@lib/group/tcp-ui/*": [
+        "libs/group/tcp-ui/src/*"
+      ],
+      "@lib/user/tcp-ui": [
+        "libs/user/tcp-ui/src"
+      ],
+      "@lib/user/tcp-ui/*": [
+        "libs/user/tcp-ui/src/*"
+      ],
+      "@lib/meeting/rmq-ui": [
+        "libs/meeting/rmq-ui/src"
+      ],
+      "@lib/meeting/rmq-ui/*": [
+        "libs/meeting/rmq-ui/src/*"
+      ],
+      "@lib/meeting/tcp-ui": [
+        "libs/meeting/tcp-ui/src"
+      ],
+      "@lib/meeting/tcp-ui/*": [
+        "libs/meeting/tcp-ui/src/*"
       ]
     }
   }

@@ -1,0 +1,7 @@
+@startuml
+Member -> SocketGateway: disconnect, [socket id]
+SocketGateway -> MeetingService: remove member by id
+MeetingService -> MeetingService: validate and remove member
+MeetingService -> SocketGateway: member was out event
+SocketGateway -> Member: member out event
+@enduml

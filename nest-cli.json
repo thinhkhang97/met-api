@@ -135,6 +135,105 @@
       "compilerOptions": {
         "tsConfigPath": "libs/user/rest-ui/tsconfig.lib.json"
       }
+    },
+    "meeting/domain": {
+      "type": "library",
+      "root": "libs/meeting/domain",
+      "entryFile": "index",
+      "sourceRoot": "libs/meeting/domain/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/meeting/domain/tsconfig.lib.json"
+      }
+    },
+    "meeting": {
+      "type": "application",
+      "root": "apps/meeting",
+      "entryFile": "main",
+      "sourceRoot": "apps/meeting/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/meeting/tsconfig.app.json"
+      }
+    },
+    "socket": {
+      "type": "application",
+      "root": "apps/socket",
+      "entryFile": "main",
+      "sourceRoot": "apps/socket/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/socket/tsconfig.app.json"
+      }
+    },
+    "meeting/socket": {
+      "type": "library",
+      "root": "libs/meeting/socket",
+      "entryFile": "index",
+      "sourceRoot": "libs/meeting/socket/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/meeting/socket/tsconfig.lib.json"
+      }
+    },
+    "meeting/infrastructure": {
+      "type": "library",
+      "root": "libs/meeting/infrastructure",
+      "entryFile": "index",
+      "sourceRoot": "libs/meeting/infrastructure/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/meeting/infrastructure/tsconfig.lib.json"
+      }
+    },
+    "meeting/application": {
+      "type": "library",
+      "root": "libs/meeting/application",
+      "entryFile": "index",
+      "sourceRoot": "libs/meeting/application/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/meeting/application/tsconfig.lib.json"
+      }
+    },
+    "meeting/graphql-ui": {
+      "type": "library",
+      "root": "libs/meeting/graphql-ui",
+      "entryFile": "index",
+      "sourceRoot": "libs/meeting/graphql-ui/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/meeting/graphql-ui/tsconfig.lib.json"
+      }
+    },
+    "group/tcp-ui": {
+      "type": "library",
+      "root": "libs/group/tcp-ui",
+      "entryFile": "index",
+      "sourceRoot": "libs/group/tcp-ui/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/group/tcp-ui/tsconfig.lib.json"
+      }
+    },
+    "user/tcp-ui": {
+      "type": "library",
+      "root": "libs/user/tcp-ui",
+      "entryFile": "index",
+      "sourceRoot": "libs/user/tcp-ui/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/user/tcp-ui/tsconfig.lib.json"
+      }
+    },
+    "meeting/rmq-ui": {
+      "type": "library",
+      "root": "libs/meeting/rmq-ui",
+      "entryFile": "index",
+      "sourceRoot": "libs/meeting/rmq-ui/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/meeting/rmq-ui/tsconfig.lib.json"
+      }
+    },
+    "meeting/tcp-ui": {
+      "type": "library",
+      "root": "libs/meeting/tcp-ui",
+      "entryFile": "index",
+      "sourceRoot": "libs/meeting/tcp-ui/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/meeting/tcp-ui/tsconfig.lib.json"
+      }
     }
   }
 }

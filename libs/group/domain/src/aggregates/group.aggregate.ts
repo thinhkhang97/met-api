@@ -1,7 +1,9 @@
-import { AggregateRoot, CUID, RuleValidator } from '@lib/shared';
+import { AggregateRoot, CUID, Nullable, RuleValidator } from '@lib/shared';
 
 import { Member, Role } from '../entities';
 import {
+  GroupMustHaveNameRule,
+  MemberMustHaveNameRule,
   OnlyOwnerCanAddMemberRule,
   OnlyOwnerCanRemoveMemberRule,
 } from '../rules';
@@ -13,12 +15,15 @@ type CreateGroupProps = {
   userId: CUID;
   ownerName: string;
   name: string;
+  description: Nullable<string>;
 };
 
 export type GroupProps = {
   name: string;
   roles: Role[];
   members: Member[];
+  description: Nullable<string>;
+  logoUrl: Nullable<string>;
 };
 
 /**
@@ -35,17 +40,28 @@ export class Group extends AggregateRoot<GroupProps> {
    * @param props Properties to create a group
    */
   public static create(props: CreateGroupProps) {
+    RuleValidator.validate(
+      new GroupMustHaveNameRule(props.name),
+      new MemberMustHaveNameRule(props.ownerName),
+    );
     const groupId = CUID.generate();
     const roles = Role.forCasual(groupId);
+    const ownerRole = Role.getOwner(roles);
     const owner = Member.create({
       name: props.ownerName,
       userId: props.userId,
-      roleId: Role.getOwner(roles).id as CUID,
       avatar: null,
       groupId,
+      role: ownerRole,
     });
     return new Group(
-      { name: props.name.toLowerCase(), roles, members: [owner] },
+      {
+        name: props.name,
+        roles,
+        members: [owner],
+        description: props.description,
+        logoUrl: null,
+      },
       groupId,
     );
   }
@@ -62,16 +78,17 @@ export class Group extends AggregateRoot<GroupProps> {
     byMember: Member,
   ) {
     RuleValidator.validate(new OnlyOwnerCanAddMemberRule(this, byMember));
-    this._props.members.push(
-      Member.create({
-        name: newMemberName,
-        userId: newMemberUserId,
-        avatar: null,
-        groupId: this._props.id as CUID,
-        roleId: Role.getMember(this._props.roles).id as CUID,
-      }),
-    );
+    const role = Role.getMember(this._props.roles);
+    const newMember = Member.create({
+      name: newMemberName,
+      userId: newMemberUserId,
+      avatar: null,
+      groupId: this._props.id as CUID,
+      role,
+    });
+    this._props.members.push(newMember);
     this.update();
+    return newMember;
   }
 
   /**
