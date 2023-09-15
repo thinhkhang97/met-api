@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
@@ -7,6 +7,8 @@ import { IDENTITY_INTERNAL_SERVICE } from '../constance';
 
 @Injectable()
 export class IdentityService {
+  private readonly _logger = new Logger(this.constructor.name);
+
   constructor(
     @Inject(IDENTITY_INTERNAL_SERVICE)
     private readonly _identityService: ClientProxy,
@@ -15,6 +17,7 @@ export class IdentityService {
 
   public async authenticate(token: string) {
     try {
+      this._logger.debug('Authenticating');
       const result = await this._identityService.send(
         { action: 'authenticate' },
         {
@@ -22,8 +25,10 @@ export class IdentityService {
           internalApiKey: this._configService.getOrThrow('INTERNAL_API_KEY'),
         },
       );
+      this._logger.debug('Authenticated');
       return await firstValueFrom(result);
     } catch (e) {
+      this._logger.error(JSON.stringify(e));
       return null;
     }
   }
