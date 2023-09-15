@@ -17,7 +17,7 @@ RUN npm run prisma:migrate-deploy prisma/user/schema.prisma
 RUN npm run build identity
 
 # Expose the port your NestJS application is listening on
-EXPOSE 3001
+EXPOSE 3001 3011
 
 # Define the command to run the NestJS application
 CMD ["node", "dist/apps/identity/main.js"]
