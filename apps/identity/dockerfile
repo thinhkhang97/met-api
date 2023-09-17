@@ -13,6 +13,8 @@ RUN npm install
 
 RUN npm run prisma:migrate-deploy prisma/user/schema.prisma  
 
+RUN npx prisma generate --schema prisma/user/schema.prisma
+
 # Install only production dependencies
 RUN npm run build identity
 
