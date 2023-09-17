@@ -16,7 +16,7 @@ env:
     met-graphql-gateway # set this to the name of the container in the
     # containerDefinitions section of your task definition
 jobs:
-  Deploy-Identity-Service:
+  Deploy-Graphql-Gateway-Service:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -24,7 +24,7 @@ jobs:
 
       - name: Set up Docker Build Environment
         run: |
-          echo "GRAPHQL_GATEWAY=${{ secrets.GRAPHQL_GATEWAY }}" >> .env
+          echo "GRAPHQL_GATEWAY_ENV=${{ secrets.GRAPHQL_GATEWAY_ENV }}" >> .env
           cat .env
         shell: bash
 
