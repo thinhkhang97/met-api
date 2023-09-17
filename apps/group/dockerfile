@@ -9,9 +9,9 @@ COPY . .
 # Install only production dependencies
 RUN npm install
 
-COPY /prisma/group/.env.prod prisma/group/.env
-
 RUN npm run prisma:migrate-deploy prisma/group/schema.prisma  
+
+RUN npx prisma generate --schema prisma/group/schema.prisma
 
 # Install only production dependencies
 RUN npm run build group
