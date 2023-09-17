@@ -9,7 +9,7 @@ COPY . .
 # Install only production dependencies
 RUN npm install
 
-COPY /prisma/user/.env.prod prisma/user/.env
+# COPY /prisma/user/.env.prod prisma/user/.env
 
 RUN npm run prisma:migrate-deploy prisma/user/schema.prisma  
 
