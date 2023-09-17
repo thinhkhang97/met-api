@@ -10,7 +10,15 @@ async function bootstrap() {
   const logger = new Logger();
   app.enableCors({ origin: '*' });
   await app.listen(3000);
-  logger.log('Started successfully, env: ' + configService.get('ENV'));
+  logger.log(
+    `Started successfully, env: ${configService.get(
+      'ENV',
+    )}, env: ${configService.get('API_KEY')}, env: ${configService.get(
+      'IDENTITY_SUBGRAPH',
+    )}, env: ${configService.get('GROUP_SUBGRAPH')}, env: ${configService.get(
+      'MEETING_SUBGRAPH',
+    )}`,
+  );
 }
 
 bootstrap();
