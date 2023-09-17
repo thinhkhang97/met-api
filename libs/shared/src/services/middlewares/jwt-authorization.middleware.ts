@@ -42,11 +42,12 @@ export class JwtAuthorizationMiddleware implements NestMiddleware {
   }
 
   private shouldByPassValidation(req: Request) {
-    const env = this._configService.getOrThrow<string>('ENV');
+    const env = this._configService.getOrThrow<string>('NODE_ENV');
     const operationName = req.body.operationName;
     return (
-      (env === 'dev' &&
-        (!operationName || operationName === 'IntrospectionQuery')) ||
+      env === 'dev' ||
+      !operationName ||
+      operationName === 'IntrospectionQuery' ||
       JwtAuthorizationMiddleware.operationsWhiteList.includes(operationName)
     );
   }
@@ -55,7 +56,7 @@ export class JwtAuthorizationMiddleware implements NestMiddleware {
     const [_, token] = req.headers.authorization?.split(' ') || [];
     try {
       req['user'] = await this._jwtService.verifyAsync(token, {
-        secret: this._configService.getOrThrow<string>('JWT_SECRET'),
+        secret: this._configService.getOrThrow<string>('JWT_KEY'),
       });
     } catch {
       throw new UnauthorizedException();

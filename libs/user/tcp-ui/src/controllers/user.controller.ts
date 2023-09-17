@@ -22,7 +22,7 @@ export class UserController {
     }
     try {
       return this._jwtService.verifyAsync(token, {
-        secret: this._configService.getOrThrow<string>('JWT_SECRET'),
+        secret: this._configService.getOrThrow<string>('JWT_KEY'),
       });
     } catch {
       return null;

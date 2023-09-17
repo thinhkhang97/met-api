@@ -24,8 +24,7 @@ jobs:
 
       - name: Set up Docker Build Environment
         run: |
-          echo "GROUP_ENV=${{ secrets.GROUP_ENV }}" >> .env
-          cat .env
+          echo "${{ secrets.GROUP_ENV }}" >> .env
         shell: bash
 
       - name: Configure AWS credentials

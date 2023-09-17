@@ -1,4 +1,4 @@
-JWT_SECRET=
+JWT_KEY=
 
 # Database
 DB="postgresql://test:test@localhost:5432/lunch-together-db?schema=public"

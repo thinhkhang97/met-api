@@ -20,8 +20,8 @@ async function bootstrap() {
   await app.listen(3001);
   logger.log(
     `Started successfully, env: ${configService.get(
-      'ENV',
-    )}, env: ${configService.get('JWT_SECRET')}, env: ${configService.get(
+      'NODE_ENV',
+    )}, env: ${configService.get('JWT_KEY')}, env: ${configService.get(
       'INTERNAL_API_KEY',
     )},`,
   );

@@ -12,7 +12,7 @@ async function bootstrap() {
   await app.listen(3000);
   logger.log(
     `Started successfully, env: ${configService.get(
-      'ENV',
+      'NODE_ENV',
     )}, env: ${configService.get('API_KEY')}, env: ${configService.get(
       'IDENTITY_SUBGRAPH',
     )}, env: ${configService.get('GROUP_SUBGRAPH')}, env: ${configService.get(
