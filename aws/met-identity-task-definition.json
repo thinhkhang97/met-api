@@ -1,9 +1,9 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:361958472332:task-definition/met-identity-task:9",
+    "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:361958472332:task-definition/met-identity-task:19",
     "containerDefinitions": [
         {
             "name": "met-identity",
-            "image": "361958472332.dkr.ecr.ap-southeast-1.amazonaws.com/met-identity:57f5f0aebd69e00e56cb96fa0f6687a95f63a0fb",
+            "image": "361958472332.dkr.ecr.ap-southeast-1.amazonaws.com/met-identity:66fa0302a86fc684e6133607c878abcd45fdab95",
             "cpu": 0,
             "memory": 1024,
             "memoryReservation": 1024,
@@ -28,7 +28,6 @@
             "environmentFiles": [],
             "mountPoints": [],
             "volumesFrom": [],
-            "ulimits": [],
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
@@ -45,7 +44,7 @@
     "taskRoleArn": "arn:aws:iam::361958472332:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::361958472332:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
-    "revision": 9,
+    "revision": 19,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -94,7 +93,7 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2023-09-17T07:38:40.986Z",
+    "registeredAt": "2023-09-17T11:53:42.087Z",
     "registeredBy": "arn:aws:iam::361958472332:root",
     "tags": []
 }
