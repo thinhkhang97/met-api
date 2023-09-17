@@ -9,9 +9,9 @@ COPY . .
 # Install only production dependencies
 RUN npm install
 
-COPY /prisma/meeting/.env.prod prisma/meeting/.env
-
 RUN npm run prisma:migrate-deploy prisma/meeting/schema.prisma  
+
+RUN npx prisma generate --schema prisma/meeting/schema.prisma
 
 # Install only production dependencies
 RUN npm run build meeting
