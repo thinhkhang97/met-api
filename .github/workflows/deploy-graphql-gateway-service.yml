@@ -24,7 +24,7 @@ jobs:
 
       - name: Set up Docker Build Environment
         run: |
-          echo "${{ secrets.GRAPHQL_GATEWAY_ENV }}" >> .env
+          echo "${{ secrets.GRAPHQL_GATEWAY_ENV }}" >> ./apps/graphql-gateway/src/.env
         shell: bash
 
       - name: Configure AWS credentials
