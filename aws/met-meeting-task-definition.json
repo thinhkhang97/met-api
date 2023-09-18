@@ -1,9 +1,9 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:361958472332:task-definition/met-meeting-task:5",
+    "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:361958472332:task-definition/met-meeting-task:13",
     "containerDefinitions": [
         {
             "name": "met-meeting",
-            "image": "361958472332.dkr.ecr.ap-southeast-1.amazonaws.com/met-meeting:51fa909cf63909c8a7d5d12f0cb57ca3e7e609bb",
+            "image": "361958472332.dkr.ecr.ap-southeast-1.amazonaws.com/met-meeting:76eb5127e497584cabcc2c03ddd2a2dd28f4e6a2",
             "cpu": 0,
             "memory": 1024,
             "memoryReservation": 1024,
@@ -38,10 +38,8 @@
                     "value": "3012"
                 }
             ],
-            "environmentFiles": [],
             "mountPoints": [],
             "volumesFrom": [],
-            "ulimits": [],
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
@@ -58,7 +56,7 @@
     "taskRoleArn": "arn:aws:iam::361958472332:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::361958472332:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
-    "revision": 5,
+    "revision": 13,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -101,13 +99,13 @@
     "requiresCompatibilities": [
         "FARGATE"
     ],
-    "cpu": "512",
+    "cpu": "256",
     "memory": "1024",
     "runtimePlatform": {
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2023-09-17T08:46:48.465Z",
+    "registeredAt": "2023-09-18T07:18:51.516Z",
     "registeredBy": "arn:aws:iam::361958472332:root",
     "tags": []
 }

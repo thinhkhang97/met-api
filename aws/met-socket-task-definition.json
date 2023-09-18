@@ -1,24 +1,24 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:361958472332:task-definition/met-group-task:16",
+    "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:361958472332:task-definition/met-socket-task:3",
     "containerDefinitions": [
         {
-            "name": "met-group",
-            "image": "361958472332.dkr.ecr.ap-southeast-1.amazonaws.com/met-group:76eb5127e497584cabcc2c03ddd2a2dd28f4e6a2",
+            "name": "met-socket",
+            "image": "public.ecr.aws/a1d3t6k6/met-socket",
             "cpu": 0,
             "memory": 1024,
             "memoryReservation": 1024,
             "portMappings": [
                 {
-                    "name": "met-group-3002-tcp",
-                    "containerPort": 3002,
-                    "hostPort": 3002,
+                    "name": "met-socket-3004-tcp",
+                    "containerPort": 3004,
+                    "hostPort": 3004,
                     "protocol": "tcp",
                     "appProtocol": "http"
                 },
                 {
-                    "name": "met-group-3012-tcp",
-                    "containerPort": 3012,
-                    "hostPort": 3012,
+                    "name": "met-socket-80-tcp",
+                    "containerPort": 80,
+                    "hostPort": 80,
                     "protocol": "tcp",
                     "appProtocol": "http"
                 }
@@ -26,17 +26,47 @@
             "essential": true,
             "environment": [
                 {
-                    "name": "IDENTITY_INTERNAL_SERVICE",
-                    "value": "http://met-identity.internal-service:3001"
+                    "name": "REDIS_HOST",
+                    "value": "redis-17504.c295.ap-southeast-1-1.ec2.cloud.redislabs.com"
+                },
+                {
+                    "name": "IDENTITY_MS_PORT",
+                    "value": "3011"
+                },
+                {
+                    "name": "MEETING_MS_PORT",
+                    "value": "3013"
+                },
+                {
+                    "name": "REDIS_PORT",
+                    "value": "17504"
+                },
+                {
+                    "name": "IDENTITY_MS_HOST",
+                    "value": "http://met-identity-tcp.internal-service"
+                },
+                {
+                    "name": "REDIS_PASSWORD",
+                    "value": "HQHAmPeCGuWgEMMlNv9M1CwOIEcPQLMW"
+                },
+                {
+                    "name": "MEETING_MS_HOST",
+                    "value": "http://met-meeting-tcp.internal-service"
+                },
+                {
+                    "name": "REDIS_USERNAME",
+                    "value": "default"
                 }
             ],
+            "environmentFiles": [],
             "mountPoints": [],
             "volumesFrom": [],
+            "ulimits": [],
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
                     "awslogs-create-group": "true",
-                    "awslogs-group": "/ecs/met-group-task",
+                    "awslogs-group": "/ecs/met-socket-task",
                     "awslogs-region": "ap-southeast-1",
                     "awslogs-stream-prefix": "ecs"
                 },
@@ -44,11 +74,11 @@
             }
         }
     ],
-    "family": "met-group-task",
+    "family": "met-socket-task",
     "taskRoleArn": "arn:aws:iam::361958472332:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::361958472332:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
-    "revision": 16,
+    "revision": 3,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -59,9 +89,6 @@
             "name": "ecs.capability.execution-role-awslogs"
         },
         {
-            "name": "com.amazonaws.ecs.capability.ecr-auth"
-        },
-        {
             "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
         },
         {
@@ -69,9 +96,6 @@
         },
         {
             "name": "com.amazonaws.ecs.capability.task-iam-role"
-        },
-        {
-            "name": "ecs.capability.execution-role-ecr-pull"
         },
         {
             "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
@@ -97,7 +121,7 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2023-09-18T07:18:01.627Z",
+    "registeredAt": "2023-09-18T07:19:15.733Z",
     "registeredBy": "arn:aws:iam::361958472332:root",
     "tags": []
 }

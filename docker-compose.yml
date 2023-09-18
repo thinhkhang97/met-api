@@ -27,46 +27,41 @@ services:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=admin
   identity-service:
+    platform: linux/amd64
     build:
       context: .
       dockerfile: ./apps/identity/dockerfile
     ports:
       - "3001:3001"
       - "3011:3011"
-    env_file:
-      - ./apps/identity/src/.env.prod
   group-service:
+    platform: linux/amd64
     build:
       context: .
       dockerfile: ./apps/group/dockerfile
     ports:
       - "3002:3002"
       - "3012:3012"
-    env_file:
-      - ./apps/group/src/.env.prod
   meeting-service:
+    platform: linux/amd64
     build:
       context: .
       dockerfile: ./apps/meeting/dockerfile
     ports:
       - "3003:3003"
       - "3013:3013"
-    env_file:
-      - ./apps/meeting/src/.env.prod
-    depends_on:
-      - rabbitmq
+    environment:
+      - INTERNAL_API_KEY=my-override-key
   socket-service:
+    platform: linux/amd64
     build:
       context: .
       dockerfile: ./apps/socket/dockerfile
     ports:
       - "3004:3004"
       - "80:80"
-    env_file:
-      - ./apps/socket/src/.env.prod
-    depends_on:
-      - rabbitmq
   graphql-gateway-service:
+    platform: linux/amd64
     build:
       context: .
       dockerfile: ./apps/graphql-gateway/dockerfile

@@ -24,6 +24,7 @@ jobs:
 
       - name: Set up Docker Build Environment
         run: |
+          echo "${{ secrets.GROUP_ENV }}" >> ./apps/group/src/.env
           echo "${{ secrets.GROUP_ENV }}" >> .env
         shell: bash
 

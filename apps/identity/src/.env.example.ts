@@ -1,8 +1,10 @@
-JWT_KEY=
+NODE_ENV=
+
+JWT_SECRET=
 
 # Database
-DB="postgresql://test:test@localhost:5432/lunch-together-db?schema=public"
+DB=
 
 # API key
-API_KEY=KEY
+API_KEY=
 INTERNAL_API_KEY=

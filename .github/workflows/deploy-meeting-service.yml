@@ -24,6 +24,7 @@ jobs:
 
       - name: Set up Docker Build Environment
         run: |
+          echo "${{ secrets.MEETING_ENV }}" >> ./apps/meeting/src/.env
           echo "${{ secrets.MEETING_ENV }}" >> .env
         shell: bash
 
