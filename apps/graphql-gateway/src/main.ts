@@ -9,7 +9,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const logger = new Logger();
   app.enableCors({ origin: '*' });
-  await app.listen(3000);
+  await app.listen(443);
   logger.log(
     `Started successfully, env: ${configService.get(
       'NODE_ENV',
