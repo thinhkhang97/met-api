@@ -1,17 +1,17 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:361958472332:task-definition/met-graphql-gateway:16",
+    "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:361958472332:task-definition/met-graphql-gateway:21",
     "containerDefinitions": [
         {
             "name": "met-graphql-gateway",
-            "image": "361958472332.dkr.ecr.ap-southeast-1.amazonaws.com/met-graphql-gateway:aa505cc594c826ef1be0d815fcec01606ddf62d0",
+            "image": "361958472332.dkr.ecr.ap-southeast-1.amazonaws.com/met-graphql-gateway:aa8ac685b19786225594327a34b6e383ec57cd1c",
             "cpu": 0,
             "memory": 1024,
             "memoryReservation": 1024,
             "portMappings": [
                 {
-                    "name": "met-graphql-gateway-3000-tcp",
-                    "containerPort": 3000,
-                    "hostPort": 3000,
+                    "name": "met-graphql-gateway-443-tcp",
+                    "containerPort": 443,
+                    "hostPort": 443,
                     "protocol": "tcp",
                     "appProtocol": "http"
                 }
@@ -49,7 +49,7 @@
     "taskRoleArn": "arn:aws:iam::361958472332:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::361958472332:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
-    "revision": 16,
+    "revision": 21,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -98,7 +98,7 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2023-09-18T07:17:42.691Z",
+    "registeredAt": "2023-09-19T23:44:20.352Z",
     "registeredBy": "arn:aws:iam::361958472332:root",
     "tags": []
 }
