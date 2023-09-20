@@ -1,5 +1,6 @@
 import { MeetingSocketModule } from '@lib/meeting/socket';
-import { Module } from '@nestjs/common';
+import { HealthCheck } from '@lib/shared';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -11,4 +12,8 @@ import { ConfigModule } from '@nestjs/config';
     MeetingSocketModule,
   ],
 })
-export class SocketModule {}
+export class SocketModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(HealthCheck).forRoutes('/health');
+  }
+}

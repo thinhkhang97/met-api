@@ -17,7 +17,7 @@ import { MeetingEventHandler } from '../event-handlers';
 import { IdentityService } from '../services';
 import { Member, TaskEstimation } from '../types';
 
-@WebSocketGateway(80, {
+@WebSocketGateway({
   cors: {
     origin: '*',
   },
