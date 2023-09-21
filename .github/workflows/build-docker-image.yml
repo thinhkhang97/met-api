@@ -1,0 +1,69 @@
+name: Build docker image
+
+run-name: ${{ github.actor }} is building docker images
+
+on:
+  push:
+    branches:
+      - deployment
+
+env:
+  AWS_REGION: ap-southeast-1 # set this to your preferred AWS region, e.g. us-west-1
+  ECS_CLUSTER: met-cluster # set this to your Amazon ECS cluster name
+
+jobs:
+  build_image:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        SERVICE:
+          - identity
+          - group
+          - meeting
+        include:
+          - SERVICE: identity
+            SECRET_VALUE: '${{ vars.IDENTITY_ENV }}'
+            ENV_PATH: './apps/identity/src/.env'
+
+          - SERVICE: group
+            SECRET_VALUE: '${{ vars.GROUP_ENV }}'
+            ENV_PATH: './apps/group/src/.env'
+
+          - SERVICE: meeting
+            SECRET_VALUE: '${{ vars.MEETING_ENV }}'
+            ENV_PATH: './apps/meeting/src/.env'
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Build Environment
+        run: |
+          echo "${{ matrix.SECRET_VALUE }}" >> ${{ matrix.ENV_PATH }}
+          echo "${{ matrix.SECRET_VALUE }}" >> .env
+        shell: bash
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@0e613a0980cbf65ed5b322eb7a1e075d28913a83
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          cat .env
+          docker build -t $ECR_REGISTRY/met-${{ matrix.SERVICE }}:$IMAGE_TAG . -f ./apps/${{ matrix.SERVICE }}/dockerfile
+          docker push $ECR_REGISTRY/met-${{ matrix.SERVICE }}:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/met-${{ matrix.SERVICE }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
