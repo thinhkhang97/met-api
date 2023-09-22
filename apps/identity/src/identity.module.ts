@@ -1,8 +1,8 @@
-import { AllExceptionsFilter } from '@lib/shared';
+import { AllExceptionsFilter, HealthCheck } from '@lib/shared';
 import { UserGraphqlUiModule } from '@lib/user/graphql-ui';
 import { UserRestUiModule } from '@lib/user/rest-ui';
 import { UserTcpUiModule } from '@lib/user/tcp-ui';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 
@@ -23,4 +23,8 @@ import { APP_FILTER } from '@nestjs/core';
     },
   ],
 })
-export class IdentityModule {}
+export class IdentityModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(HealthCheck);
+  }
+}

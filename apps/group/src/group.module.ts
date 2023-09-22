@@ -1,6 +1,7 @@
 import { GroupGraphqlUIModule } from '@lib/group/graphql-ui';
 import { GroupTcpUiModule } from '@lib/group/tcp-ui';
-import { Module } from '@nestjs/common';
+import { HealthCheck } from '@lib/shared';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -13,4 +14,8 @@ import { ConfigModule } from '@nestjs/config';
     GroupTcpUiModule,
   ],
 })
-export class GroupModule {}
+export class GroupModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(HealthCheck);
+  }
+}
