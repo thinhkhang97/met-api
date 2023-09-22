@@ -5,7 +5,7 @@ run-name: ${{ github.actor }} is building docker images
 on:
   push:
     branches:
-      - deployment
+      - deployment-2
 
 env:
   AWS_REGION: ap-southeast-1 # set this to your preferred AWS region, e.g. us-west-1
@@ -22,15 +22,15 @@ jobs:
           - meeting
         include:
           - SERVICE: identity
-            SECRET_VALUE: '${{ vars.IDENTITY_ENV }}'
+            SECRET_VALUE: '${{ secrets.IDENTITY_ENV }}'
             ENV_PATH: './apps/identity/src/.env'
 
           - SERVICE: group
-            SECRET_VALUE: '${{ vars.GROUP_ENV }}'
+            SECRET_VALUE: '${{ secrets.GROUP_ENV }}'
             ENV_PATH: './apps/group/src/.env'
 
           - SERVICE: meeting
-            SECRET_VALUE: '${{ vars.MEETING_ENV }}'
+            SECRET_VALUE: '${{ secrets.MEETING_ENV }}'
             ENV_PATH: './apps/meeting/src/.env'
 
     steps:
@@ -63,7 +63,6 @@ jobs:
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          cat .env
           docker build -t $ECR_REGISTRY/met-${{ matrix.SERVICE }}:$IMAGE_TAG . -f ./apps/${{ matrix.SERVICE }}/dockerfile
           docker push $ECR_REGISTRY/met-${{ matrix.SERVICE }}:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/met-${{ matrix.SERVICE }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
