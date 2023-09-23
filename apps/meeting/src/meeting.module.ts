@@ -1,7 +1,7 @@
 import { MeetingGraphqlUiModule } from '@lib/meeting/graphql-ui';
 import { MeetingRmqUiModule } from '@lib/meeting/rmq-ui';
 import { MeetingTcpUiModule } from '@lib/meeting/tcp-ui';
-import { HealthCheck } from '@lib/shared';
+import { GraphqlSubgraphMiddleware, HealthCheck } from '@lib/shared';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
@@ -18,6 +18,7 @@ import { ConfigModule } from '@nestjs/config';
 })
 export class MeetingModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(HealthCheck);
+    consumer.apply(HealthCheck).forRoutes('/health');
+    consumer.apply(GraphqlSubgraphMiddleware).forRoutes('/graphql');
   }
 }

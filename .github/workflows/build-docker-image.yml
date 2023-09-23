@@ -5,7 +5,7 @@ run-name: ${{ github.actor }} is building docker images
 on:
   push:
     branches:
-      - deployment-2
+      - deployment
 
 env:
   AWS_REGION: ap-southeast-1 # set this to your preferred AWS region, e.g. us-west-1
@@ -22,15 +22,15 @@ jobs:
           - meeting
         include:
           - SERVICE: identity
-            SECRET_VALUE: '${{ secrets.IDENTITY_ENV }}'
+            ENV_NAME: IDENTITY_ENV
             ENV_PATH: './apps/identity/src/.env'
 
           - SERVICE: group
-            SECRET_VALUE: '${{ secrets.GROUP_ENV }}'
+            ENV_NAME: GROUP_ENV
             ENV_PATH: './apps/group/src/.env'
 
           - SERVICE: meeting
-            SECRET_VALUE: '${{ secrets.MEETING_ENV }}'
+            ENV_NAME: MEETING_ENV
             ENV_PATH: './apps/meeting/src/.env'
 
     steps:
@@ -39,8 +39,8 @@ jobs:
 
       - name: Set up Docker Build Environment
         run: |
-          echo "${{ matrix.SECRET_VALUE }}" >> ${{ matrix.ENV_PATH }}
-          echo "${{ matrix.SECRET_VALUE }}" >> .env
+          echo "${{ secrets[matrix.ENV_NAME] }}" >> ${{ matrix.ENV_PATH }}
+          echo "${{ secrets[matrix.ENV_NAME] }}" >> .env
         shell: bash
 
       - name: Configure AWS credentials

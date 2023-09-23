@@ -1,4 +1,8 @@
-import { AllExceptionsFilter, HealthCheck } from '@lib/shared';
+import {
+  AllExceptionsFilter,
+  GraphqlSubgraphMiddleware,
+  HealthCheck,
+} from '@lib/shared';
 import { UserGraphqlUiModule } from '@lib/user/graphql-ui';
 import { UserRestUiModule } from '@lib/user/rest-ui';
 import { UserTcpUiModule } from '@lib/user/tcp-ui';
@@ -25,6 +29,7 @@ import { APP_FILTER } from '@nestjs/core';
 })
 export class IdentityModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(HealthCheck);
+    consumer.apply(HealthCheck).forRoutes('/health');
+    consumer.apply(GraphqlSubgraphMiddleware).forRoutes('/graphql');
   }
 }

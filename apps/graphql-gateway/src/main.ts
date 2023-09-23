@@ -8,8 +8,9 @@ async function bootstrap() {
   const app = await NestFactory.create(GraphqlGatewayModule);
   const configService = app.get(ConfigService);
   const logger = new Logger();
+  const isDevelopment = configService.get('NODE_ENV') === 'development';
   app.enableCors({ origin: '*' });
-  await app.listen(443);
+  await app.listen(isDevelopment ? 3000 : 443);
   logger.log(
     `Started successfully, env: ${configService.get(
       'NODE_ENV',

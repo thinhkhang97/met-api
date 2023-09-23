@@ -45,9 +45,8 @@ export class JwtAuthorizationMiddleware implements NestMiddleware {
     const env = this._configService.getOrThrow<string>('NODE_ENV');
     const operationName = req.body.operationName;
     return (
-      env === 'dev' ||
-      !operationName ||
-      operationName === 'IntrospectionQuery' ||
+      (env === 'development' &&
+        (!operationName || operationName === 'IntrospectionQuery')) ||
       JwtAuthorizationMiddleware.operationsWhiteList.includes(operationName)
     );
   }

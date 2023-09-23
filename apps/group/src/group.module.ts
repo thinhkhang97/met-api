@@ -1,6 +1,6 @@
 import { GroupGraphqlUIModule } from '@lib/group/graphql-ui';
 import { GroupTcpUiModule } from '@lib/group/tcp-ui';
-import { HealthCheck } from '@lib/shared';
+import { GraphqlSubgraphMiddleware, HealthCheck } from '@lib/shared';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
@@ -16,6 +16,7 @@ import { ConfigModule } from '@nestjs/config';
 })
 export class GroupModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(HealthCheck);
+    consumer.apply(HealthCheck).forRoutes('/health');
+    consumer.apply(GraphqlSubgraphMiddleware).forRoutes('/graphql');
   }
 }
