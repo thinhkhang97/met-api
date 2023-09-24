@@ -6,6 +6,7 @@ import {
   RemoveEstimationTaskCommand,
   StartEstimateTaskCommand,
   UpdateEstimationTaskCommand,
+  UpdateMeetingCommand,
 } from '@lib/meeting/application';
 import { EstimationMeeting, TaskEstimation } from '@lib/meeting/domain';
 import { Either, GraphQLUser, LoggedInUser } from '@lib/shared';
@@ -169,6 +170,28 @@ export class EstimationMeetingMutation {
       FinishEstimateTaskCommand,
       Either<void>
     >(new FinishEstimateTaskCommand({ meetingId, taskEstimationId }));
+    if (result.isErr()) {
+      return new MeetingActionResultObject(
+        'failed',
+        result.unwrapErr().message,
+      );
+    }
+    return new MeetingActionResultObject('success');
+  }
+
+  @Mutation(() => MeetingActionResultObject, { name: 'updateMeeting' })
+  async updateMeeting(
+    @Args({ type: () => String, name: 'meetingId' }) meetingId: string,
+    @Args({ type: () => String, name: 'title' }) title: string,
+    @Args({ type: () => String, name: 'description', nullable: true })
+    description: string,
+    @Args({ type: () => GraphQLISODateTime, name: 'from' }) from: Date,
+    @Args({ type: () => GraphQLISODateTime, name: 'to' }) to: Date,
+  ) {
+    const result = await this._commandBus.execute<
+      UpdateMeetingCommand,
+      Either<void>
+    >(new UpdateMeetingCommand({ meetingId, title, description, from, to }));
     if (result.isErr()) {
       return new MeetingActionResultObject(
         'failed',

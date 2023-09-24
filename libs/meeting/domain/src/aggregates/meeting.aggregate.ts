@@ -1,3 +1,4 @@
+import { MeetingDataNotValidException } from '@lib/meeting/domain/exceptions';
 import { Nullable } from '@lib/shared';
 import { AggregateRoot, CUID, DateVO } from '@lib/shared/ddd';
 
@@ -57,6 +58,26 @@ export abstract class Meeting<C extends MeetingProps> extends AggregateRoot<C> {
     return this._props.members;
   }
 
+  public updateTitle(title: string) {
+    this._props.title = title;
+    this.update();
+  }
+
+  public updateDescription(description: Nullable<string>) {
+    this._props.description = description;
+    this.update();
+  }
+
+  public updateFrom(from: DateVO) {
+    this._props.from = from;
+    this.update();
+  }
+
+  public updateTo(to: DateVO) {
+    this._props.to = to;
+    this.update();
+  }
+
   /**
    * Remove a member out of the meeting
    * @param memberId
@@ -93,5 +114,11 @@ export abstract class Meeting<C extends MeetingProps> extends AggregateRoot<C> {
     this.apply(new MemberJoinedEvent({ aggregateId: this.id, member }));
     this.update();
     return member;
+  }
+
+  validate() {
+    if (!this._props.title.trim() || !this._props.from || !this._props.to) {
+      throw new MeetingDataNotValidException();
+    }
   }
 }
