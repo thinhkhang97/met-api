@@ -7,8 +7,10 @@ import {
   StartEstimateTaskCommand,
   UpdateEstimationTaskCommand,
   UpdateMeetingCommand,
+  UpdateMemberRoleCommand,
 } from '@lib/meeting/application';
 import { EstimationMeeting, TaskEstimation } from '@lib/meeting/domain';
+import { MemberRole } from '@lib/meeting/domain/constance';
 import { Either, GraphQLUser, LoggedInUser } from '@lib/shared';
 import { CommandBus } from '@nestjs/cqrs';
 import {
@@ -192,6 +194,27 @@ export class EstimationMeetingMutation {
       UpdateMeetingCommand,
       Either<void>
     >(new UpdateMeetingCommand({ meetingId, title, description, from, to }));
+    if (result.isErr()) {
+      return new MeetingActionResultObject(
+        'failed',
+        result.unwrapErr().message,
+      );
+    }
+    return new MeetingActionResultObject('success');
+  }
+
+  @Mutation(() => MeetingActionResultObject, { name: 'updateMemberRole' })
+  async updateMemberRole(
+    @Args({ type: () => String, name: 'meetingId' }) meetingId: string,
+    @Args({ type: () => MemberRole, name: 'role' }) role: MemberRole,
+    @GraphQLUser() loggedInUser: LoggedInUser,
+  ) {
+    const result = await this._commandBus.execute<
+      UpdateMemberRoleCommand,
+      Either<void>
+    >(
+      new UpdateMemberRoleCommand({ meetingId, role, userId: loggedInUser.id }),
+    );
     if (result.isErr()) {
       return new MeetingActionResultObject(
         'failed',

@@ -68,6 +68,11 @@ export class Member extends BaseEntity<MemberProps> {
     this.update();
   }
 
+  public updateRole(role: MemberRole) {
+    this._props.role = role;
+    this.update();
+  }
+
   validate() {
     return;
   }

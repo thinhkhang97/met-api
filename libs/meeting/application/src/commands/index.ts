@@ -10,6 +10,7 @@ import { StartEstimateTaskCommandHandler } from './start-estimate-task/start-est
 import { UpdateEstimationTaskCommandHandler } from './update-estimation-task/update-estimation-task.command-handler';
 import { UpdateMeetingCommandHandler } from './update-meeting/update-meeting.command-handler';
 import { UpdateMemberEstimationCommandHandler } from './update-member-estimation/update-member-estimation.command-handler';
+import { UpdateMemberRoleCommandHandler } from './update-member-role/update-member-role.command-handler';
 import { UpdateTaskEstimationResultCommandHandler } from './update-task-estimation-result/update-task-estimation-result.command-handler';
 
 export * from './add-estimation-task/add-estimation-task.command';
@@ -22,6 +23,7 @@ export * from './start-estimate-task/start-estimate-task.command';
 export * from './update-estimation-task/update-estimation-task.command';
 export * from './update-meeting/update-meeting.command';
 export * from './update-member-estimation/update-member-estimation.command';
+export * from './update-member-role/update-member-role.command';
 export * from './update-task-estimation-result/update-task-estimation-result.command';
 
 export const commands: Provider[] = [
@@ -36,4 +38,5 @@ export const commands: Provider[] = [
   StartEstimateTaskCommandHandler,
   FinishEstimateTaskCommandHandler,
   UpdateMeetingCommandHandler,
+  UpdateMemberRoleCommandHandler,
 ];
