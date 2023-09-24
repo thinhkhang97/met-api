@@ -34,4 +34,11 @@ export abstract class GroupService {
    * @param byMemberId
    */
   abstract removeMember(groupId: CUID, memberId: CUID, byMemberId: CUID);
+
+  /**
+   * User leave group
+   * @param groupId
+   * @param userId
+   */
+  abstract leaveGroup(groupId: CUID, userId: CUID);
 }

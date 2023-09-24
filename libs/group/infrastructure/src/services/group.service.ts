@@ -100,6 +100,19 @@ export class GroupServiceImpl extends GroupService {
     await this._groupRepository.upsert(group);
   }
 
+  public async leaveGroup(groupId: CUID, userId: CUID) {
+    const group = await this._groupRepository.findOneByIdOrThrow(
+      groupId,
+      new GroupNotFoundException(),
+    );
+    const member = await this._memberRepository.findOne({ groupId, userId });
+    if (!member) {
+      throw new MemberNotFoundException();
+    }
+    group.leaveGroup(member);
+    await this._groupRepository.upsert(group);
+  }
+
   private async getMemberByUserId(
     userId: CUID,
     groupId: CUID,
