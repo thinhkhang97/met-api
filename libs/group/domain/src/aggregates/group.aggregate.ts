@@ -123,6 +123,7 @@ export class Group extends AggregateRoot<GroupProps> {
   public leaveGroup(member: Member) {
     RuleValidator.validate(new GroupOwnerCannotLeaveGroupRule(this, member));
     member.leave();
+    this._props.members.push(member);
     this.update();
   }
 
