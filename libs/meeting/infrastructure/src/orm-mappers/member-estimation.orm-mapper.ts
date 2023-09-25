@@ -21,6 +21,7 @@ export class MemberEstimationOrmMapper extends BaseOrmMapper<
       meetingMemberId: new CUID(ormEntity.meetingMemberId),
       estimation: ormEntity.estimation,
       taskEstimationId: new CUID(ormEntity.taskEstimationId),
+      reason: ormEntity.reason,
     };
   }
 
@@ -32,6 +33,7 @@ export class MemberEstimationOrmMapper extends BaseOrmMapper<
       meetingMemberId: props.meetingMemberId.unpack(),
       estimation: props.estimation,
       taskEstimationId: props.taskEstimationId.unpack(),
+      reason: props.reason,
     };
   }
 }

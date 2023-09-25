@@ -14,4 +14,7 @@ export class UpdateMemberEstimationArg {
 
   @Field(() => Int, { nullable: true })
   public estimationValue!: Nullable<number>;
+
+  @Field(() => String, { nullable: true })
+  public reason!: Nullable<string>;
 }

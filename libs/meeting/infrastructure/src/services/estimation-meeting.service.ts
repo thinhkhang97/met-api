@@ -78,6 +78,7 @@ export class EstimationMeetingServiceImpl implements EstimationMeetingService {
     meetingMemberId: CUID,
     taskEstimationId: CUID,
     estimationValue: Nullable<number>,
+    reason: Nullable<string>,
   ) {
     const meeting = await this._estimationMeetingRepository.findOneByIdOrThrow(
       meetingId,
@@ -96,7 +97,11 @@ export class EstimationMeetingServiceImpl implements EstimationMeetingService {
       throw new MeetingMemberNotFoundException();
     }
     RuleValidator.validate(new OnlyVoterCanEstimateRule(member));
-    taskEstimation.updateMemberEstimation(meetingMemberId, estimationValue);
+    taskEstimation.updateMemberEstimation(
+      meetingMemberId,
+      estimationValue,
+      reason,
+    );
     await this._taskEstimationRepository.upsert(taskEstimation);
   }
 

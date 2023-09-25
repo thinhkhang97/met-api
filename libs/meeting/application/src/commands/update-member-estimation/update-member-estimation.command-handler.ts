@@ -24,6 +24,7 @@ export class UpdateMemberEstimationCommandHandler extends BaseCommandHandler<
       memberMeetingId,
       taskEstimationId,
       command.estimationValue,
+      command.reason,
     );
   }
 }
