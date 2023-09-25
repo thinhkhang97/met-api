@@ -13,7 +13,7 @@ export class MemberEstimationObject extends BaseObject {
   @Field(() => Float, { nullable: true })
   public readonly estimation: Nullable<number>;
 
-  @Field(() => Float, { nullable: true })
+  @Field(() => String, { nullable: true })
   public readonly reason: Nullable<string>;
 
   constructor(entity: MemberEstimation) {
