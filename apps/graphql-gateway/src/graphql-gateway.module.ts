@@ -1,4 +1,4 @@
-import { JwtAuthorizationMiddleware } from '@lib/shared';
+import { HealthCheck, JwtAuthorizationMiddleware } from '@lib/shared';
 import { WrappedGraphqlModule } from '@lib/shared/modules/wapped-graphql/wrapped-graphql.module';
 import { WrappedJwtModule } from '@lib/shared/modules/wrapped-jwt/wrapped-jwt.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
@@ -16,6 +16,7 @@ import { ConfigModule } from '@nestjs/config';
 })
 export class GraphqlGatewayModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
+    consumer.apply(HealthCheck).forRoutes('/health');
     consumer.apply(JwtAuthorizationMiddleware).forRoutes('/graphql');
   }
 }

@@ -71,6 +71,7 @@ model MemberEstimation {
 
   meetingMemberId String
   estimation      Float?
+  reason          String?
 
   taskEstimationId String
   taskEstimation   TaskEstimation @relation(references: [id], fields: [taskEstimationId])

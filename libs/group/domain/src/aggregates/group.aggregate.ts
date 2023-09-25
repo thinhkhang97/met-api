@@ -3,6 +3,7 @@ import { AggregateRoot, CUID, Nullable, RuleValidator } from '@lib/shared';
 import { Member, Role } from '../entities';
 import {
   GroupMustHaveNameRule,
+  GroupOwnerCannotLeaveGroupRule,
   MemberMustHaveNameRule,
   OnlyOwnerCanAddMemberRule,
   OnlyOwnerCanRemoveMemberRule,
@@ -111,6 +112,17 @@ export class Group extends AggregateRoot<GroupProps> {
   public removeMember(member: Member, byMember: Member) {
     RuleValidator.validate(new OnlyOwnerCanRemoveMemberRule(this, byMember));
     member.removed();
+    this._props.members.push(member);
+    this.update();
+  }
+
+  /**
+   * Leave group, group owner can not leave group
+   * @param member
+   */
+  public leaveGroup(member: Member) {
+    RuleValidator.validate(new GroupOwnerCannotLeaveGroupRule(this, member));
+    member.leave();
     this._props.members.push(member);
     this.update();
   }

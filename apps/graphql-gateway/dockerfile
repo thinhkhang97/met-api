@@ -1,0 +1,19 @@
+# Use a smaller base image for Node.js
+FROM node:18.17.0
+
+# Set the working directory in the container
+WORKDIR /app/graphql-gateway
+
+COPY . .
+
+# Install only production dependencies
+RUN npm install
+
+# Install only production dependencies
+RUN npm run build graphql-gateway
+
+# Expose the port your NestJS application is listening on
+EXPOSE 3000
+
+# Define the command to run the NestJS application
+CMD ["node", "dist/apps/graphql-gateway/main.js"]

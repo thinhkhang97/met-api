@@ -17,6 +17,7 @@ export class BroadcastToMeetingAfterMemberJoinedEventHandler extends BaseEventHa
       JSON.stringify({
         eventName: MeetingEventName.MEMBER_JOINED,
         payload: {
+          id: memberProps.id.unpack(),
           memberId: memberProps.memberId.unpack(),
           meetingId: memberProps.meetingId.unpack(),
           name: memberProps.name,

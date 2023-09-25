@@ -1,0 +1,239 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:361958472332:task-definition/met-socket-gateway-task:2",
+    "containerDefinitions": [
+        {
+            "name": "met-socket",
+            "image": "361958472332.dkr.ecr.ap-southeast-1.amazonaws.com/met-socket:e68bb103d117d9b1768b6342ea7ef11ba5745e4d",
+            "cpu": 256,
+            "memory": 1024,
+            "memoryReservation": 1024,
+            "portMappings": [
+                {
+                    "name": "met-socket-3004-tcp",
+                    "containerPort": 3004,
+                    "hostPort": 3004,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                },
+                {
+                    "name": "met-socket-80-tcp",
+                    "containerPort": 80,
+                    "hostPort": 80,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "REDIS_HOST",
+                    "value": "redis-17504.c295.ap-southeast-1-1.ec2.cloud.redislabs.com"
+                },
+                {
+                    "name": "IDENTITY_MS_PORT",
+                    "value": "3011"
+                },
+                {
+                    "name": "MEETING_MS_PORT",
+                    "value": "3013"
+                },
+                {
+                    "name": "REDIS_PORT",
+                    "value": "17504"
+                },
+                {
+                    "name": "IDENTITY_MS_HOST",
+                    "value": "0.0.0.0"
+                },
+                {
+                    "name": "REDIS_PASSWORD",
+                    "value": "HQHAmPeCGuWgEMMlNv9M1CwOIEcPQLMW"
+                },
+                {
+                    "name": "MEETING_MS_HOST",
+                    "value": "0.0.0.0"
+                },
+                {
+                    "name": "REDIS_USERNAME",
+                    "value": "default"
+                }
+            ],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/met-socket-task",
+                    "awslogs-region": "ap-southeast-1",
+                    "awslogs-stream-prefix": "ecs"
+                },
+                "secretOptions": []
+            }
+        },
+        {
+            "name": "met-meeting",
+            "image": "361958472332.dkr.ecr.ap-southeast-1.amazonaws.com/met-meeting:604b4ba9be2c57873b35e02e94ab6a8a6fdc8ae9",
+            "cpu": 256,
+            "memory": 1024,
+            "memoryReservation": 1024,
+            "portMappings": [
+                {
+                    "name": "met-meeting-3003-tcp",
+                    "containerPort": 3003,
+                    "hostPort": 3003,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                },
+                {
+                    "name": "met-meeting-3013-tcp",
+                    "containerPort": 3013,
+                    "hostPort": 3013,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "GROUP_MS_HOST",
+                    "value": "0.0.0.0"
+                },
+                {
+                    "name": "GROUP_MS_PORT",
+                    "value": "3012"
+                }
+            ],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": []
+        },
+        {
+            "name": "met-group",
+            "image": "361958472332.dkr.ecr.ap-southeast-1.amazonaws.com/met-group:604b4ba9be2c57873b35e02e94ab6a8a6fdc8ae9",
+            "cpu": 256,
+            "memory": 1024,
+            "memoryReservation": 1024,
+            "portMappings": [
+                {
+                    "name": "met-group-3002-tcp",
+                    "containerPort": 3002,
+                    "hostPort": 3002,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                },
+                {
+                    "name": "met-group-3012-tcp",
+                    "containerPort": 3012,
+                    "hostPort": 3012,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "IDENTITY_INTERNAL_SERVICE",
+                    "value": "http://0.0.0.0:3001"
+                }
+            ],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": []
+        },
+        {
+            "name": "met-identity",
+            "image": "361958472332.dkr.ecr.ap-southeast-1.amazonaws.com/met-identity:604b4ba9be2c57873b35e02e94ab6a8a6fdc8ae9",
+            "cpu": 256,
+            "memory": 1024,
+            "memoryReservation": 1024,
+            "portMappings": [
+                {
+                    "name": "met-identity-3001-tcp",
+                    "containerPort": 3001,
+                    "hostPort": 3001,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                },
+                {
+                    "name": "met-identity-3011-tcp",
+                    "containerPort": 3011,
+                    "hostPort": 3011,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/met-socket-gateway-task",
+                    "awslogs-region": "ap-southeast-1",
+                    "awslogs-stream-prefix": "ecs"
+                },
+                "secretOptions": []
+            }
+        }
+    ],
+    "family": "met-socket-gateway-task",
+    "taskRoleArn": "arn:aws:iam::361958472332:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::361958472332:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "revision": 2,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+        },
+        {
+            "name": "ecs.capability.execution-role-awslogs"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
+        },
+        {
+            "name": "ecs.capability.execution-role-ecr-pull"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+        },
+        {
+            "name": "ecs.capability.task-eni"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2",
+        "FARGATE"
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "1024",
+    "memory": "4096",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "registeredAt": "2023-09-18T13:44:14.189Z",
+    "registeredBy": "arn:aws:iam::361958472332:root",
+    "tags": []
+}

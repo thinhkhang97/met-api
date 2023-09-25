@@ -1,0 +1,104 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:361958472332:task-definition/met-graphql-gateway:21",
+    "containerDefinitions": [
+        {
+            "name": "met-graphql-gateway",
+            "image": "361958472332.dkr.ecr.ap-southeast-1.amazonaws.com/met-graphql-gateway:aa8ac685b19786225594327a34b6e383ec57cd1c",
+            "cpu": 0,
+            "memory": 1024,
+            "memoryReservation": 1024,
+            "portMappings": [
+                {
+                    "name": "met-graphql-gateway-443-tcp",
+                    "containerPort": 443,
+                    "hostPort": 443,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "GROUP_SUBGRAPH",
+                    "value": "http://met-group.internal-service:3002/graphql"
+                },
+                {
+                    "name": "IDENTITY_SUBGRAPH",
+                    "value": "http://met-identity.internal-service:3001/graphql"
+                },
+                {
+                    "name": "MEETING_SUBGRAPH",
+                    "value": "http://met-meeting.internal-service:3003/graphql"
+                }
+            ],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/met-graphql-gateway",
+                    "awslogs-region": "ap-southeast-1",
+                    "awslogs-stream-prefix": "ecs"
+                },
+                "secretOptions": []
+            }
+        }
+    ],
+    "family": "met-graphql-gateway",
+    "taskRoleArn": "arn:aws:iam::361958472332:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::361958472332:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "revision": 21,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+        },
+        {
+            "name": "ecs.capability.execution-role-awslogs"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
+        },
+        {
+            "name": "ecs.capability.execution-role-ecr-pull"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+        },
+        {
+            "name": "ecs.capability.task-eni"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2",
+        "FARGATE"
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "256",
+    "memory": "1024",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "registeredAt": "2023-09-19T23:44:20.352Z",
+    "registeredBy": "arn:aws:iam::361958472332:root",
+    "tags": []
+}

@@ -41,11 +41,11 @@ export class LoginCommandHandler extends BaseCommandHandler<
     };
     return {
       accessToken: await this._jwtService.signAsync(payload, {
-        secret: this._configService.getOrThrow<string>('JWT_SECRET'),
+        secret: this._configService.getOrThrow<string>('JWT_KEY'),
         expiresIn: '7d',
       }),
       refreshToken: await this._jwtService.signAsync(payload, {
-        secret: this._configService.getOrThrow<string>('JWT_SECRET'),
+        secret: this._configService.getOrThrow<string>('JWT_KEY'),
         expiresIn: '30d',
       }),
     };

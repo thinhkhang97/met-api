@@ -25,6 +25,10 @@ export interface MemberProps {
  * Member of a group, each member has a role
  */
 export class Member extends BaseEntity<MemberProps> {
+  public get role() {
+    return this._props.role;
+  }
+
   /**
    * Create a new member for a group
    * @param props Properties to create a member
@@ -53,6 +57,11 @@ export class Member extends BaseEntity<MemberProps> {
 
   public reactivate() {
     this._props.status = MemberStatus.ACTIVE;
+    this.update();
+  }
+
+  public leave() {
+    this._props.status = MemberStatus.LEAVED;
     this.update();
   }
 

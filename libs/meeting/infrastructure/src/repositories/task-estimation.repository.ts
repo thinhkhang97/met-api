@@ -5,11 +5,8 @@ import {
 } from '@lib/meeting/domain';
 import { TaskEstimationOrmEntity } from '@lib/meeting/infrastructure/orm-entities';
 import { TaskEstimationOrmMapper } from '@lib/meeting/infrastructure/orm-mappers';
-import {
-  MeetingPrismaService,
-  PrismaRepository,
-  QueryParams,
-} from '@lib/shared';
+import { PrismaRepository, QueryParams } from '@lib/shared';
+import { MeetingPrismaService } from '@lib/shared/services/prisma/meeting-prisma.service';
 import { Injectable } from '@nestjs/common';
 import { EventPublisher } from '@nestjs/cqrs';
 import { Prisma } from '@prisma/meeting-client';

@@ -10,6 +10,7 @@ import {
   TaskEstimationNotFoundException,
   TaskEstimationRepository,
 } from '@lib/meeting/domain';
+import { MemberRole } from '@lib/meeting/domain/constance';
 import { OnlyVoterCanEstimateRule } from '@lib/meeting/domain/rules';
 import { TaskTitle } from '@lib/meeting/domain/value-objects';
 import { CUID, DateVO, Nullable, RuleValidator } from '@lib/shared';
@@ -77,6 +78,7 @@ export class EstimationMeetingServiceImpl implements EstimationMeetingService {
     meetingMemberId: CUID,
     taskEstimationId: CUID,
     estimationValue: Nullable<number>,
+    reason: Nullable<string>,
   ) {
     const meeting = await this._estimationMeetingRepository.findOneByIdOrThrow(
       meetingId,
@@ -95,7 +97,11 @@ export class EstimationMeetingServiceImpl implements EstimationMeetingService {
       throw new MeetingMemberNotFoundException();
     }
     RuleValidator.validate(new OnlyVoterCanEstimateRule(member));
-    taskEstimation.updateMemberEstimation(meetingMemberId, estimationValue);
+    taskEstimation.updateMemberEstimation(
+      meetingMemberId,
+      estimationValue,
+      reason,
+    );
     await this._taskEstimationRepository.upsert(taskEstimation);
   }
 
@@ -164,6 +170,26 @@ export class EstimationMeetingServiceImpl implements EstimationMeetingService {
     taskEstimation.startEstimating();
     meeting.startEstimateTask(taskEstimationId);
     await this._taskEstimationRepository.upsert(taskEstimation);
+    await this._estimationMeetingRepository.upsert(meeting);
+  }
+
+  async updateMemberRole(meetingId: CUID, userId: CUID, role: MemberRole) {
+    const meeting = await this._estimationMeetingRepository.findOneByIdOrThrow(
+      meetingId,
+      new MeetingNotFoundException(),
+    );
+    const member = await this._groupService.getGroupMember(
+      meeting.groupId,
+      userId,
+    );
+    if (!member) {
+      throw new MeetingMemberNotFoundException();
+    }
+    const meetingMember = meeting.members.findOneByMemberId(member.id);
+    if (!meetingMember) {
+      throw new MeetingMemberNotFoundException();
+    }
+    meeting.updateMemberRole(meetingMember, role);
     await this._estimationMeetingRepository.upsert(meeting);
   }
 }

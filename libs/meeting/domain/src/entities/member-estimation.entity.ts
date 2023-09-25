@@ -15,6 +15,11 @@ export interface CreateMemberEstimationProps {
    * task estimation id
    */
   taskEstimationId: CUID;
+
+  /**
+   * Reason for the estimation
+   */
+  reason: Nullable<string>;
 }
 
 export type MemberEstimationProps = CreateMemberEstimationProps;
@@ -45,9 +50,11 @@ export class MemberEstimation extends BaseEntity<MemberEstimationProps> {
   /**
    * Update estimation value of the member for a task
    * @param value
+   * @param reason
    */
-  public updateEstimation(value: Nullable<number>) {
+  public updateEstimation(value: Nullable<number>, reason: Nullable<string>) {
     this._props.estimation = value;
+    this._props.reason = reason;
     this.update();
   }
 

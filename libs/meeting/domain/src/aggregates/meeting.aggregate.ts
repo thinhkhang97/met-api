@@ -1,7 +1,8 @@
+import { MeetingDataNotValidException } from '@lib/meeting/domain/exceptions';
 import { Nullable } from '@lib/shared';
 import { AggregateRoot, CUID, DateVO } from '@lib/shared/ddd';
 
-import { MemberRole, MemberStatus } from '../constance';
+import { MeetingStatus, MemberRole, MemberStatus } from '../constance';
 import { Member } from '../entities';
 import { MemberJoinedEvent, MemberLeftEvent } from '../events';
 import { MemberWatchedList } from '../watched-list';
@@ -57,6 +58,26 @@ export abstract class Meeting<C extends MeetingProps> extends AggregateRoot<C> {
     return this._props.members;
   }
 
+  public updateTitle(title: string) {
+    this._props.title = title;
+    this.update();
+  }
+
+  public updateDescription(description: Nullable<string>) {
+    this._props.description = description;
+    this.update();
+  }
+
+  public updateFrom(from: DateVO) {
+    this._props.from = from;
+    this.update();
+  }
+
+  public updateTo(to: DateVO) {
+    this._props.to = to;
+    this.update();
+  }
+
   /**
    * Remove a member out of the meeting
    * @param memberId
@@ -93,5 +114,19 @@ export abstract class Meeting<C extends MeetingProps> extends AggregateRoot<C> {
     this.apply(new MemberJoinedEvent({ aggregateId: this.id, member }));
     this.update();
     return member;
+  }
+
+  /**
+   * End the meeting, the meeting should be stopped and cannot be started again
+   */
+  public end() {
+    this._props.status = MeetingStatus.ENDED;
+    this.update();
+  }
+
+  validate() {
+    if (!this._props.title.trim() || !this._props.from || !this._props.to) {
+      throw new MeetingDataNotValidException();
+    }
   }
 }

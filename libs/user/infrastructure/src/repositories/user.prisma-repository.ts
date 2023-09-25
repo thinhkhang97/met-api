@@ -1,10 +1,11 @@
-import { PrismaRepository, QueryParams, UserPrismaService } from '@lib/shared';
+import { PrismaRepository, QueryParams } from '@lib/shared';
 import { User, UserProps } from '@lib/user/domain';
 import { UserOrmMapper } from '@lib/user/infrastructure/orm-mappers';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/user-client';
 
 import { UserOrmEntity } from '../orm-entities';
+import { UserPrismaService } from '@lib/shared/services/prisma/user-prisma.service';
 
 @Injectable()
 export class UserPrismaRepository extends PrismaRepository<

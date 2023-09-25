@@ -2,6 +2,7 @@ import { MemberRole } from '@lib/meeting/domain/constance';
 import { Nullable } from '@lib/shared';
 
 export interface Member {
+  id?: string;
   meetingId: string;
   memberId: string;
   role?: MemberRole;

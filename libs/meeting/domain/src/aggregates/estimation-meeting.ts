@@ -8,8 +8,16 @@ import {
 import { TaskTitle } from '@lib/meeting/domain/value-objects';
 import { CUID, Nullable, RuleValidator } from '@lib/shared';
 
-import { EstimationMeetingStatus, TaskEstimationStatus } from '../constance';
-import { TaskEstimationNotFoundException } from '../exceptions';
+import {
+  EstimationMeetingStatus,
+  MemberRole,
+  TaskEstimationStatus,
+} from '../constance';
+import { Member } from '../entities';
+import {
+  MeetingMemberNotFoundException,
+  TaskEstimationNotFoundException,
+} from '../exceptions';
 import {
   OneEstimationTaskAtTheTimeRule,
   OnlyMeetingMemberCanAddTaskRule,
@@ -192,6 +200,17 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
         taskEstimationId,
       }),
     );
+    this.update();
+  }
+
+  /**
+   * Update member role, it can be voter
+   * @param member
+   * @param role
+   */
+  public updateMemberRole(member: Member, role: MemberRole) {
+    member.updateRole(role);
+    this.members.update(member, new MeetingMemberNotFoundException());
     this.update();
   }
 

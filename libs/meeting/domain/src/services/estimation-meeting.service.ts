@@ -1,4 +1,5 @@
 import { EstimationMeeting, TaskEstimation } from '@lib/meeting/domain';
+import { MemberRole } from '@lib/meeting/domain/constance';
 import { CUID, Nullable } from '@lib/shared';
 
 import { TaskTitle } from '../value-objects';
@@ -17,6 +18,7 @@ export abstract class EstimationMeetingService extends MeetingService<Estimation
     meetingMemberId: CUID,
     taskEstimationId: CUID,
     estimationValue: Nullable<number>,
+    reason: Nullable<string>,
   ): Promise<void>;
 
   public abstract startEstimateTask(
@@ -28,4 +30,10 @@ export abstract class EstimationMeetingService extends MeetingService<Estimation
     meetingId: CUID,
     taskEstimationId: CUID,
   ): Promise<void>;
+
+  public abstract updateMemberRole(
+    meetingId: CUID,
+    userId: CUID,
+    role: MemberRole,
+  );
 }

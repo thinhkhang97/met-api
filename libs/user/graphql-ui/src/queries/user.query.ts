@@ -12,9 +12,9 @@ export class UserQuery {
   constructor(public readonly _queryBus: QueryBus) {}
 
   @Public()
-  @Query(() => String, { name: 'helloworld' })
+  @Query(() => String, { name: 'helloworld2' })
   public getHelloWorld() {
-    return 'hello world';
+    return 'hello world 2';
   }
 
   @Query(() => UserResult, { name: 'user' })

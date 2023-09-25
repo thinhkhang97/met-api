@@ -1,11 +1,7 @@
 import { Group, GroupProps, GroupRepository } from '@lib/group/domain';
-import {
-  CUID,
-  GroupPrismaService,
-  Nullable,
-  PrismaRepository,
-  QueryParams,
-} from '@lib/shared';
+import { MemberStatus } from '@lib/group/domain/constant';
+import { CUID, Nullable, PrismaRepository, QueryParams } from '@lib/shared';
+import { GroupPrismaService } from '@lib/shared/services/prisma/group-prisma.service';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/group-client';
 import { omit } from 'lodash';
@@ -70,6 +66,7 @@ export class GroupPrismaRepository
         members: {
           some: {
             userId: userId.value,
+            status: MemberStatus.ACTIVE,
           },
         },
       },

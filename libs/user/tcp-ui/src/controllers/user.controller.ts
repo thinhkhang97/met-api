@@ -1,3 +1,4 @@
+import { Logger } from '@lib/shared';
 import { Controller } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -7,6 +8,7 @@ import { AuthenticateDto } from '../dtos';
 
 @Controller()
 export class UserController {
+  private readonly _logger = new Logger(this.constructor.name);
   constructor(
     private readonly _configService: ConfigService,
     private readonly _jwtService: JwtService,
@@ -21,10 +23,12 @@ export class UserController {
       return null;
     }
     try {
+      this._logger.log('AUTHENTICATE: ' + token);
       return this._jwtService.verifyAsync(token, {
-        secret: this._configService.getOrThrow<string>('JWT_SECRET'),
+        secret: this._configService.getOrThrow<string>('JWT_KEY'),
       });
-    } catch {
+    } catch (e) {
+      this._logger.error(JSON.stringify(e));
       return null;
     }
   }

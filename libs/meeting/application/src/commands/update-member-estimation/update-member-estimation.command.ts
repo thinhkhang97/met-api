@@ -5,6 +5,7 @@ export class UpdateMemberEstimationCommand extends BaseCommand {
   public meetingMemberId: string;
   public taskEstimationId: string;
   public estimationValue: Nullable<number>;
+  public reason: Nullable<string>;
 
   constructor(props: CommandProps<UpdateMemberEstimationCommand>) {
     super();
@@ -12,5 +13,6 @@ export class UpdateMemberEstimationCommand extends BaseCommand {
     this.meetingMemberId = props.meetingMemberId;
     this.taskEstimationId = props.taskEstimationId;
     this.estimationValue = props.estimationValue;
+    this.reason = props.reason;
   }
 }

@@ -1,4 +1,4 @@
-import { UserPrismaService } from '@lib/shared';
+import { UserPrismaService } from '@lib/shared/services/prisma/user-prisma.service';
 import { UserOrmMapper } from '@lib/user/infrastructure/orm-mappers';
 import { Module, Provider } from '@nestjs/common';
 

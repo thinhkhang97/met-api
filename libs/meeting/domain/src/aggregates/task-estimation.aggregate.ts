@@ -73,10 +73,12 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
    * Update the member's estimation for the task
    * @param meetingMemberId
    * @param value
+   * @param reason
    */
   public updateMemberEstimation(
     meetingMemberId: CUID,
     value: Nullable<number>,
+    reason: Nullable<string>,
   ) {
     RuleValidator.validate(
       new OnlyInEstimatingTaskCanBeEstimatedRule(this.status),
@@ -88,10 +90,11 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
         meetingMemberId,
         estimation: value,
         taskEstimationId: this.id as CUID,
+        reason,
       });
       this._props.memberEstimations.add(memberEstimation);
     } else {
-      memberEstimation.updateEstimation(value);
+      memberEstimation.updateEstimation(value, reason);
       this._props.memberEstimations.update(memberEstimation);
     }
     this.apply(

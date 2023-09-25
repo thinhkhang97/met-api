@@ -13,11 +13,15 @@ export class MemberEstimationObject extends BaseObject {
   @Field(() => Float, { nullable: true })
   public readonly estimation: Nullable<number>;
 
+  @Field(() => String, { nullable: true })
+  public readonly reason: Nullable<string>;
+
   constructor(entity: MemberEstimation) {
     super(entity);
     const props = entity.getProps();
     this.meetingMemberId = props.meetingMemberId.unpack();
     this.taskEstimationId = props.taskEstimationId.unpack();
     this.estimation = props.estimation;
+    this.reason = props.reason;
   }
 }

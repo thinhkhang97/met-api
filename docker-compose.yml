@@ -10,7 +10,6 @@ services:
       - POSTGRES_PASSWORD=test
   cache:
     image: redis:alpine
-    container_name: met-redis
     ports:
       - "6379:6379"
     volumes:
@@ -27,6 +26,59 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=admin
+  identity-service:
+    build:
+      context: .
+      dockerfile: ./apps/identity/dockerfile
+    env_file:
+      - ./apps/identity/src/.env
+    ports:
+      - "3001:3001"
+      - "3011:3011"
+    environment:
+      - DB=postgres://test:test@db/lt-user?schema=public
+  group-service:
+    build:
+      context: .
+      dockerfile: ./apps/group/dockerfile
+    env_file:
+      - ./apps/group/src/.env
+    ports:
+      - "3002:3002"
+      - "3012:3012"
+  meeting-service:
+    build:
+      context: .
+      dockerfile: ./apps/meeting/dockerfile
+    env_file:
+      - ./apps/meeting/src/.env
+    ports:
+      - "3003:3003"
+      - "3013:3013"
+  socket-service:
+    build:
+      context: .
+      dockerfile: ./apps/socket/dockerfile
+    env_file:
+      - ./apps/socket/src/.env
+    ports:
+      - "3004:3004"
+      - "80:80"
+    environment:
+      - REDIS_HOST=cache
+      - IDENTITY_MS_HOST=identity-service
+  # graphql-gateway-service:
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/graphql-gateway/dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   env_file:
+  #     - ./apps/graphql-gateway/src/.env
+  #   depends_on:
+  #     - identity-service
+  #     - group-service
+  #     - meeting-service
 volumes:
   lunch-together-postgres:
   met-redis:
