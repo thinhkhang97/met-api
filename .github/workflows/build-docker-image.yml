@@ -20,6 +20,7 @@ jobs:
           - identity
           - group
           - meeting
+          - socket
         include:
           - SERVICE: identity
             ENV_NAME: IDENTITY_ENV
@@ -32,6 +33,10 @@ jobs:
           - SERVICE: meeting
             ENV_NAME: MEETING_ENV
             ENV_PATH: './apps/meeting/src/.env'
+
+          - SERVICE: socket
+            ENV_NAME: SOCKET_ENV
+            ENV_PATH: './apps/socket/src/.env'
 
     steps:
       - name: Checkout Code
