@@ -1,10 +1,13 @@
-import { MemberUpdatedTaskEstimationEvent } from '@lib/meeting/domain/events';
-import { OnlyInEstimatingTaskCanBeEstimatedRule } from '@lib/meeting/domain/rules';
+import {
+  CanUpdateFinalEstimationForEstimatedTaskRule,
+  OnlyInEstimatingTaskCanBeEstimatedRule,
+} from '@lib/meeting/domain/rules';
 import { TaskTitle } from '@lib/meeting/domain/value-objects';
 import { AggregateRoot, CUID, Nullable, RuleValidator } from '@lib/shared';
 
 import { TaskEstimationStatus } from '../constance';
 import { MemberEstimation } from '../entities';
+import { MemberUpdatedTaskEstimationEvent } from '../events';
 import { MemberEstimationWatchedList } from '../watched-list';
 
 interface CreateTaskEstimationProps {
@@ -36,9 +39,14 @@ export interface TaskEstimationProps extends CreateTaskEstimationProps {
   memberEstimations: MemberEstimationWatchedList;
 
   /**
-   * Final estimation for the task
+   * Final average estimation for the task
    */
   averageEstimation: Nullable<number>;
+
+  /**
+   * Final estimation
+   */
+  finalEstimation: Nullable<number>;
 }
 
 export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
@@ -55,6 +63,7 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
       ...props,
       status: TaskEstimationStatus.ACTIVE,
       averageEstimation: null,
+      finalEstimation: null,
       memberEstimations: new MemberEstimationWatchedList(),
     });
   }
@@ -66,6 +75,14 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
 
   public updateDescription(description: Nullable<string>) {
     this._props.description = description;
+    this.update();
+  }
+
+  public updateFinalEstimation(finalEstimation: Nullable<number>) {
+    RuleValidator.validate(
+      new CanUpdateFinalEstimationForEstimatedTaskRule(this),
+    );
+    this._props.finalEstimation = finalEstimation;
     this.update();
   }
 
@@ -135,14 +152,14 @@ export class TaskEstimation extends AggregateRoot<TaskEstimationProps> {
    */
   public finishEstimating() {
     this._props.status = TaskEstimationStatus.ESTIMATED;
-    this.updateFinalEstimation();
+    this.updateAverageEstimation();
     this.update();
   }
 
   /**
    * Update final average estimation for the task
    */
-  public updateFinalEstimation() {
+  public updateAverageEstimation() {
     const numberOfValue = this.memberEstimations.numberOfValue;
     if (numberOfValue < 1) {
       this._props.averageEstimation = null;

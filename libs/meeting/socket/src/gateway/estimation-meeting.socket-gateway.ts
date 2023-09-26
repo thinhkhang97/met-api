@@ -1,5 +1,5 @@
 import { MeetingChannel, MeetingEventName } from '@lib/meeting/application';
-import { Logger, SocketGateway } from '@lib/shared';
+import { Logger, Nullable, SocketGateway } from '@lib/shared';
 import { IoredisService } from '@lib/shared/modules/ioredis';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject } from '@nestjs/common';
@@ -118,6 +118,20 @@ export class EstimationMeetingSocketGateway extends SocketGateway {
           .to(`${RoomKey.MEETING}:${taskEstimation.meetingId}`)
           .emit(
             MeetingMessageName.MEMBER_UPDATE_ESTIMATION_VALUE,
+            taskEstimation,
+          );
+        break;
+      }
+      case MeetingEventName.ESTIMATION_TASK_UPDATED_FINAL_VALUE: {
+        const taskEstimation = data.payload as {
+          meetingId: string;
+          taskEstimationId: string;
+          finalEstimation: Nullable<number>;
+        };
+        this.server
+          .to(`${RoomKey.MEETING}:${taskEstimation.meetingId}`)
+          .emit(
+            MeetingMessageName.ESTIMATION_TASK_UPDATED_FINAL_ESTIMATION_VALUE,
             taskEstimation,
           );
         break;

@@ -2,7 +2,7 @@ import { TaskEstimation } from '@lib/meeting/domain';
 import { TaskEstimationStatus } from '@lib/meeting/domain/constance';
 import { MemberEstimationObject } from '@lib/meeting/graphql-ui/objects/member-estimation.object';
 import { BaseObject, Nullable } from '@lib/shared';
-import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class TaskEstimationObject extends BaseObject {
@@ -24,6 +24,9 @@ export class TaskEstimationObject extends BaseObject {
   @Field(() => Float, { nullable: true })
   public readonly averageEstimation: Nullable<number>;
 
+  @Field(() => Int, { nullable: true })
+  public readonly finalEstimation: Nullable<number>;
+
   constructor(entity: TaskEstimation) {
     super(entity);
     const props = entity.getProps();
@@ -35,5 +38,6 @@ export class TaskEstimationObject extends BaseObject {
       (memberEstimation) => new MemberEstimationObject(memberEstimation),
     );
     this.averageEstimation = props.averageEstimation;
+    this.finalEstimation = props.finalEstimation;
   }
 }

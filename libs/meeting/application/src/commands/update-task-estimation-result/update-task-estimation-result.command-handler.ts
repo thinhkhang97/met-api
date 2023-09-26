@@ -24,7 +24,7 @@ export class UpdateTaskEstimationResultCommandHandler extends BaseCommandHandler
         taskEstimationId,
         new TaskEstimationNotFoundException(),
       );
-    taskEstimation.updateFinalEstimation();
+    taskEstimation.updateAverageEstimation();
     await this._taskEstimationRepository.upsert(taskEstimation);
   }
 }
