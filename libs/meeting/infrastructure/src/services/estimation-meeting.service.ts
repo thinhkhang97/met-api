@@ -192,4 +192,29 @@ export class EstimationMeetingServiceImpl implements EstimationMeetingService {
     meeting.updateMemberRole(meetingMember, role);
     await this._estimationMeetingRepository.upsert(meeting);
   }
+
+  async updateFinalEstimation(
+    meetingId: CUID,
+    userId: CUID,
+    taskEstimationId: CUID,
+    finalEstimation: Nullable<number>,
+  ) {
+    const meeting = await this._estimationMeetingRepository.findOneByIdOrThrow(
+      meetingId,
+      new MeetingNotFoundException(),
+    );
+    const member = await this._groupService.getGroupMember(
+      meeting.groupId,
+      userId,
+    );
+    if (!member) {
+      throw new MeetingMemberNotFoundException();
+    }
+    const meetingMember = meeting.members.findOneByMemberId(member.id);
+    if (!meetingMember) {
+      throw new MeetingMemberNotFoundException();
+    }
+    meeting.updateTaskEstimationFinalValue(taskEstimationId, finalEstimation);
+    await this._estimationMeetingRepository.upsert(meeting);
+  }
 }

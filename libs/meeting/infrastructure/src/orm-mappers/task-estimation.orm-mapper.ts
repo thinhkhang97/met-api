@@ -32,6 +32,7 @@ export class TaskEstimationOrmMapper extends BaseOrmMapper<
       description: ormEntity.description,
       status: ormEntity.status as TaskEstimationStatus,
       averageEstimation: ormEntity.averageEstimation,
+      finalEstimation: ormEntity.finalEstimation,
       memberEstimations: new MemberEstimationWatchedList(
         ormEntity.memberEstimations
           ? ormEntity.memberEstimations.map((memberEstimation) =>
@@ -52,6 +53,7 @@ export class TaskEstimationOrmMapper extends BaseOrmMapper<
       status: props.status,
       meetingId: props.meetingId.unpack(),
       averageEstimation: props.averageEstimation,
+      finalEstimation: props.finalEstimation,
       memberEstimations: props.memberEstimations.updatedItems.map(
         (memberEstimation) =>
           this._memberEstimationOrmMapper.toOrm(memberEstimation),

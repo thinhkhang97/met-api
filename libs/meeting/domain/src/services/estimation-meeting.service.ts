@@ -36,4 +36,11 @@ export abstract class EstimationMeetingService extends MeetingService<Estimation
     userId: CUID,
     role: MemberRole,
   );
+
+  public abstract updateFinalEstimation(
+    meetingId: CUID,
+    userId: CUID,
+    taskEstimationId: CUID,
+    finalEstimation: Nullable<number>,
+  );
 }

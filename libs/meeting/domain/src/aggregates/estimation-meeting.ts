@@ -4,6 +4,7 @@ import {
   TaskEstimationRemovedEvent,
   TaskEstimationStartedEvent,
   TaskEstimationUpdatedEvent,
+  TaskEstimationUpdatedFinalEstimationEvent,
 } from '@lib/meeting/domain/events';
 import { TaskTitle } from '@lib/meeting/domain/value-objects';
 import { CUID, Nullable, RuleValidator } from '@lib/shared';
@@ -211,6 +212,27 @@ export class EstimationMeeting extends Meeting<EstimationMeetingProps> {
   public updateMemberRole(member: Member, role: MemberRole) {
     member.updateRole(role);
     this.members.update(member, new MeetingMemberNotFoundException());
+    this.update();
+  }
+
+  public updateTaskEstimationFinalValue(
+    taskEstimationId: CUID,
+    finalEstimation: Nullable<number>,
+  ) {
+    const taskEstimation =
+      this._props.taskEstimations.findOneById(taskEstimationId);
+    if (!taskEstimation) {
+      throw new TaskEstimationNotFoundException();
+    }
+    taskEstimation.updateFinalEstimation(finalEstimation);
+    this.apply(
+      new TaskEstimationUpdatedFinalEstimationEvent({
+        aggregateId: this.id,
+        taskEstimationId: taskEstimation.id as CUID,
+        finalEstimation,
+      }),
+    );
+    this.taskEstimations.update(taskEstimation);
     this.update();
   }
 
