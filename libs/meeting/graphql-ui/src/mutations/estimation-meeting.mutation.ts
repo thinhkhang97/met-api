@@ -8,15 +8,17 @@ import {
   UpdateEstimationTaskCommand,
   UpdateMeetingCommand,
   UpdateMemberRoleCommand,
+  UpdateTaskEstimationFinalValueCommand,
 } from '@lib/meeting/application';
 import { EstimationMeeting, TaskEstimation } from '@lib/meeting/domain';
 import { MemberRole } from '@lib/meeting/domain/constance';
-import { Either, GraphQLUser, LoggedInUser } from '@lib/shared';
+import { Either, GraphQLUser, LoggedInUser, Nullable } from '@lib/shared';
 import { CommandBus } from '@nestjs/cqrs';
 import {
   Args,
   GraphQLISODateTime,
   ID,
+  Int,
   Mutation,
   Resolver,
 } from '@nestjs/graphql';
@@ -214,6 +216,37 @@ export class EstimationMeetingMutation {
       Either<void>
     >(
       new UpdateMemberRoleCommand({ meetingId, role, userId: loggedInUser.id }),
+    );
+    if (result.isErr()) {
+      return new MeetingActionResultObject(
+        'failed',
+        result.unwrapErr().message,
+      );
+    }
+    return new MeetingActionResultObject('success');
+  }
+
+  @Mutation(() => MeetingActionResultObject, {
+    name: 'updateFinalTaskEstimation',
+  })
+  async updateFinalTaskEstimation(
+    @Args({ type: () => ID, name: 'meetingId' }) meetingId: string,
+    @Args({ type: () => ID, name: 'taskEstimationId' })
+    taskEstimationId: string,
+    @Args({ type: () => Int, name: 'finalEstimation', nullable: true })
+    finalEstimation: Nullable<number>,
+    @GraphQLUser() loggedInUser: LoggedInUser,
+  ) {
+    const result = await this._commandBus.execute<
+      UpdateTaskEstimationFinalValueCommand,
+      Either<void>
+    >(
+      new UpdateTaskEstimationFinalValueCommand({
+        meetingId,
+        taskEstimationId,
+        finalEstimation,
+        userId: loggedInUser.id,
+      }),
     );
     if (result.isErr()) {
       return new MeetingActionResultObject(

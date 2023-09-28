@@ -54,6 +54,7 @@ model TaskEstimation {
   description       String?
   meetingId         String
   averageEstimation Float?
+  finalEstimation   Float?
   status            String
 
   meeting           Meeting            @relation(references: [id], fields: [meetingId])

@@ -11,6 +11,7 @@ export enum MeetingEventName {
   ESTIMATION_TASK_REMOVED = 'estimation_task_removed',
   ESTIMATION_TASK_STARTED = 'estimation_task_started',
   ESTIMATION_TASK_FINISHED = 'estimation_task_finished',
+  ESTIMATION_TASK_UPDATED_FINAL_VALUE = 'estimation_task_updated_final_value',
 }
 
 export const MEETING_QUEUE_SERVICE = 'MEETING_QUEUE_SERVICE';

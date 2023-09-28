@@ -6,3 +6,4 @@ export * from './task-estimation-finished.event';
 export * from './task-estimation-removed.event';
 export * from './task-estimation-started.event';
 export * from './task-estimation-updated.event';
+export * from './task-estimation-updated-final-estimation.event';
