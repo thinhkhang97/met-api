@@ -19,13 +19,7 @@ async function bootstrap() {
   });
   await app.startAllMicroservices();
   await app.listen(3001);
-  logger.log(
-    `Started successfully, env: ${configService.get(
-      'NODE_ENV',
-    )}, env: ${configService.get('JWT_KEY')}, env: ${configService.get(
-      'INTERNAL_API_KEY',
-    )},`,
-  );
+  logger.log(`Started successfully, env: ${configService.get('NODE_ENV')},`);
 }
 
 bootstrap();
