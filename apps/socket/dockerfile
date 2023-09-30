@@ -4,12 +4,22 @@ FROM node:18.17.0
 # Set the working directory in the container
 WORKDIR /app/socket
 
-COPY . .
+WORKDIR /met
 
-# Install only production dependencies
+COPY ./apps/socket ./apps/socket
+COPY ./libs/meeting ./libs/meeting
+COPY ./libs/shared ./libs/shared
+COPY ./prisma/meeting ./prisma/meeting
+COPY ./nest-cli.json .
+COPY ./package.json .
+COPY ./package-lock.json .
+COPY ./tsconfig.json .
+COPY ./tsconfig.build.json .
+
 RUN npm install
 
-# Install only production dependencies
+RUN npm run prisma:generate --schema prisma/meeting/schema.prisma
+
 RUN npm run build socket
 
 # Expose the port your NestJS application is listening on
