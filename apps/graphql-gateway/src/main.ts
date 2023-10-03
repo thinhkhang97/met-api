@@ -11,15 +11,7 @@ async function bootstrap() {
   const isDevelopment = configService.get('NODE_ENV') === 'development';
   app.enableCors({ origin: '*' });
   await app.listen(isDevelopment ? 3000 : 443);
-  logger.log(
-    `Started successfully, env: ${configService.get(
-      'NODE_ENV',
-    )}, env: ${configService.get('API_KEY')}, env: ${configService.get(
-      'IDENTITY_SUBGRAPH',
-    )}, env: ${configService.get('GROUP_SUBGRAPH')}, env: ${configService.get(
-      'MEETING_SUBGRAPH',
-    )}`,
-  );
+  logger.log(`Started successfully, env: ${configService.get('NODE_ENV')}`);
 }
 
 bootstrap();

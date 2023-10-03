@@ -2,16 +2,24 @@
 FROM node:18.17.0
 
 # Set the working directory in the container
-WORKDIR /app/identity
+WORKDIR /met
 
-COPY . .
+COPY ./apps/identity ./apps/identity
+COPY ./libs/user ./libs/user
+COPY ./libs/shared ./libs/shared
+COPY ./prisma/identity ./prisma/identity
+COPY ./nest-cli.json .
+COPY ./package.json .
+COPY ./package-lock.json .
+COPY ./tsconfig.json .
+COPY ./tsconfig.build.json .
 
 # Install only production dependencies
 RUN npm install
 
 # COPY /prisma/user/.env.prod prisma/user/.env
 
-RUN npm run prisma:migrate-deploy prisma/identity/schema.prisma  
+# RUN npm run prisma:migrate-deploy prisma/identity/schema.prisma
 
 RUN npx prisma generate --schema prisma/identity/schema.prisma
 
